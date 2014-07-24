@@ -32,6 +32,12 @@
 			<artifactId>commons-vfs2</artifactId>
 			<version>2.0</version>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.ant</artifactId>
+            <version>1.7.0_5</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>commons-collections</groupId>
 			<artifactId>commons-collections</artifactId>
