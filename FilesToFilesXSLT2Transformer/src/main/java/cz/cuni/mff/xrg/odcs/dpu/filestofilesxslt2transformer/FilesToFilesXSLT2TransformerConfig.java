@@ -1,6 +1,5 @@
 package cz.cuni.mff.xrg.odcs.dpu.filestofilesxslt2transformer;
 
-
 public class FilesToFilesXSLT2TransformerConfig {
 
     private String xslTemplate = "";
@@ -8,6 +7,8 @@ public class FilesToFilesXSLT2TransformerConfig {
     private String xslTemplateFileNameShownInDialog = "";
 
     private boolean skipOnError = false;
+
+    private String xlstParametersMapName = "xlstParameters";
 
     public FilesToFilesXSLT2TransformerConfig() {
     }
@@ -37,8 +38,16 @@ public class FilesToFilesXSLT2TransformerConfig {
         this.skipOnError = skipOnError;
     }
 
+    public String getXlstParametersMapName() {
+        return xlstParametersMapName;
+    }
+
+    public void setXlstParametersMapName(String xlstParametersMapName) {
+        this.xlstParametersMapName = xlstParametersMapName;
+    }
+
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "[templateFile=" + xslTemplateFileNameShownInDialog + ",skipOnError=" + String.valueOf(skipOnError) + "]";
+        return this.getClass().getSimpleName() + "[templateFile=" + xslTemplateFileNameShownInDialog + ",skipOnError=" + String.valueOf(skipOnError) + ",xsltParametersMapName=" + xlstParametersMapName + "]";
     }
 }

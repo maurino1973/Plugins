@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.Date;
+import java.util.Map;
 
 import javax.xml.transform.stream.StreamSource;
 
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
@@ -24,6 +27,8 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.maphelper.MapHelper;
+import eu.unifiedviews.helpers.dataunit.maphelper.MapHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -67,7 +72,6 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
         } catch (SaxonApiException ex) {
             throw new DPUException("Cannot compile XSLT", ex);
         }
-        XsltTransformer trans = exp.load();
 
         dpuContext.sendMessage(DPUContext.MessageType.INFO, "Stylesheet was compiled successully");
 
@@ -81,6 +85,8 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
         long index = 0L;
         boolean shouldContinue = !dpuContext.canceled();
 
+        MapHelper mapHelper = MapHelpers.create(filesInput);
+        String xsltParametersMapName = config.getXlstParametersMapName();
         try {
             while ((shouldContinue) && (filesIteration.hasNext())) {
                 FilesDataUnit.Entry entry;
@@ -108,7 +114,13 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
 //                    builder.setTreeModel(TreeModel.TINY_TREE_CONDENSED);
 //                    XdmNode source = builder.build(new StreamSource(entry.getFilesystemURI().toASCIIString()));
 //                    trans.setInitialContextNode(source);
-
+                        XsltTransformer trans = exp.load();
+                        Map<String, String> xsltParameters = mapHelper.getMap(inSymbolicName, xsltParametersMapName);
+                        if (xsltParameters != null) {
+                            for (String key : xsltParameters.keySet()) {
+                                trans.setParameter(new QName(key), new XdmAtomicValue(xsltParameters.get(key)));
+                            }
+                        }
                         trans.setSource(new StreamSource(inputFile));
                         trans.setDestination(out);
                         trans.transform();
