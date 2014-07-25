@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>eu.unifiedviews</groupId>
+	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-plugin-dpus</artifactId>
 	<version>1.3.0</version>
 	<packaging>pom</packaging>
@@ -9,6 +9,7 @@
 
 	<!-- list of core modules -->
 	<modules>
+		<module>t_sparql</module>
 		<!-- New DPUs -->
 		<module>FilesToFilesXSLT2Transformer</module>
 		<module>FilesToRDFTransformer</module>
@@ -24,7 +25,6 @@
 		<module>File_loader</module>
 		<module>RDF_extractor</module>
 		<module>RDF_loader</module>
-		<module>SPARQL_transformer</module>
 		<module>RDF_Data_Validator</module>
 		<module>Silk_Linker</module>
 	</modules>
