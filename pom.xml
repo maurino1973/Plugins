@@ -10,6 +10,7 @@
 	<!-- list of core modules -->
 	<modules>
 		<module>t_sparql</module>
+		<module>l_virtuoso</module>
 		<!-- New DPUs -->
 		<module>FilesToFilesXSLT2Transformer</module>
 		<module>FilesToRDFTransformer</module>
@@ -18,7 +19,6 @@
 		<module>HTTPToFilesExtractor</module>
 		<module>TripleGeneratorToRDFExtractor</module>
 		<module>FilesToFilesRenameTransformer</module>
-		<module>VirtuosoLoader</module>
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
 		<module>File_extractor</module>
