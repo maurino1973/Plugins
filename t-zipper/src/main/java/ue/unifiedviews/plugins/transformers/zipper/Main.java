@@ -78,7 +78,8 @@ public class Main extends ConfigurableBase<Configuration>
         try {
             // add metadata 
             Manipulator.set(outFilesData, zipSymbolicName, 
-                    VirtualPathHelper.PREDICATE_VIRTUAL_PATH, zipSymbolicName);
+                    VirtualPathHelper.PREDICATE_VIRTUAL_PATH, 
+                    config.getZipFile());
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed",
                     "Failed to add metadata.", ex);
