@@ -92,7 +92,7 @@ public class Main extends ConfigurableBase<Configuration>
 	}
     
     /**
-     * Pack files in given iterator into zip ile and add metadata.
+     * Pack files in given iterator into zip file and add metadata.
      * 
      * @param zipFile
      * @param zipSymbolicName
