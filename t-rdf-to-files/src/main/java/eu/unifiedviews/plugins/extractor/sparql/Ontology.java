@@ -14,6 +14,6 @@ public class Ontology {
      * Indicates that some resource were created from other resource(s).
      */    
     public static final String PREDICATE_TRANFORM_FROM = 
-            "http://unifiedviews.cz/resource/domain/rdf-to-files/source";
+            "http://unifiedviews.cz/resource/domain/t-rdf-to-files/source";
     
 }
