@@ -176,6 +176,10 @@ public class Main extends ConfigurableBase<Configuration> implements
                 Manipulator.set(outFilesData, outputSymbolicName, 
                     Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
             }
+            // check cancel
+            if (context.canceled()) {
+                return;
+            }
         }
     }
 
