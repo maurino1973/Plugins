@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.openrdf.model.URI;
-import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFHandlerException;
@@ -171,7 +170,8 @@ public class Main extends ConfigurableBase<Configuration> implements
             // transfer metadata
             //
             for (String sourceSombolicName : sourceSymbolicNames) {
-                CopyHelpers.copyMetadata(sourceSombolicName, inRdfData, outFilesData);
+                CopyHelpers.copyMetadata(sourceSombolicName, inRdfData, 
+                        outFilesData);
                 // we use symbolic name to denote
                 Manipulator.set(outFilesData, outputSymbolicName, 
                     Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
@@ -195,7 +195,8 @@ public class Main extends ConfigurableBase<Configuration> implements
     private String exportGraph(URI[] uris, String fileName) 
             throws DataUnitException, ExportFailedException {
         final String outputSymbolicName = genFileSymbolicName(fileName);
-        final File outputFile = new File(java.net.URI.create(outputSymbolicName));
+        final File outputFile = 
+                new File(java.net.URI.create(outputSymbolicName));
         // create parent
         outputFile.getParentFile().mkdirs();
         
