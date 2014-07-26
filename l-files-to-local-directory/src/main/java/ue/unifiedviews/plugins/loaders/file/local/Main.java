@@ -46,7 +46,9 @@ public class Main extends ConfigurableBase<Configuration> implements
         try {
             filesIteration = inFilesData.getIteration();
         } catch (DataUnitException ex) {
-            throw new DPUException("Could not obtain filesInput", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, 
+                    "DPU Failed", "Can't get file iterator.", ex);
+            return;
         }
         
         // prepare output directory
