@@ -1,4 +1,4 @@
-package ue.unifiedviews.plugins.loaders.file.local;
+package ue.unifiedviews.plugins.loaders.files.local;
 
 public class Configuration {
 	

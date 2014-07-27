@@ -1,10 +1,9 @@
-package ue.unifiedviews.plugins.loaders.file.local;
+package ue.unifiedviews.plugins.loaders.files.local;
 
 import cz.cuni.mff.xrg.uv.utils.dataunit.metadata.Manipulator;
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
-import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
@@ -101,6 +100,10 @@ public class Main extends ConfigurableBase<Configuration> implements
                             "Failed to copy file.", 
                             "Failed to copy, file ignored.", ex);
                 }
+                
+// TODO Remove
+Manipulator.dump(inFilesData);
+                
             }
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU failed",
@@ -112,8 +115,5 @@ public class Main extends ConfigurableBase<Configuration> implements
                 LOG.warn("Error in close.", ex);
             }
         }
-        
-        
-	}
-	
+	}	
 }
