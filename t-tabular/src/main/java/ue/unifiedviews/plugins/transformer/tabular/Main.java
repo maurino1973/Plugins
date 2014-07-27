@@ -131,6 +131,7 @@ public class Main extends ConfigurableBase<Configuration>
         }
     }
 
+// TODO Rework this method !!    
     private void proceedFile(DPUContext context,
             SimpleRdfWrite triplifiedTableWrap, File tableFile) throws OperationFailedException {
         final ValueFactory valueFactory = triplifiedTableWrap.getValueFactory();
