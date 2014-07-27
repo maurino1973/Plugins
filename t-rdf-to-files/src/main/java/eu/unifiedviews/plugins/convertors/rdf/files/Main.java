@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.extractor.sparql;
+package eu.unifiedviews.plugins.convertors.rdf.files;
 
 import cz.cuni.mff.xrg.uv.utils.dataunit.metadata.Manipulator;
 import eu.unifiedviews.dataunit.DataUnit;
@@ -95,6 +95,10 @@ public class Main extends ConfigurableBase<Configuration> implements
             } else {
                 exportMultiple(graphUris);
             }
+            
+// TODO Remove
+Manipulator.dump(outFilesData);            
+            
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "DPU Failed.", "Problem with DataUnit.", ex);

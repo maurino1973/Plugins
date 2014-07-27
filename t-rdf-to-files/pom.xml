@@ -15,7 +15,7 @@
     <description>Transform RDF graphs into files.</description>
 	
     <properties>    
-        <dpu.package>eu.unifiedviews.plugins.extractor.sparql</dpu.package>
+        <dpu.package>eu.unifiedviews.plugins.convertors.rdf.files</dpu.package>
         <dpu.mainClass>Main</dpu.mainClass>
     </properties>
 	

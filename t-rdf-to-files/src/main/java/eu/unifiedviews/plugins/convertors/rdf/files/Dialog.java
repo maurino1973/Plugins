@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.extractor.sparql;
+package eu.unifiedviews.plugins.convertors.rdf.files;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
