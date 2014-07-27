@@ -89,6 +89,15 @@ public class Main extends ConfigurableBase<Configuration>
         // Create zip file
         //        
         zipFiles(zipFile, zipSymbolicName, filesIteration);                
+        try {
+            filesIteration.close();
+            
+// TODO Remove
+Manipulator.dump(outFilesData);            
+            
+        } catch (DataUnitException ex) {
+            LOG.warn("Error in close.", ex);
+        }
 	}
     
     /**
@@ -107,6 +116,9 @@ public class Main extends ConfigurableBase<Configuration>
         
         try (FileOutputStream fos = new FileOutputStream(zipFile); 
 				ZipOutputStream zos = new ZipOutputStream(fos)) {
+            //
+            // Itarate over files and zip them
+            //
             while(!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();                
                 LOG.debug("Adding file: {}", entry.getSymbolicName());
@@ -120,7 +132,7 @@ public class Main extends ConfigurableBase<Configuration>
                     // add metadata
                     CopyHelpers.copyMetadata(entry.getSymbolicName(), 
                             inFilesData, outFilesData);
-                    Manipulator.set(outFilesData, zipSymbolicName, 
+                    Manipulator.add(outFilesData, zipSymbolicName, 
                             Ontology.PREDICATE_CONTAINS_FILE, 
                             entry.getSymbolicName());
                 }
