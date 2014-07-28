@@ -9,9 +9,9 @@
 
 	<!-- list of core modules -->
 	<modules>
-		<module>t_sparql</module>
 		<module>l_virtuoso</module>
 		<module>e-rdfDataGenerator</module>
+		<module>t-sparql</module>
 		<!-- New DPUs -->
 		<module>FilesToFilesXSLT2Transformer</module>
 		<module>FilesToRDFTransformer</module>
