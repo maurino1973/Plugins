@@ -18,13 +18,13 @@
 		<module>t-xslt</module>
 		<module>t-filesRenamer</module>
 		<module>t-filesToRdf</module>
+		<module>l-rdfToFile</module>
 		<module>l-filesToLocalFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
 		<!-- New DPUs -->
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
-		<module>File_loader</module>
 		<module>RDF_loader</module>
 		<module>RDF_Data_Validator</module>
 	</modules>
