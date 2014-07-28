@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.virtuosoloader;
+package eu.unifiedviews.plugins.loader.filestovirtuoso;
 
 
 public class VirtuosoLoaderConfig {

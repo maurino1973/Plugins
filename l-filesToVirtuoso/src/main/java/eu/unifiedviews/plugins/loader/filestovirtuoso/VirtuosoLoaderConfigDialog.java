@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.virtuosoloader;
+package eu.unifiedviews.plugins.loader.filestovirtuoso;
 
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.CheckBox;
