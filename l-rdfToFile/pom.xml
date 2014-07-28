@@ -17,7 +17,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.loader.file</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.loader.rdftofile</dpu.package>
 		<dpu.mainClass>FileLoader</dpu.mainClass>
 	</properties>
 

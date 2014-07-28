@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.file;
+package eu.unifiedviews.plugins.loader.rdftofile;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
 

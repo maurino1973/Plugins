@@ -1,5 +1,7 @@
-package cz.cuni.mff.xrg.odcs.loader.file;
+package eu.unifiedviews.plugins.loader.rdftofile.test;
 
+import eu.unifiedviews.plugins.loader.rdftofile.FileLoaderConfig;
+import eu.unifiedviews.plugins.loader.rdftofile.FileLoader;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;

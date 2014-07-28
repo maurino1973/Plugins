@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.file;
+package eu.unifiedviews.plugins.loader.rdftofile;
 
 import java.io.File;
 import java.io.FileNotFoundException;
