@@ -76,7 +76,7 @@ public class Main extends ConfigurableBase<Configuration>
 
 		// try again ?
 		int retryCount = config.getRetryCount();
-		while(retryCount != 0) {
+		while(retryCount != 0 && !context.canceled()) {
 			// sleep for a while
 			try {
 				Thread.sleep(config.getRetryDelay());
@@ -87,17 +87,12 @@ public class Main extends ConfigurableBase<Configuration>
 				FileUtils.copyURLToFile(url, outFile);
 				return;
 			} catch (IOException ex) {
-				LOG.error("Download failed.", ex);
+				LOG.error("Download failed - {}/{}", ex, retryCount,
+                        config.getRetryCount());
 			}
 			// update retry counter
 			if (retryCount > 0) {
 				retryCount--;
-			}
-			// check for cancelation
-			if (context.canceled()) {
-				context.sendMessage(DPUContext.MessageType.INFO, 
-                        "DPU has been canceled.");
-				return;
 			}
 		}
 		context.sendMessage(DPUContext.MessageType.ERROR, 
