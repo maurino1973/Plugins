@@ -20,13 +20,13 @@
 		<module>t-rdfDataValidator</module>
 		<module>t-filesToRdf</module>
 		<module>l-rdfToFile</module>
+		<module>l-rdfToSparql</module>
 		<module>l-filesToLocalFS</module>
 		<module>l-filesToVFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
 		<!-- New DPUs -->
 		<!-- Old DPUs -->
-		<module>RDF_loader</module>
 	</modules>
 
 	<properties>
