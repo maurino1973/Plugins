@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.extractor.file;
+package eu.unifiedviews.plugins.extractor.rdffromfile;
 
 /**
  * Possibilies how to choose handler for data extraction and how to solve found

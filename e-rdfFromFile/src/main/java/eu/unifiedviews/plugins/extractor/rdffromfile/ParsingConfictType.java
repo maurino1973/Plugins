@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.extractor.file;
+package eu.unifiedviews.plugins.extractor.rdffromfile;
 
 /**
  * Type of problems we want to find out in case of parsing RDF triples using RDF

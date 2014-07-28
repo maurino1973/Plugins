@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.extractor.file;
+package eu.unifiedviews.plugins.extractor.rdffromfile;
 
 import java.io.File;
 import java.io.FileInputStream;
