@@ -1,0 +1,112 @@
+package ue.unifiedviews.plugins.extractors.http.files;
+
+import cz.cuni.mff.xrg.uv.utils.dataunit.metadata.Manipulator;
+import eu.unifiedviews.dataunit.DataUnit;
+import eu.unifiedviews.dataunit.DataUnitException;
+import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
+import eu.unifiedviews.dpu.DPU;
+import eu.unifiedviews.dpu.DPUContext;
+import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
+import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
+import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@DPU.AsExtractor
+public class Main extends ConfigurableBase<Configuration>
+		implements ConfigDialogProvider<Configuration> {
+
+	private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+
+	@DataUnit.AsOutput(name = "output")
+	public WritableFilesDataUnit output;	
+
+	public Main() {
+		super(Configuration.class);
+	}
+
+	@Override
+	public void execute(DPUContext context)
+			throws DPUException {
+        //
+        // get url
+        //
+        final URL url = config.getURL();
+		if (url == null) {
+			context.sendMessage(DPUContext.MessageType.ERROR, 
+                    "Source URL not specified.");
+            return;
+		}
+        //
+        // prepare output file and metadata
+        // 
+        final String outSymName;
+        final String outUri;
+        try {
+            outSymName = output.getBaseFileURIString() + config.getTarget();
+            outUri = output.createFile(outSymName);
+            output.addExistingFile(outSymName, outUri);
+            
+            Manipulator.add(output, outSymName, 
+                    VirtualPathHelper.PREDICATE_VIRTUAL_PATH, config.getTarget());
+            Manipulator.add(output, outSymName, 
+                    Ontology.PREDICATE_DOWNLOADED_FROM, url.toString());
+        } catch (DataUnitException ex) {
+            context.sendMessage(DPUContext.MessageType.ERROR, 
+                    "Problem with Dataunit.", "Can't create output file.", ex);
+            return;
+        }
+        final File outFile = new File(java.net.URI.create(outUri));
+        //
+        // download
+        //
+		try {
+			FileUtils.copyURLToFile(url, outFile);
+			// ok we have downloaded the file .. 
+			return;
+		} catch (IOException ex) {
+			LOG.error("Download failed.", ex);
+		}		
+
+		// try again ?
+		int retryCount = config.getRetryCount();
+		while(retryCount != 0) {
+			// sleep for a while
+			try {
+				Thread.sleep(config.getRetryDelay());
+			} catch (InterruptedException ex) {				
+			}			
+			// try to download
+			try {
+				FileUtils.copyURLToFile(url, outFile);
+				return;
+			} catch (IOException ex) {
+				LOG.error("Download failed.", ex);
+			}
+			// update retry counter
+			if (retryCount > 0) {
+				retryCount--;
+			}
+			// check for cancelation
+			if (context.canceled()) {
+				context.sendMessage(DPUContext.MessageType.INFO, 
+                        "DPU has been canceled.");
+				return;
+			}
+		}
+		context.sendMessage(DPUContext.MessageType.ERROR, 
+                "Failed to download file.");
+	}
+
+	@Override
+	public AbstractConfigDialog<Configuration> getConfigurationDialog() {
+		return new Dialog();
+	}
+
+}
