@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.rdf.validator;
+package eu.unifiedviews.plugins.transformer.rdfvalidator;
 
 /**
  * Type of problems we want to find out in case of parsing RDF triples using RDF

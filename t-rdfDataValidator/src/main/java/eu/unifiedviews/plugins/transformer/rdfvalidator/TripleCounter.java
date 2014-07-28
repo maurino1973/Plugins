@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.rdf.validator;
+package eu.unifiedviews.plugins.transformer.rdfvalidator;
 
 /**
  * Interface provides information about extracted triples.

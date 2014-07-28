@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.rdf.validator;
+package eu.unifiedviews.plugins.transformer.rdfvalidator;
 
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;

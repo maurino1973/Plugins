@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.rdf.validator;
+package eu.unifiedviews.plugins.transformer.rdfvalidator;
 
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.VerticalLayout;

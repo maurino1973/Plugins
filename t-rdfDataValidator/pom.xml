@@ -18,7 +18,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.rdf.validator</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.transformer.rdfvalidator</dpu.package>
 		<dpu.mainClass>RDFDataValidator</dpu.mainClass>
 	</properties>
 </project>
