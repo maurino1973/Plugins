@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestofilesrenametransformer;
+package eu.unifiedviews.plugins.transformer.filesrenamer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

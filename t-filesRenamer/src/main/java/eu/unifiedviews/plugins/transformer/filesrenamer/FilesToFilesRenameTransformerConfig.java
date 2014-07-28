@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestofilesrenametransformer;
+package eu.unifiedviews.plugins.transformer.filesrenamer;
 
 
 public class FilesToFilesRenameTransformerConfig {

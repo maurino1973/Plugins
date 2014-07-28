@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestofilesrenametransformer;
+package eu.unifiedviews.plugins.transformer.filesrenamer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

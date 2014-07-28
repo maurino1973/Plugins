@@ -18,7 +18,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.filestofilesrenametransformer</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.transformer.filesrenamer</dpu.package>
 		<dpu.mainClass>FilesToFilesRenameTransformer</dpu.mainClass>
 	</properties>
 
