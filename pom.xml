@@ -21,10 +21,10 @@
 		<module>t-filesToRdf</module>
 		<module>l-rdfToFile</module>
 		<module>l-filesToLocalFS</module>
+		<module>l-filesToVFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
 		<!-- New DPUs -->
-		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
 		<module>RDF_loader</module>
 	</modules>
