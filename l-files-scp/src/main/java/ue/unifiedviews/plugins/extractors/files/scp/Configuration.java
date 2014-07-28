@@ -1,0 +1,68 @@
+package ue.unifiedviews.plugins.extractors.files.scp;
+
+public class Configuration {
+
+    private String hostname = "";
+
+    private Integer port = 22;
+
+    private String username = "";
+
+    private String password = "";
+
+    private String destination = "/";
+
+    /**
+     * If true and upload failed, then only warning is published.
+     */
+    private boolean softFail = true;
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String upDestination) {
+        this.destination = upDestination;
+    }
+
+    public boolean isSoftFail() {
+        return softFail;
+    }
+
+    public void setSoftFail(boolean softFail) {
+        this.softFail = softFail;
+    }
+
+}
