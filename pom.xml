@@ -9,6 +9,7 @@
 
 	<!-- list of core modules -->
 	<modules>
+		<module>e_httpDownloadList</module>
 		<module>e-rdfDataGenerator</module>
 		<module>t-sparql</module>
 		<module>l-filesToVirtuoso</module>
@@ -17,7 +18,6 @@
 		<module>FilesToRDFTransformer</module>
 		<module>FilesToSPARQLLoader</module>
 		<module>FilesToLocalDirectoryLoader</module>
-		<module>HTTPToFilesExtractor</module>
 		<module>FilesToFilesRenameTransformer</module>
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
