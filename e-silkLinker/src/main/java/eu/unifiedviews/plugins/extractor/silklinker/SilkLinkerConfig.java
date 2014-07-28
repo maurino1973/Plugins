@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.extractor.silklinker;
+package eu.unifiedviews.plugins.extractor.silklinker;
 
 
 /**

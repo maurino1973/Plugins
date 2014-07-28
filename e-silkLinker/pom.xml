@@ -24,7 +24,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.extractor.silklinker</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.extractor.silklinker</dpu.package>
 		<dpu.mainClass>SilkLinker</dpu.mainClass>
 	</properties>
 
