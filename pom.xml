@@ -13,9 +13,9 @@
 		<module>e-sparqlToRdf</module>
 		<module>e-rdfDataGenerator</module>
 		<module>t-sparql</module>
+		<module>t-xslt</module>
 		<module>l-filesToVirtuoso</module>
 		<!-- New DPUs -->
-		<module>FilesToFilesXSLT2Transformer</module>
 		<module>FilesToRDFTransformer</module>
 		<module>FilesToSPARQLLoader</module>
 		<module>FilesToLocalDirectoryLoader</module>
