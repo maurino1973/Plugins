@@ -18,7 +18,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.httptofilesextractor</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.extractor.httpdownloadlist</dpu.package>
 		<dpu.mainClass>HTTPToFilesExtractor</dpu.mainClass>
 	</properties>
 

@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.httptofilesextractor;
+package eu.unifiedviews.plugins.extractor.httpdownloadlist;
 
 import java.io.File;
 import java.io.IOException;
