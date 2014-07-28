@@ -15,10 +15,10 @@
 		<module>t-sparql</module>
 		<module>t-xslt</module>
 		<module>t-filesToRdf</module>
+		<module>l-filesToLocalFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
 		<!-- New DPUs -->
-		<module>FilesToLocalDirectoryLoader</module>
 		<module>FilesToFilesRenameTransformer</module>
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
