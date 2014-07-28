@@ -15,12 +15,12 @@
 		<module>e-rdfDataGenerator</module>
 		<module>t-sparql</module>
 		<module>t-xslt</module>
+		<module>t-filesRenamer</module>
 		<module>t-filesToRdf</module>
 		<module>l-filesToLocalFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
 		<!-- New DPUs -->
-		<module>FilesToFilesRenameTransformer</module>
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
 		<module>File_loader</module>
