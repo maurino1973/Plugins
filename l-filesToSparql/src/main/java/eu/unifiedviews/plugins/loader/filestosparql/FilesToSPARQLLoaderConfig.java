@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestosparqlloader;
+package eu.unifiedviews.plugins.loader.filestosparql;
 
 import java.util.Collections;
 import java.util.Set;
