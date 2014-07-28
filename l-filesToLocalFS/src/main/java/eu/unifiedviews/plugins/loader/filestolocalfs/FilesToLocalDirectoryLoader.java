@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestolocaldirectoryloader;
+package eu.unifiedviews.plugins.loader.filestolocalfs;
 
 import java.io.File;
 import java.io.IOException;
