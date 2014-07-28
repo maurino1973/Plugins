@@ -18,7 +18,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.filestovfsloader</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.loader.filestovfs</dpu.package>
 		<dpu.mainClass>FilesToVFSLoader</dpu.mainClass>
 	</properties>
 

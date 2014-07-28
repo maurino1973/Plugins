@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestovfsloader;
+package eu.unifiedviews.plugins.loader.filestovfs;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;

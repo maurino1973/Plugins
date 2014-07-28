@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestovfsloader;
+package eu.unifiedviews.plugins.loader.filestovfs;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

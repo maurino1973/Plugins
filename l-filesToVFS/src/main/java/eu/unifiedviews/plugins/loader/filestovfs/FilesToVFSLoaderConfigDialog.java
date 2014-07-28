@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestovfsloader;
+package eu.unifiedviews.plugins.loader.filestovfs;
 
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.CheckBox;
