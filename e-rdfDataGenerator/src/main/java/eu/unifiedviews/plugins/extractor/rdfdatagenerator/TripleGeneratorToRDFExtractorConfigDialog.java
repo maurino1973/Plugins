@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.triplegeneratortordfextractor;
+package eu.unifiedviews.plugins.extractor.rdfdatagenerator;
 
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.FormLayout;

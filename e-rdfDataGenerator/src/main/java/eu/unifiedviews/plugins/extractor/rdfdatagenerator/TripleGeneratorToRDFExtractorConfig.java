@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.triplegeneratortordfextractor;
+package eu.unifiedviews.plugins.extractor.rdfdatagenerator;
 
 public class TripleGeneratorToRDFExtractorConfig {
 

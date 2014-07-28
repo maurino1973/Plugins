@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.triplegeneratortordfextractor;
+package eu.unifiedviews.plugins.extractor.rdfdatagenerator;
 
 import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.RepositoryConnection;

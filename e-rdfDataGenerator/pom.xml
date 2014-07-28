@@ -18,7 +18,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.triplegeneratortordfextractor</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.extractor.rdfdatagenerator</dpu.package>
 		<dpu.mainClass>TripleGeneratorToRDFExtractor</dpu.mainClass>
 	</properties>
 	
