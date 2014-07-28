@@ -10,6 +10,7 @@
 	<!-- list of core modules -->
 	<modules>
 		<module>e_httpDownloadList</module>
+		<module>e-rdfFromFile</module>
 		<module>e-sparqlToRdf</module>
 		<module>e-rdfDataGenerator</module>
 		<module>t-sparql</module>
@@ -22,7 +23,6 @@
 		<module>FilesToFilesRenameTransformer</module>
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
-		<module>File_extractor</module>
 		<module>File_loader</module>
 		<module>RDF_loader</module>
 		<module>RDF_Data_Validator</module>
