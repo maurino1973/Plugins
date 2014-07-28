@@ -1,5 +1,11 @@
-package cz.cuni.mff.xrg.odcs.loader.rdf;
+package eu.unifiedviews.plugins.loader.rdftosparql;
 
+import eu.unifiedviews.plugins.loader.rdftosparql.RDFLoaderConfig;
+import eu.unifiedviews.plugins.loader.rdftosparql.InsertType;
+import eu.unifiedviews.plugins.loader.rdftosparql.LoaderEndpointParams;
+import eu.unifiedviews.plugins.loader.rdftosparql.SPARQLoader;
+import eu.unifiedviews.plugins.loader.rdftosparql.WriteGraphType;
+import eu.unifiedviews.plugins.loader.rdftosparql.LoaderPostType;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;

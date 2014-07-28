@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.rdf;
+package eu.unifiedviews.plugins.loader.rdftosparql;
 
 import java.util.List;
 

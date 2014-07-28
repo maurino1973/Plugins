@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.rdf;
+package eu.unifiedviews.plugins.loader.rdftosparql;
 
 /**
  * Possibilies how to load RDF data insert part to the SPARQL endpoint.

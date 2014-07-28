@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.rdf;
+package eu.unifiedviews.plugins.loader.rdftosparql;
 
 /**
  * Specify params should be used when POSTing RDF data to target SPARQL

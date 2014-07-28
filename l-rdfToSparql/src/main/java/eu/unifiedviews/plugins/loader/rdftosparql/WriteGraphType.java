@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.rdf;
+package eu.unifiedviews.plugins.loader.rdftosparql;
 
 /**
  * One of chosed way, how to load RDF data to named graph to SPARQL endpoint.

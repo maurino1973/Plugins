@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.loader.rdf;
+package eu.unifiedviews.plugins.loader.rdftosparql;
 
 /**
  * Specify one of possible type of HTTP request used for loading data to SPARQL
