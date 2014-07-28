@@ -11,13 +11,13 @@
 	<modules>
 		<module>t_sparql</module>
 		<module>l_virtuoso</module>
+		<module>e-rdfDataGenerator</module>
 		<!-- New DPUs -->
 		<module>FilesToFilesXSLT2Transformer</module>
 		<module>FilesToRDFTransformer</module>
 		<module>FilesToSPARQLLoader</module>
 		<module>FilesToLocalDirectoryLoader</module>
 		<module>HTTPToFilesExtractor</module>
-		<module>TripleGeneratorToRDFExtractor</module>
 		<module>FilesToFilesRenameTransformer</module>
 		<module>FilesToVFSLoader</module>
 		<!-- Old DPUs -->
