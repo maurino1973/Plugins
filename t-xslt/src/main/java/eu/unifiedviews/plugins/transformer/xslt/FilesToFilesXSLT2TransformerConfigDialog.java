@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestofilesxslt2transformer;
+package eu.unifiedviews.plugins.transformer.xslt;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;

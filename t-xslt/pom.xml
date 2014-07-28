@@ -18,7 +18,7 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.filestofilesxslt2transformer</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.transformer.xslt</dpu.package>
 		<dpu.mainClass>FilesToFilesXSLT2Transformer</dpu.mainClass>
 	</properties>
 
