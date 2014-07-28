@@ -63,6 +63,10 @@ public class Main extends ConfigurableBase<Configuration> implements
                 copyOptions.toArray(new CopyOption[0]);
         
         try {
+
+// TODO Remove
+Manipulator.dump(inFilesData);
+
             while(!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
                 LOG.debug("Found entry '{}' with path '{}'", 
@@ -100,10 +104,6 @@ public class Main extends ConfigurableBase<Configuration> implements
                             "Failed to copy file.", 
                             "Failed to copy, file ignored.", ex);
                 }
-                
-// TODO Remove
-Manipulator.dump(inFilesData);
-                
             }
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU failed",
