@@ -1,5 +1,6 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package eu.unifiedviews.plugins.transformer.sparql.test;
 
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
 import static org.junit.Assert.*;
 
 import org.junit.AfterClass;
