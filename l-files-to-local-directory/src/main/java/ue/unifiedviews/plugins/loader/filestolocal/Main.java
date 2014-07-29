@@ -1,13 +1,12 @@
-package ue.unifiedviews.plugins.loaders.file.local;
+package ue.unifiedviews.plugins.loader.filestolocal;
 
-import cz.cuni.mff.xrg.uv.utils.dataunit.metadata.Manipulator;
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
-import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
