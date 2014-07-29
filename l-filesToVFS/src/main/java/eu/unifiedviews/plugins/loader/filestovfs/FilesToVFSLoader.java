@@ -4,17 +4,18 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.Date;
 
-import org.apache.commons.vfs2.AllFileSelector;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.FileSystemOptions;
-import org.apache.commons.vfs2.VFS;
-import org.apache.commons.vfs2.auth.StaticUserAuthenticator;
-import org.apache.commons.vfs2.impl.DefaultFileSystemConfigBuilder;
-import org.apache.commons.vfs2.provider.ftp.FtpFileSystemConfigBuilder;
-import org.apache.commons.vfs2.provider.ftps.FtpsFileSystemConfigBuilder;
-import org.apache.commons.vfs2.provider.sftp.SftpFileSystemConfigBuilder;
+import org.apache.commons.vfs.AllFileSelector;
+import org.apache.commons.vfs.FileObject;
+import org.apache.commons.vfs.FileSystemException;
+import org.apache.commons.vfs.FileSystemManager;
+import org.apache.commons.vfs.FileSystemOptions;
+import org.apache.commons.vfs.VFS;
+import org.apache.commons.vfs.auth.StaticUserAuthenticator;
+import org.apache.commons.vfs.impl.DefaultFileSystemConfigBuilder;
+import org.apache.commons.vfs.provider.ftp.FtpFileSystemConfigBuilder;
+// TODO will be work when vfs2 bundle will work properly
+//import org.apache.commons.vfs2.provider.ftps.FtpsFileSystemConfigBuilder;
+import org.apache.commons.vfs.provider.sftp.SftpFileSystemConfigBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +68,8 @@ public class FilesToVFSLoader extends
             }
             FtpFileSystemConfigBuilder.getInstance().setUserDirIsRoot(options, false);
             SftpFileSystemConfigBuilder.getInstance().setUserDirIsRoot(options, false);
-            FtpsFileSystemConfigBuilder.getInstance().setUserDirIsRoot(options, false);
+            // TODO will be work when vfs2 bundle will work properly
+            // FtpsFileSystemConfigBuilder.getInstance().setUserDirIsRoot(options, false);
             fileSystemManager = VFS.getManager();
             destinationFileObject = fileSystemManager.resolveFile(config.getDestination());
             destinationFileObject.createFolder();
