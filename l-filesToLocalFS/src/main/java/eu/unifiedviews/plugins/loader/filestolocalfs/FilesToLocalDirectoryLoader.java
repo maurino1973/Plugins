@@ -18,6 +18,8 @@ import eu.unifiedviews.dataunit.files.FilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -63,6 +65,8 @@ public class FilesToLocalDirectoryLoader extends
 
         long index = 0L;
         boolean shouldContinue = !dpuContext.canceled();
+        VirtualPathHelper inputVirtualPathHelper = VirtualPathHelpers.create(filesInput);
+
         try {
             while ((shouldContinue)&& (filesIteration.hasNext())) {
                 index++;
@@ -71,8 +75,12 @@ public class FilesToLocalDirectoryLoader extends
                 try {
                     entry = filesIteration.next();
                     Path inputPath = new File(URI.create(entry.getFileURIString())).toPath();
-                    Path outputPath = new File(destinationAbsolutePath + '/'
-                            + entry.getSymbolicName()).toPath();
+                    String outputRelativePath = inputVirtualPathHelper.getVirtualPath(entry.getSymbolicName());
+                    if( outputRelativePath == null || outputRelativePath.isEmpty()) {
+                        outputRelativePath = entry.getSymbolicName();
+                    }
+                    Path outputPath = new File(destinationAbsolutePath + File.separator
+                            + outputRelativePath).toPath();
                     try {
                         Date start = new Date();
                         if (dpuContext.isDebugging()) {
