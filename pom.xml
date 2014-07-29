@@ -9,11 +9,11 @@
 
 	<!-- list of core modules -->
 	<modules>
-		<module>e_httpDownloadList</module>
 		<module>e-rdfFromFile</module>
 		<module>e-sparqlToRdf</module>
 		<module>e-rdfDataGenerator</module>
 		<module>e-silkLinker</module>
+		<module>e-httpDownloadList</module>
 		<module>t-sparql</module>
 		<module>t-xslt</module>
 		<module>t-filesRenamer</module>
