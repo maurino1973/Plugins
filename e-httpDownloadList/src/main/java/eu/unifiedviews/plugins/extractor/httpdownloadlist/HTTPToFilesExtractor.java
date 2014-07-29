@@ -51,11 +51,10 @@ public class HTTPToFilesExtractor extends ConfigurableBase<HTTPToFilesExtractorC
             File downloadedFile = null;
             String downloadFromLocation = null;
             try {
-                downloadedFilename = filesOutput.createFile(symbolicName);
+                downloadedFilename = filesOutput.addNewFile(symbolicName);
                 downloadedFile = new File(URI.create(downloadedFilename));
                 downloadFromLocation = symbolicNameToURIMap.get(symbolicName);
                 FileUtils.copyURLToFile(new java.net.URL(downloadFromLocation), downloadedFile, connectionTimeout, readTimeout);
-                filesOutput.addExistingFile(symbolicName, downloadedFilename);
                 if (dpuContext.isDebugging()) {
                     LOG.debug("Downloaded " + symbolicName + " from " + downloadFromLocation + " to " + downloadedFilename);
                 }

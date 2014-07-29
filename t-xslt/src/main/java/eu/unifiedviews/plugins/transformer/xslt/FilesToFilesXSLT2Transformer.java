@@ -95,7 +95,7 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
 
                     String inSymbolicName = entry.getSymbolicName();
 
-                    String outputFilename = filesOutput.createFile(inSymbolicName);
+                    String outputFilename = filesOutput.addNewFile(inSymbolicName);
                     File outputFile = new File(URI.create(outputFilename));
                     File inputFile = new File(URI.create(entry.getFileURIString()));
                     try {
@@ -126,7 +126,6 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
                         trans.transform();
                         trans.getUnderlyingController().clearDocumentPool();
 
-                        filesOutput.addExistingFile(inSymbolicName, outputFilename);
                         filesSuccessfulCount++;
 
                         if (dpuContext.isDebugging()) {
