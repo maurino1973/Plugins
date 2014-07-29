@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 
 /**
@@ -69,7 +70,7 @@ public class DPUReplacementTest {
             env.run(transformer);
 
             connection3 = output.getConnection();
-            assertEquals("Count of triples are not same", 3L, connection3.size(output.getDataGraphnames().toArray(new URI[0])));
+            assertEquals("Count of triples are not same", 3L, connection3.size(RDFHelper.getGraphsArray(output)));
             env.release();
 
         } catch (Exception e) {

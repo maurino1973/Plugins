@@ -10,6 +10,7 @@ import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -174,7 +175,7 @@ public class PlaceholdersHelper {
                 usedRepositories.add(input);
                 try {
                     //set RIGHT data graph for DPU
-                    next.setGraphName(input.getDataGraphnames().iterator().next().stringValue());
+                    next.setGraphName(RDFHelper.getGraphs(input).iterator().next().stringValue());
                 } catch (DataUnitException ex) {
                     throw new DPUException(ex);
                 }
