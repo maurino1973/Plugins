@@ -10,10 +10,13 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.NonConfigurableBase;
 
 @DPU.AsTransformer
 public class FilesToFilesRenameTransformer extends NonConfigurableBase {
+
     private static final Logger LOG = LoggerFactory.getLogger(FilesToFilesRenameTransformer.class);
 
     @DataUnit.AsInput(name = "filesInput")
@@ -50,14 +53,23 @@ public class FilesToFilesRenameTransformer extends NonConfigurableBase {
         long index = 0L;
         boolean shouldContinue = !dpuContext.canceled();
 
+        VirtualPathHelper virtualPathHelperInput = VirtualPathHelpers.create(filesInput);
+        VirtualPathHelper virtualPathHelperOutput = VirtualPathHelpers.create(filesOutput);
         try {
+
             while ((shouldContinue) && (filesIteration.hasNext())) {
                 FilesDataUnit.Entry entry;
                 try {
                     entry = filesIteration.next();
                     index++;
 
-                    filesOutput.addExistingFile(entry.getSymbolicName() + ".ttl", entry.getFileURIString());
+                    final String newSymbolicName = entry.getSymbolicName() + ".ttl";
+                    final String newVirtualPath
+                            = virtualPathHelperInput.getVirtualPath(entry.getSymbolicName()) + ".ttl";
+
+                    filesOutput.addExistingFile(newSymbolicName, entry.getFileURIString());
+                    virtualPathHelperOutput.setVirtualPath(newSymbolicName, newVirtualPath);
+
                     filesSuccessfulCount++;
                 } catch (DataUnitException ex) {
                     dpuContext.sendMessage(
@@ -73,6 +85,8 @@ public class FilesToFilesRenameTransformer extends NonConfigurableBase {
             throw new DPUException("Error iterating filesInput.", ex);
         } finally {
             try {
+                virtualPathHelperInput.close();
+                virtualPathHelperOutput.close();
                 filesIteration.close();
             } catch (DataUnitException ex) {
                 LOG.warn("Error closing filesInput", ex);
@@ -88,8 +102,9 @@ public class FilesToFilesRenameTransformer extends NonConfigurableBase {
             // Check for special case: 11 - 13 are all "th".
             // So if the second to last digit is 1, it is "th".
             char secondToLastDigit = value.charAt(value.length() - 2);
-            if (secondToLastDigit == '1')
+            if (secondToLastDigit == '1') {
                 return value + "th";
+            }
         }
         char lastDigit = value.charAt(value.length() - 1);
         switch (lastDigit) {
