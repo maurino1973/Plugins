@@ -10,7 +10,7 @@
 	<!-- list of core modules -->
 	<modules>
 		<module>e-rdfFromFile</module>
-		<module>e-sparqlToRdf</module>
+		<module>e-rdfFromSparql</module>
 		<module>e-rdfDataGenerator</module>
 		<module>e-silkLinker</module>
 		<module>e-httpDownloadList</module>
