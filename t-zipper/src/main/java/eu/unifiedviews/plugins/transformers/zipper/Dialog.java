@@ -1,4 +1,4 @@
-package ue.unifiedviews.plugins.transformers.zipper;
+package eu.unifiedviews.plugins.transformers.zipper;
 
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;

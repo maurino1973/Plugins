@@ -2,30 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>eu.unifiedviews</groupId>
+        <groupId>eu.unifiedviews.plugins</groupId>
         <artifactId>dpu-base-pom</artifactId>
         <version>1.0.0</version>
         <relativePath>../dpu-base-pom.xml</relativePath>
     </parent>    
     <groupId>eu.unifiedviews.plugins</groupId>
     <artifactId>t-zipper</artifactId>
-    <version>1.0.0</version>
-    <packaging>bundle</packaging>
     <name>T-Zipper</name>
     <description>Zip input files into zip file of given name.</description>
+    <version>1.0.0</version>
+    <packaging>bundle</packaging>
 	
     <properties>    
-        <dpu.package>ue.unifiedviews.plugins.transformers.zipper</dpu.package>
+        <dpu.package>eu.unifiedviews.plugins.transformers.zipper</dpu.package>
         <dpu.mainClass>Main</dpu.mainClass>
     </properties>
 	
     <dependencies>
-        <dependency>
-            <groupId>cz.cuni.mff.xrg.uv</groupId>
-            <artifactId>utils-dataunit</artifactId>
-            <version>1.1.0</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

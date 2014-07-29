@@ -19,6 +19,7 @@
 		<module>t-filesRenamer</module>
 		<module>t-rdfDataValidator</module>
 		<module>t-filesToRdf</module>
+		<module>t-zipper</module>
 		<module>l-rdfToFile</module>
 		<module>l-rdfToSparql</module>
 		<module>l-filesToLocalFS</module>
