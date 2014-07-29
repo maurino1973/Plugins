@@ -1,4 +1,4 @@
-package ue.unifiedviews.plugins.loader.filestolocal;
+package eu.unifiedviews.plugins.loader.filestolocaldir;
 
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.TextField;
