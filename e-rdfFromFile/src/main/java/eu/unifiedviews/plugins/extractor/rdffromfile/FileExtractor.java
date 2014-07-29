@@ -30,6 +30,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -106,7 +107,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
                 RepositoryConnection connection = null;
                 try {
                     connection = writableRdfDataUnit.getConnection();
-                    triplesCount = connection.size(writableRdfDataUnit.getBaseDataGraphURI());
+                    triplesCount = connection.size(RDFHelper.getGraphsArray(writableRdfDataUnit));
                     LOG.info("Extracted {} triples", triplesCount);
                 } catch (DataUnitException ex) {
                     throw new DPUException(ex);
@@ -184,7 +185,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
             RDFFormat fileFormat,
             InputStreamReader is, String baseURI) throws DPUException, DataUnitException {
 
-        handler.setGraphContext(writableRdfDataUnit.getBaseDataGraphURI());
+        handler.setGraphContext(writableRdfDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName()));
         RDFParser parser = getRDFParser(fileFormat, handler);
 
         try {
@@ -382,7 +383,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
                 connection.begin();
                 addFilesInDirectoryToRepository(format, files, baseURI,
                         handlerExtractType, skipFiles, connection,
-                        repo.getBaseDataGraphURI());
+                        repo.addNewDataGraph(config.getOutputGraphSymbolicName()));
 
                 connection.commit();
             } catch (RepositoryException | DataUnitException e) {
@@ -465,7 +466,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
                 connection.begin();
                 addFileToRepository(format, dirFile, baseURI,
                         handlerExtractType,
-                        connection, repo.getBaseDataGraphURI());
+                        connection, repo.addNewDataGraph(config.getOutputGraphSymbolicName()));
                 connection.commit();
             } catch (RepositoryException | DataUnitException e) {
                 throw new DPUException(e.getMessage(), e);

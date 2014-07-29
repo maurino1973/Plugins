@@ -1,11 +1,13 @@
 package eu.unifiedviews.plugins.transformer.sparql.test;
 
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
@@ -15,8 +17,8 @@ import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
 
 public class AddQueryGraphsTest {
 
@@ -35,7 +37,7 @@ public class AddQueryGraphsTest {
     public static void initialize() throws DataUnitException {
         testEnvironment = new TestEnvironment();
         writeRepository = testEnvironment.createRdfInput("LocalRepository", false);
-        GRAPH_NAME = writeRepository.getBaseDataGraphURI().stringValue();
+        GRAPH_NAME = writeRepository.addNewDataGraph("test").stringValue();
         trans = new SPARQLTransformer();
     }
 
@@ -58,11 +60,11 @@ public class AddQueryGraphsTest {
                         + "{ GRAPH <%s> { <http://example/book1>  ns:price  42 } } ",
                 GRAPH_NAME);
 
-        String returnedQuery = trans.AddGraphToUpdateQuery(originalQuery, writeRepository.getBaseDataGraphURI());
+        String returnedQuery = trans.AddGraphToUpdateQuery(originalQuery,  new URIImpl(GRAPH_NAME));
         assertEquals(expectedQuery, returnedQuery);
         
         assertTrue("This update query can not be executed by transformer",
-                tryExecuteUpdateQuery(originalQuery));
+                tryExecuteUpdateQuery(originalQuery,  new URIImpl(GRAPH_NAME)));
 
     }
 
@@ -80,11 +82,11 @@ public class AddQueryGraphsTest {
                         + "dc:creator \"Edmund Wells\" . } }",
                 GRAPH_NAME);
 
-        String returnedQuery = trans.AddGraphToUpdateQuery(originalQuery, writeRepository.getBaseDataGraphURI());
+        String returnedQuery = trans.AddGraphToUpdateQuery(originalQuery,  new URIImpl(GRAPH_NAME));
         assertEquals(expectedQuery, returnedQuery);
         
         assertTrue("This update query can not be executed by transformer",
-                tryExecuteUpdateQuery(originalQuery));
+                tryExecuteUpdateQuery(originalQuery,  new URIImpl(GRAPH_NAME)));
 
     }
 
@@ -104,19 +106,20 @@ public class AddQueryGraphsTest {
                         + "WHERE\n"
                         + "{ ?person foaf:givenName 'Bill' }",
                 GRAPH_NAME);
-        String returnedQuery = trans.AddGraphToUpdateQuery(originalQuery, writeRepository.getBaseDataGraphURI());
+        
+        String returnedQuery = trans.AddGraphToUpdateQuery(originalQuery, new URIImpl(GRAPH_NAME));
         assertEquals(expectedQuery, returnedQuery);
         
         assertTrue("This update query can not be executed by transformer",
-                tryExecuteUpdateQuery(originalQuery));
+                tryExecuteUpdateQuery(originalQuery,  new URIImpl(GRAPH_NAME)));
     }
 
-    private boolean tryExecuteUpdateQuery(String updateQuery) throws RepositoryException, DataUnitException {
+    private boolean tryExecuteUpdateQuery(String updateQuery, URI graph) throws RepositoryException, DataUnitException {
         RepositoryConnection connection = null;
         try {
             connection = writeRepository.getConnection();
 
-            trans.executeSPARQLUpdateQuery(connection, updateQuery, RDFHelper.getDatasetWithDefaultGraphs(writeRepository), writeRepository.getBaseDataGraphURI());
+            trans.executeSPARQLUpdateQuery(connection, updateQuery, RDFHelper.getDatasetWithDefaultGraphs(writeRepository), graph);
             return true;
         } catch (DPUException e) {
             LOG.debug("Exception duering exectution query " + updateQuery + e

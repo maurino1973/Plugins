@@ -5,9 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
@@ -21,6 +23,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @authod Petr Škoda
  */
 public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerConfig> {
+    private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
+    private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
     private enum QueryType {
         INVALID,
@@ -100,6 +104,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
         mainLayout.addComponent(accordion);
         mainLayout.setExpandRatio(accordion, 1);
 
+        mainLayout.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
         setCompositionRoot(mainLayout);
     }
 
@@ -186,6 +191,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
         }
 
         btnDelete.setEnabled(!conf.getQueryPairs().isEmpty());
+        outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
     }
 
     /**
@@ -214,7 +220,8 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
             final boolean isConstruct = queryTypes.get(txtQuery) == QueryType.CONSTRUCT;
             queryPairs.add(new SPARQLQueryPair(txtQuery.getValue(), isConstruct));
         }
-
+        
+        conf.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
         return conf;
     }
 

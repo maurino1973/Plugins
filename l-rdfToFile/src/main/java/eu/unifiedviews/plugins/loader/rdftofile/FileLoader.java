@@ -25,6 +25,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUContext.MessageType;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.copyhelper.AddAllHelper;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -121,7 +122,7 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
 
         if (config.isPenetrable()) {
             try {
-                inputShadow.addAll(inputDataUnit);
+                AddAllHelper.addAll(inputDataUnit, inputShadow);
             } catch (DataUnitException e) {
                 context.sendMessage(DPUContext.MessageType.ERROR,
                         "DataUnit exception" + e.getMessage(), e.fillInStackTrace().toString());

@@ -9,6 +9,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.ui.*;
 
@@ -24,6 +25,9 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 public class RDFExtractorDialog extends BaseConfigDialog<RDFExtractorConfig> {
 
     private static final long serialVersionUID = 1L;
+    
+    private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
+    private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
     private GridLayout mainLayout;
 
@@ -476,6 +480,7 @@ public class RDFExtractorDialog extends BaseConfigDialog<RDFExtractorConfig> {
                 });
 
         gridLayoutCore.addComponent(textAreaConstr, 1, 5);
+        gridLayoutCore.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
 
         return gridLayoutCore;
     }
@@ -1395,7 +1400,7 @@ public class RDFExtractorDialog extends BaseConfigDialog<RDFExtractorConfig> {
                     extractFailed, useStatisticalHandler, failWhenErrors,
                     retrySize, retryTime, endpointParams, useSplitConstruct,
                     splitConstructSize);
-
+            config.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
             return config;
         }
     }
@@ -1482,7 +1487,7 @@ public class RDFExtractorDialog extends BaseConfigDialog<RDFExtractorConfig> {
             } else {
                 failsWhenErrors.setValue(CONTINUE);
             }
-
+            outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
         } catch (UnsupportedOperationException | Property.ReadOnlyException | Converter.ConversionException e) {
             // throw setting exception
             throw new DPUConfigException(e.getMessage(), e);

@@ -26,6 +26,8 @@ public class FileExtractorConfig {
 
     private boolean failWhenErrors;
 
+    private String outputGraphSymbolicName = "E-RDFFromFile/output" + String.valueOf(new java.util.Random().nextInt(100));
+
     public void setFileSuffix(String fileSuffix) {
         FileSuffix = fileSuffix;
     }
@@ -164,4 +166,14 @@ public class FileExtractorConfig {
                 && RDFFormatValue != null
                 && fileExtractType != null;
     }
+
+    public String getOutputGraphSymbolicName() {
+        return outputGraphSymbolicName;
+    }
+
+    public void setOutputGraphSymbolicName(String outputGraphSymbolicName) {
+        this.outputGraphSymbolicName = outputGraphSymbolicName;
+    }
+    
+    
 }

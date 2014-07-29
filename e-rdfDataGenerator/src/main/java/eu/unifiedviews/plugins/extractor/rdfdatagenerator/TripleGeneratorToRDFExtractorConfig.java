@@ -6,6 +6,8 @@ public class TripleGeneratorToRDFExtractorConfig {
 
     private int commitSize = 50000;
 
+    private String outputGraphSymbolicName = "E-RDFDataGenerator/output" + String.valueOf(new java.util.Random().nextInt(100));
+
     public int getTripleCount() {
         return tripleCount;
     }
@@ -22,4 +24,11 @@ public class TripleGeneratorToRDFExtractorConfig {
         this.commitSize = commitSize;
     }
 
+    public String getOutputGraphSymbolicName() {
+        return outputGraphSymbolicName;
+    }
+
+    public void setOutputGraphSymbolicName(String outputGraphSymbolicName) {
+        this.outputGraphSymbolicName = outputGraphSymbolicName;
+    }
 }

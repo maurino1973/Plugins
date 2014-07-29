@@ -1,6 +1,7 @@
 package eu.unifiedviews.plugins.extractor.spartqltordf.test;
 
 import eu.unifiedviews.plugins.extractor.rdffromsparql.ExtractorEndpointParams;
+import eu.unifiedviews.plugins.extractor.rdffromsparql.RDFExtractorConfig;
 import eu.unifiedviews.plugins.extractor.rdffromsparql.SPARQLExtractor;
 import eu.unifiedviews.plugins.extractor.rdffromsparql.ExtractorRequestType;
 import static org.junit.Assert.assertEquals;
@@ -21,6 +22,7 @@ import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 /**
  * @author Jiri Tomes
@@ -65,11 +67,13 @@ public class SPARQLExtractorRequestSysTest {
 
         RepositoryConnection connection = null;
         try {
+            RDFExtractorConfig c = new RDFExtractorConfig();
+            c.setOutputGraphSymbolicName("dfsfds");
             SPARQLExtractor extractor = new SPARQLExtractor(repository,
-                    getTestContext(), params);
+                    getTestContext(), params, c);
             extractor.extractFromSPARQLEndpoint(endpoint, query);
             connection = repository.getConnection();
-            assertEquals(connection.size(repository.getBaseDataGraphURI()), EXTRACTED_TRIPLES);
+            assertEquals(connection.size(RDFHelper.getGraphsArray(repository)), EXTRACTED_TRIPLES);
         } catch (DPUException ex) {
             fail(ex.getMessage());
         } finally {

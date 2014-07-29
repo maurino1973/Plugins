@@ -80,22 +80,6 @@ public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig>
                         graphName));
 
         if (stopExecution) {
-            RepositoryConnection connection = null;
-            try {
-                connection = dataOutput.getConnection();
-                connection.clear(dataOutput.getBaseDataGraphURI());
-            } catch (RepositoryException ex) {
-                LOG.warn("Error", ex);
-            } finally {
-                if (connection != null) {
-                    try {
-                        connection.close();
-                    } catch (RepositoryException ex) {
-                        LOG.warn("Error when closing connection", ex);
-                        // eat close exception, we cannot do anything clever here
-                    }
-                }
-            }
             throw new DPUException(
                     "RDFDataValidator found some invalid data - pipeline execution is stopped");
         }

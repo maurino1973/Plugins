@@ -15,6 +15,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -98,11 +99,11 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
             }
 
             SPARQLExtractor extractor = new SPARQLExtractor(outputRdfDataUnit, context,
-                    retrySize, retryTime, endpointParams);
+                    retrySize, retryTime, endpointParams, config);
 
             long lastrepoSize = 0;
             connection = outputRdfDataUnit.getConnection();
-            lastrepoSize = connection.size(outputRdfDataUnit.getBaseDataGraphURI());
+            lastrepoSize = connection.size(RDFHelper.getGraphsArray(outputRdfDataUnit));
 
             if (usedSplitConstruct) {
                 if (splitConstructSize <= 0) {
@@ -124,7 +125,7 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
                             hostName, password, RDFFormat.NTRIPLES,
                             handlerExtractType, false);
 
-                    long newrepoSize = connection.size(outputRdfDataUnit.getBaseDataGraphURI());
+                    long newrepoSize = connection.size(RDFHelper.getGraphsArray(outputRdfDataUnit));
 
                     checkParsingProblems(useStatisticHandler, context);
                     if (lastrepoSize < newrepoSize) {
@@ -148,7 +149,7 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
 
                 checkParsingProblems(useStatisticHandler, context);
             }
-            final long triplesCount = connection.size(outputRdfDataUnit.getBaseDataGraphURI());
+            final long triplesCount = connection.size(RDFHelper.getGraphsArray(outputRdfDataUnit));
 
             String tripleInfoMessage = String.format(
                     "Extracted %s triples from SPARQL endpoint %s",

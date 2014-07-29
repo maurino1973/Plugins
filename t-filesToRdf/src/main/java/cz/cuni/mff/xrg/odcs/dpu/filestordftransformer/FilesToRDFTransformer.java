@@ -58,13 +58,12 @@ public class FilesToRDFTransformer extends ConfigurableBase<FilesToRDFTransforme
 
             while (filesIteration.hasNext()) {
                 connection = rdfOutput.getConnection();
+                FilesDataUnit.Entry entry = filesIteration.next();
 
                 RDFInserter rdfInserter = new CancellableCommitSizeInserter(connection, config.getCommitSize(), dpuContext);
-                rdfInserter.enforceContext(rdfOutput.getBaseDataGraphURI());
+                rdfInserter.enforceContext(rdfOutput.addNewDataGraph(entry.getSymbolicName()));
 
                 ParseErrorListenerEnabledRDFLoader loader = new ParseErrorListenerEnabledRDFLoader(connection.getParserConfig(), connection.getValueFactory());
-
-                FilesDataUnit.Entry entry = filesIteration.next();
                 try {
                     if (dpuContext.isDebugging()) {
                         LOG.debug("Starting extraction of file " + entry.getSymbolicName() + " path URI " + entry.getFileURIString());

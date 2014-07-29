@@ -103,7 +103,7 @@ public class SPARQLExtractor {
     private String username;
 
     private String password;
-
+    private RDFExtractorConfig config;
     /**
      * Create new instance of SPARQLExtractor with given parameters.
      *
@@ -118,12 +118,13 @@ public class SPARQLExtractor {
      */
     public SPARQLExtractor(WritableRDFDataUnit dataUnit, DPUContext context,
             int retrySize, long retryTime,
-            ExtractorEndpointParams endpointParams) {
+            ExtractorEndpointParams endpointParams, RDFExtractorConfig config) {
 
         this.outputDataUnit = dataUnit;
         this.context = context;
         this.endpointParams = endpointParams;
-
+        this.config = config;
+        
         setRetryConnectionSize(retrySize);
         setRetryConnectionTime(retryTime);
     }
@@ -138,10 +139,11 @@ public class SPARQLExtractor {
      * endpoint.
      */
     public SPARQLExtractor(WritableRDFDataUnit dataUnit, DPUContext context,
-            ExtractorEndpointParams endpointParams) {
+            ExtractorEndpointParams endpointParams,RDFExtractorConfig config) {
         this.outputDataUnit = dataUnit;
         this.context = context;
         this.endpointParams = endpointParams;
+        this.config = config;
 
         setRetryConnectionSize(DEFAULT_EXTRACTOR_RETRY_SIZE);
         setRetryConnectionTime(DEFAULT_EXTRACTOR_RETRY_TIME);
@@ -352,7 +354,7 @@ public class SPARQLExtractor {
                 break;
         }
 
-        handler.setGraphContext(outputDataUnit.getBaseDataGraphURI());
+        handler.setGraphContext(outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName()));
 
         RDFParser parser = getRDFParser(format, handler);
 
@@ -382,13 +384,6 @@ public class SPARQLExtractor {
 
         } catch (RDFCancelException e) {
             logger.debug(e.getMessage());
-            try {
-                connection.clear(outputDataUnit.getBaseDataGraphURI());
-            } catch (RepositoryException e1) {
-                logger.debug(e.getMessage());
-                throw new DPUException(e1.getMessage(), e1);
-            }
-
         } catch (RDFHandlerException | RDFParseException ex) {
             logger.error(ex.getMessage(), ex);
             throw new DPUException(ex.getMessage(), ex);

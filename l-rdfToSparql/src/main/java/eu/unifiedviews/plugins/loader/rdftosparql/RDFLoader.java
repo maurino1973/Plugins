@@ -16,6 +16,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.dpu.DPUContext.MessageType;
+import eu.unifiedviews.helpers.dataunit.copyhelper.AddAllHelper;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -140,7 +141,7 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
 
         if (config.isPenetrable()) {
             try {
-                inputShadow.addAll(inputDataUnit);
+                AddAllHelper.addAll(inputDataUnit, inputShadow);
             } catch (DataUnitException e) {
                 throw new DPUException(e);
             }

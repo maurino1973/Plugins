@@ -17,6 +17,8 @@ public class SPARQLTransformerConfig {
 
     boolean isConstructType;
 
+    private String outputGraphSymbolicName = "T-SPARQL/output" + String.valueOf(new java.util.Random().nextInt(100));
+
     public SPARQLTransformerConfig() {
         this.queryPairs = new LinkedList<>();
     }
@@ -68,6 +70,14 @@ public class SPARQLTransformerConfig {
         this.queryPairs = queryPairs;
     }
 
+    public String getOutputGraphSymbolicName() {
+        return outputGraphSymbolicName;
+    }
+
+    public void setOutputGraphSymbolicName(String outputGraphSymbolicName) {
+        this.outputGraphSymbolicName = outputGraphSymbolicName;
+    }
+
     /**
      * Fill missing configuration with default values.
      */
@@ -78,4 +88,6 @@ public class SPARQLTransformerConfig {
 //                    isConstructType));
 //        }
 //    }
+    
+    
 }
