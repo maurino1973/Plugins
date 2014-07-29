@@ -150,10 +150,7 @@ public class Main extends ConfigurableBase<Configuration>
     private boolean addZipEntry(ZipOutputStream zos, byte[] buffer,
             FilesDataUnit.Entry entry) throws DataUnitException {
 
-        String virtualPath = MetadataHelper.get(inFilesData,
-                entry.getSymbolicName(),
-                VirtualPathHelper.PREDICATE_VIRTUAL_PATH);
-
+        String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
         // TODO We can try to use symbolicName here
         if (virtualPath == null) {
             context.sendMessage(DPUContext.MessageType.WARNING,
