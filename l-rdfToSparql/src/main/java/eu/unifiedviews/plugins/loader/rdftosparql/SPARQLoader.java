@@ -4,7 +4,6 @@ import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 import java.io.File;
@@ -44,6 +43,7 @@ import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
+import org.openrdf.query.Dataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
