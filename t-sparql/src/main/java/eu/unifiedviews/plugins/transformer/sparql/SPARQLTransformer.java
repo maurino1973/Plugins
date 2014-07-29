@@ -28,6 +28,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.copyhelper.AddAllHelper;
 import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
 import eu.unifiedviews.helpers.dataunit.dataset.DatasetBuilder;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
@@ -320,7 +321,7 @@ public class SPARQLTransformer
     //	TODO michal.klempa this should not be needed anymore
     private void prepareRepository(List<RDFDataUnit> inputs) throws DataUnitException {
         for (RDFDataUnit input : inputs) {
-            outputDataUnit.addAll(input);
+            AddAllHelper.addAll(input, outputDataUnit);
         }
     }
 
