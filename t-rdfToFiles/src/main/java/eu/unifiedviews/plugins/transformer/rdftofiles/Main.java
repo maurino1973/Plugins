@@ -95,6 +95,10 @@ public class Main extends ConfigurableBase<Configuration> implements
             } else {
                 exportMultiple(graphUris);
             }
+            
+// TODO Remove
+Manipulator.dump(outFilesData);            
+            
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "DPU Failed.", "Problem with DataUnit.", ex);
@@ -194,14 +198,13 @@ public class Main extends ConfigurableBase<Configuration> implements
      */
     private String exportGraph(URI[] uris, String fileName) 
             throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName = genFileSymbolicName(fileName);
+        final String outputSymbolicName = 
+                outFilesData.getBaseFileURIString() + fileName;        
         final File outputFile = 
                 new File(java.net.URI.create(outputSymbolicName));
         // create parent
         outputFile.getParentFile().mkdirs();
-        
-        LOG.debug("Exporting to: {}", outputFile.toString());
-        
+
         RepositoryConnection connection = null;
         try (FileOutputStream outStream = new FileOutputStream(outputFile);
                 OutputStreamWriter outWriter = new OutputStreamWriter(outStream, 
@@ -243,7 +246,7 @@ public class Main extends ConfigurableBase<Configuration> implements
      */
     private void generateGraphFile(String graphName) 
             throws DataUnitException, IOException {
-        final String outputSymbolicName = genFileSymbolicName(".graph");
+        final String outputSymbolicName = outFilesData.getBaseFileURIString() + ".graph";
 // TODO: delete when interface support FilesDataUnit.addNewFile
         final String fileLocation = outFilesData.createFile(outputSymbolicName);
 // TODO: uncomment when interface support FilesDataUnit.addNewFile
@@ -261,15 +264,4 @@ public class Main extends ConfigurableBase<Configuration> implements
                 VirtualPathHelper.PREDICATE_VIRTUAL_PATH, ".graph");        
     }
 
-    /**
-     * Generate symbolic name for file,of given name.
-     * 
-     * @param name
-     * @return
-     * @throws DataUnitException 
-     */
-    private String genFileSymbolicName(String name) throws DataUnitException {
-        return outFilesData.getBaseFileURIString() + name;
-    }
-    
 }
