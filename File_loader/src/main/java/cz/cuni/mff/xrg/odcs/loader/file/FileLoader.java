@@ -25,6 +25,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUContext.MessageType;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -82,7 +83,7 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
         long triplesCount = 0;
         try {
             connection = inputDataUnit.getConnection();
-            triplesCount = connection.size(inputDataUnit.getDataGraphnames().toArray(new URI[0]));
+            triplesCount = connection.size(RDFHelper.getGraphsArray(inputDataUnit));
             FileOutputStream out = new FileOutputStream(filePath);
             OutputStreamWriter os = new OutputStreamWriter(out, Charset.forName(encode));
             File file = new File(filePath);
@@ -95,7 +96,7 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
             }
 
             RDFWriter rdfWriter = Rio.createWriter(format, os);
-            connection.export(rdfWriter, inputDataUnit.getDataGraphnames().toArray(new URI[0]));
+            connection.export(rdfWriter, RDFHelper.getGraphsArray(inputDataUnit));
 
         } catch (RepositoryException e) {
             context.sendMessage(DPUContext.MessageType.ERROR,

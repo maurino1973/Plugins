@@ -16,6 +16,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.dpu.DPUContext.MessageType;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -105,7 +106,7 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
         long triplesCount = 0;
         try {
             connection = inputDataUnit.getConnection();
-            triplesCount = connection.size(inputDataUnit.getDataGraphnames().toArray(new URI[0]));
+            triplesCount = connection.size(RDFHelper.getGraphsArray(inputDataUnit));
         } catch (RepositoryException e) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "connection to repository broke down");

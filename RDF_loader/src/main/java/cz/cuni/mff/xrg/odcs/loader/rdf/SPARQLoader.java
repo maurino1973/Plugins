@@ -5,6 +5,7 @@ import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -603,9 +604,7 @@ public class SPARQLoader {
             connection = inputRdfDataUnit.getConnection();
 
             GraphQuery graphQuery = connection.prepareGraphQuery(QueryLanguage.SPARQL, "CONSTRUCT {?s ?p ?o } WHERE {?s ?p ?o } ");
-            CleverDataset dataSet = new CleverDataset();
-            dataSet.addDefaultGraphs(inputRdfDataUnit.getDataGraphnames());
-            dataSet.addNamedGraphs(inputRdfDataUnit.getDataGraphnames());
+            Dataset dataSet = RDFHelper.getDatasetWithDefaultGraphs(inputRdfDataUnit);
             graphQuery.setDataset(dataSet);
             logger.debug("Dataset: {}", dataSet);
 

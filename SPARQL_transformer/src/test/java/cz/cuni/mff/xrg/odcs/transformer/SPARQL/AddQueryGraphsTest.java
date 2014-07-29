@@ -15,6 +15,7 @@ import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 public class AddQueryGraphsTest {
 
@@ -114,10 +115,7 @@ public class AddQueryGraphsTest {
         try {
             connection = writeRepository.getConnection();
 
-            CleverDataset dataSet = new CleverDataset();
-            dataSet.addDefaultGraphs(writeRepository.getDataGraphnames());
-            dataSet.addNamedGraphs(writeRepository.getDataGraphnames());
-            trans.executeSPARQLUpdateQuery(connection, updateQuery, dataSet, writeRepository.getBaseDataGraphURI());
+            trans.executeSPARQLUpdateQuery(connection, updateQuery, RDFHelper.getDatasetWithDefaultGraphs(writeRepository), writeRepository.getBaseDataGraphURI());
             return true;
         } catch (DPUException e) {
             LOG.debug("Exception duering exectution query " + updateQuery + e

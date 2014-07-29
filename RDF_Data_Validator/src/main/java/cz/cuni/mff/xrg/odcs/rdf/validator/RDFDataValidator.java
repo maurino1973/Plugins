@@ -118,7 +118,7 @@ public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig>
 
             DataValidator validator = new RepositoryDataValidator(dataInput,
                     dataOutput);
-            String graphName = dataInput.getDataGraphnames().toString();
+            String graphName = "";//dataInput.getDataGraphnames().toString();
 
             if (sometimesOutput) {
                 if (!validator.areDataValid()) {

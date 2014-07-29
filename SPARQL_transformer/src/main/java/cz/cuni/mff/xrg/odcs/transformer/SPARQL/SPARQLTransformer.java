@@ -22,13 +22,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.unifiedviews.dataunit.DataUnit;
-import eu.unifiedviews.dpu.DPU;
-import eu.unifiedviews.dpu.DPUContext;
-import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.dpu.DPU;
+import eu.unifiedviews.dpu.DPUContext;
+import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
+import eu.unifiedviews.helpers.dataunit.dataset.DatasetBuilder;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -85,15 +87,15 @@ public class SPARQLTransformer
     }
 
     private Dataset createGraphDataSet(List<RDFDataUnit> inputs) throws DataUnitException {
-        CleverDataset dataSet = new CleverDataset();
-
+        DatasetBuilder datasetBuilder = new DatasetBuilder();
+        
         for (RDFDataUnit repository : inputs) {
             if (repository != null) {
-                dataSet.addDefaultGraphs(repository.getDataGraphnames());
-                dataSet.addNamedGraphs(repository.getDataGraphnames());
+                datasetBuilder.withDefaultGraphs(RDFHelper.getGraphs(repository));
+                datasetBuilder.withNamedGraphs(RDFHelper.getGraphs(repository));
             }
         }
-        return dataSet;
+        return datasetBuilder.build();
     }
 
     private List<RDFDataUnit> getInputs() {
@@ -294,7 +296,7 @@ public class SPARQLTransformer
         RepositoryConnection connection = null;
         try {
             connection = intputDataUnit.getConnection();
-            final long beforeTriplesCount = connection.size(intputDataUnit.getDataGraphnames().toArray(new URI[0]));
+            final long beforeTriplesCount = connection.size(RDFHelper.getGraphsArray(intputDataUnit));
             final long afterTriplesCount = connection.size(outputDataUnit.getBaseDataGraphURI());
             LOG.info("Transformed thanks {} SPARQL queries {} triples into {}",
                     queryCount, beforeTriplesCount, afterTriplesCount);
