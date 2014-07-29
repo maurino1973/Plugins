@@ -17,17 +17,11 @@ public class FileLoaderConfig {
 
     private boolean validDataBefore;
 
-    /**
-     * True if the input should be copied to the output.
-     */
-    private boolean penetrable;
-
     public FileLoaderConfig() {
         this.FilePath = "";
         this.RDFFileFormat = RDFFormatType.AUTO;
         this.DiffName = false;
         this.validDataBefore = false;
-        this.penetrable = false;
     }
 
     public FileLoaderConfig(String FilePath, RDFFormatType RDFFileFormat,
@@ -36,7 +30,6 @@ public class FileLoaderConfig {
         this.RDFFileFormat = RDFFileFormat;
         this.DiffName = DiffName;
         this.validDataBefore = validDataBefore;
-        this.penetrable = false;
     }
 
     /**
@@ -93,14 +86,6 @@ public class FileLoaderConfig {
 
     public void setValidDataBefore(boolean validDataBefore) {
         this.validDataBefore = validDataBefore;
-    }
-
-    public boolean isPenetrable() {
-        return penetrable;
-    }
-
-    public void setPenetrable(boolean redirectInput) {
-        this.penetrable = redirectInput;
     }
 
     /**

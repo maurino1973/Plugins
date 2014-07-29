@@ -54,9 +54,6 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
     @DataUnit.AsOutput(name = "validationDataUnit", description = "Never connect any data to this unit please!")
     public WritableRDFDataUnit validationDataUnit;
 
-    @DataUnit.AsOutput(name = "input_redirection", optional = true)
-    public WritableRDFDataUnit inputShadow;
-
     public FileLoader() {
         super(FileLoaderConfig.class);
     }
@@ -119,16 +116,6 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
         }
 
         logger.info("Loading {} triples", triplesCount);
-
-        if (config.isPenetrable()) {
-            try {
-                AddAllHelper.addAll(inputDataUnit, inputShadow);
-            } catch (DataUnitException e) {
-                context.sendMessage(DPUContext.MessageType.ERROR,
-                        "DataUnit exception" + e.getMessage(), e.fillInStackTrace().toString());
-            }
-        }
-
     }
 
     /**

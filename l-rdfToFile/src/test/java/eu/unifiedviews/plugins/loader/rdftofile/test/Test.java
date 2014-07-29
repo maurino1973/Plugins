@@ -34,7 +34,6 @@ public class Test {
         FileLoaderConfig config = new FileLoaderConfig();
         config.setValidDataBefore(true);
         fileLoader.configureDirectly(config);
-        config.setPenetrable(false);
         File tempFile = File.createTempFile("temp", ".rdf");
         String fileUrl = tempFile.toURI().getPath();
         config.setFilePath(fileUrl);

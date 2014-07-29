@@ -65,10 +65,6 @@ public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
 
     private Validator.InvalidValueException ex;
 
-    /**
-     * True it the input should be copied to the output.
-     */
-    private CheckBox checkBoxCopyInput;
 
     /**
      * Basic constructor.
@@ -235,16 +231,6 @@ public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
 
         verticalLayoutCore.addComponent(horizontalLayoutFormat);
 
-        // ......
-
-        checkBoxCopyInput = new CheckBox();
-        checkBoxCopyInput.setCaption("Forward input also to (file data unit) output");
-        checkBoxCopyInput.setImmediate(false);
-        checkBoxCopyInput.setWidth("-1px");
-        checkBoxCopyInput.setHeight("-1px");
-
-        verticalLayoutCore.addComponent(checkBoxCopyInput);
-
         return verticalLayoutCore;
     }
 
@@ -275,8 +261,6 @@ public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
             FileLoaderConfig config = new FileLoaderConfig(filePath,
                     RDFFileFormat, diffName, validDataBefore);
 
-            config.setPenetrable(checkBoxCopyInput.getValue());
-
             return config;
         }
 
@@ -286,7 +270,7 @@ public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
      * Load values from configuration object implementing {@link DPUConfigObject} interface and configuring DPU into the dialog
      * where the configuration object may be edited.
      * 
-     * @throws ConfigException
+     * @throws DPUConfigException
      *             Exception which might be thrown when components {@link #textFieldFilePath}, {@link #checkBoxDiffName}, {@link #comboBoxFormat} in read-only
      *             mode or when values loading to this
      *             fields could not be converted.
@@ -304,8 +288,6 @@ public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
                     .getStringValue(conf.getRDFFileFormat());
             comboBoxFormat.setValue(formatValue);
             validateDataBefore.setValue(conf.isValidDataBefore());
-
-            checkBoxCopyInput.setValue(conf.isPenetrable());
 
         } catch (Property.ReadOnlyException | Converter.ConversionException e) {
             // throw setting exception

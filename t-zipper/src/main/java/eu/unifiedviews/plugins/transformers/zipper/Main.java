@@ -8,7 +8,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -66,8 +66,7 @@ public class Main extends ConfigurableBase<Configuration>
         try {
             zipSymbolicName = 
                     outFilesData.getBaseFileURIString() + config.getZipFile();
-            zipFileUri = outFilesData.createFile(zipSymbolicName);
-            outFilesData.addExistingFile(zipSymbolicName, zipFileUri);
+            zipFileUri = outFilesData.addNewFile(zipSymbolicName);
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, 
                     "Problem with DataUnit", "Can't add new file.", ex);            
@@ -77,7 +76,7 @@ public class Main extends ConfigurableBase<Configuration>
         zipFile.mkdirs();
         try {
             // add metadata 
-            Manipulator.set(outFilesData, zipSymbolicName, 
+            MetadataHelper.set(outFilesData, zipSymbolicName,
                     VirtualPathHelper.PREDICATE_VIRTUAL_PATH, 
                     config.getZipFile());
         } catch (DataUnitException ex) {
@@ -93,7 +92,7 @@ public class Main extends ConfigurableBase<Configuration>
             filesIteration.close();
             
 // TODO Remove
-Manipulator.dump(outFilesData);            
+MetadataHelper.dump(outFilesData);
             
         } catch (DataUnitException ex) {
             LOG.warn("Error in close.", ex);
@@ -132,7 +131,7 @@ Manipulator.dump(outFilesData);
                     // add metadata
                     CopyHelpers.copyMetadata(entry.getSymbolicName(), 
                             inFilesData, outFilesData);
-                    Manipulator.add(outFilesData, zipSymbolicName, 
+                    MetadataHelper.add(outFilesData, zipSymbolicName,
                             Ontology.PREDICATE_CONTAINS_FILE, 
                             entry.getSymbolicName());
                 }
@@ -156,7 +155,7 @@ Manipulator.dump(outFilesData);
     private boolean addZipEntry(ZipOutputStream zos, byte[] buffer, 
             FilesDataUnit.Entry entry) throws DataUnitException {
         
-        String virtualPath = Manipulator.get(inFilesData, 
+        String virtualPath = MetadataHelper.get(inFilesData,
                         entry.getSymbolicName(), 
                         VirtualPathHelper.PREDICATE_VIRTUAL_PATH);
         

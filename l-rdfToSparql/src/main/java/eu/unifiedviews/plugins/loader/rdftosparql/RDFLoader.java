@@ -40,9 +40,6 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
     @DataUnit.AsInput(name = "input")
     public RDFDataUnit inputDataUnit;
 
-    @DataUnit.AsOutput(name = "input_redirection", optional = true)
-    public WritableRDFDataUnit inputShadow;
-
     @DataUnit.AsOutput(name = "validationDataUnit", description = "Never connect any data to this unit please!")
     public WritableRDFDataUnit validationDataUnit;
 
@@ -137,14 +134,6 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
 
         } catch (DPUException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, ex.getMessage(), "", ex);
-        }
-
-        if (config.isPenetrable()) {
-            try {
-                AddAllHelper.addAll(inputDataUnit, inputShadow);
-            } catch (DataUnitException e) {
-                throw new DPUException(e);
-            }
         }
     }
 

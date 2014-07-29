@@ -124,11 +124,6 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
     private PostItem last;
 
     /**
-     * True it the input should be copied to the output.
-     */
-    private CheckBox checkBoxCopyInput;
-
-    /**
      * Basic constructor.
      */
     public RDFLoaderDialog() {
@@ -541,16 +536,6 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
         gridLayoutAdm.addComponent(gridLayoutGraph, 1, 3);
 
         verticalLayoutCore.addComponent(gridLayoutAdm);
-
-        // ......
-
-        checkBoxCopyInput = new CheckBox();
-        checkBoxCopyInput.setCaption("Forward input also to (file data unit) output");
-        checkBoxCopyInput.setImmediate(false);
-        checkBoxCopyInput.setWidth("-1px");
-        checkBoxCopyInput.setHeight("-1px");
-
-        verticalLayoutCore.addComponent(checkBoxCopyInput);
 
         return verticalLayoutCore;
     }
@@ -1037,8 +1022,6 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
                     1, validDataBefore, retryTime, retrySize,
                     endpointParams, true);
 
-            config.setPenetrable(checkBoxCopyInput.getValue());
-
             return config;
         }
     }
@@ -1047,7 +1030,7 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
      * Load values from configuration object implementing {@link DPUConfigObject} interface and configuring DPU into the dialog
      * where the configuration object may be edited.
      * 
-     * @throws ConfigException
+     * @throws DPUConfigException
      *             Exception which might be thrown when components {@link #textFieldSparql}, {@link #textFieldNameAdm}, {@link #passwordFieldPass},
      *             {@link #optionGroupDetail}, {@link #defaultGraphs}, in read-only mode or when requested operation is
      *             not supported.
@@ -1104,8 +1087,6 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
             }
             refreshNamedGraphData();
 
-            checkBoxCopyInput.setValue(conf.isPenetrable());
-
         } catch (UnsupportedOperationException | Property.ReadOnlyException e) {
             // throw setting exception
             throw new DPUConfigException(e.getMessage(), e);
@@ -1113,9 +1094,8 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
     }
 
     /**
-     * Returns desription of SPARQL loader as string.
      * 
-     * @return desription of SPARQL loader as string.
+     * @return description of SPARQL loader as string.
      */
     @Override
     public String getDescription() {

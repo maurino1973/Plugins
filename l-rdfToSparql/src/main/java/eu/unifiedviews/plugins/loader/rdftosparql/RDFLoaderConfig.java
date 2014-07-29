@@ -35,11 +35,6 @@ public class RDFLoaderConfig {
 
     private boolean useSparqlGraphProtocol = true;
 
-    /**
-     * True if the input should be copied to the output.
-     */
-    private boolean penetrable;
-
     public RDFLoaderConfig() {
         this.SPARQL_endpoint = "";
         this.Host_name = "";
@@ -51,7 +46,6 @@ public class RDFLoaderConfig {
         this.validDataBefore = false;
         this.endpointParams = new LoaderEndpointParams();
         this.useSparqlGraphProtocol = true;
-        this.penetrable = false;
     }
 
     public RDFLoaderConfig(String SPARQL_endpoint, String Host_name,
@@ -72,7 +66,6 @@ public class RDFLoaderConfig {
         this.retrySize = retrySize;
         this.endpointParams = endpointParams;
         this.useSparqlGraphProtocol = useSparqlGraphProtocol;
-        this.penetrable = false;
     }
 
     public void setUseSparqlGraphProtocol(boolean useSparqlGraphProtocol) {
@@ -204,14 +197,6 @@ public class RDFLoaderConfig {
 
     public void setHost_name(String Host_name) {
         this.Host_name = Host_name;
-    }
-
-    public boolean isPenetrable() {
-        return penetrable;
-    }
-
-    public void setPenetrable(boolean redirectInput) {
-        this.penetrable = redirectInput;
     }
 
     /**
