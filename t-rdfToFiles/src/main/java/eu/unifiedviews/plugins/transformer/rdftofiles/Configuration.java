@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.extractor.sparql;
+package eu.unifiedviews.plugins.transformer.rdftofiles;
 
 import java.util.Arrays;
 import java.util.List;

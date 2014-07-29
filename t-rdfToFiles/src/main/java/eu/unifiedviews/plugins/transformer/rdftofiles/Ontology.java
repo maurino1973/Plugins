@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.extractor.sparql;
+package eu.unifiedviews.plugins.transformer.rdftofiles;
 
 /**
  *
