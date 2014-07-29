@@ -210,7 +210,8 @@ public class SPARQLTransformer
                         RepositoryConnection connection = null;
                         try {
                             connection = outputDataUnit.getConnection();
-                            connection.add(graph, outputDataUnit.getBaseDataGraphURI());
+                            URI outputGraph = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
+                            connection.add(graph, outputGraph);
                         } catch (RepositoryException | DataUnitException ex) {
                             LOG.error("Could not add triples from graph", ex);
 
@@ -255,14 +256,10 @@ public class SPARQLTransformer
 
 //					TODO michal.klempa this should not be needed anymore
 //					if (needRepository) {
-                    CleverDataset dataset = new CleverDataset();
-                    dataset.addDefaultGraph(outputDataUnit.getBaseDataGraphURI());
-                    dataset.addNamedGraph(outputDataUnit.getBaseDataGraphURI());
-
                     RepositoryConnection connection = null;
                     try {
                         connection = outputDataUnit.getConnection();
-                        executeSPARQLUpdateQuery(connection, replacedUpdateQuery, dataset, outputDataUnit.getBaseDataGraphURI());
+                        executeSPARQLUpdateQuery(connection, replacedUpdateQuery, RDFHelper.getDatasetWithDefaultGraphs(outputDataUnit), outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName()));
 
                     } catch (DataUnitException ex) {
                         LOG.error("Could not add triples from graph", ex);
@@ -298,7 +295,7 @@ public class SPARQLTransformer
         try {
             connection = intputDataUnit.getConnection();
             final long beforeTriplesCount = connection.size(RDFHelper.getGraphsArray(intputDataUnit));
-            final long afterTriplesCount = connection.size(outputDataUnit.getBaseDataGraphURI());
+            final long afterTriplesCount = connection.size(RDFHelper.getGraphsArray(outputDataUnit));
             LOG.info("Transformed thanks {} SPARQL queries {} triples into {}",
                     queryCount, beforeTriplesCount, afterTriplesCount);
         } catch (RepositoryException e) {

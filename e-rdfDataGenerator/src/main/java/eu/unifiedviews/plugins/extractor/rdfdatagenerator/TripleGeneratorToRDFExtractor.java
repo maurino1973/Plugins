@@ -1,5 +1,6 @@
 package eu.unifiedviews.plugins.extractor.rdfdatagenerator;
 
+import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -38,6 +39,7 @@ public class TripleGeneratorToRDFExtractor extends ConfigurableBase<TripleGenera
         RepositoryConnection connection = null;
         try {
             connection = rdfOutput.getConnection();
+            URI outputGraph = rdfOutput.addNewDataGraph(config.getOutputGraphSymbolicName());
             ValueFactory f = new MemValueFactory();
             connection.begin();
             int j = 1;
@@ -46,7 +48,7 @@ public class TripleGeneratorToRDFExtractor extends ConfigurableBase<TripleGenera
                         f.createURI("http://example.org/people/d" + String.valueOf(j++)),
                         f.createURI("http://example.org/ontology/e" + String.valueOf(j++)),
                         f.createLiteral("Alice" + String.valueOf(j++))
-                        ), rdfOutput.getBaseDataGraphURI());
+                        ), outputGraph);
                 if ((i % 25000) == 0) {
                     connection.commit();
                     dpuContext.sendMessage(DPUContext.MessageType.DEBUG, "Number of triples " + String.valueOf(i));
@@ -58,7 +60,7 @@ public class TripleGeneratorToRDFExtractor extends ConfigurableBase<TripleGenera
             }
             connection.commit();
             dpuContext.sendMessage(DPUContext.MessageType.DEBUG,
-                    "Number of triples " + String.valueOf(connection.size(rdfOutput.getBaseDataGraphURI())));
+                    "Number of triples " + String.valueOf(connection.size(outputGraph)));
         } catch (RepositoryException | DataUnitException ex) {
             dpuContext.sendMessage(DPUContext.MessageType.ERROR, ex.getMessage(), ex
                     .fillInStackTrace().toString());

@@ -12,6 +12,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -31,6 +32,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  */
 public class FileExtractorDialog extends BaseConfigDialog<FileExtractorConfig> {
 
+    private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
+    private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
     private GridLayout mainLayout;
 
     /**
@@ -209,7 +212,7 @@ public class FileExtractorDialog extends BaseConfigDialog<FileExtractorConfig> {
                     fileSuffix,
                     RDFFormatValue, extractType, onlyThisSuffix,
                     useStatisticalHandler, failWhenErrors);
-
+            config.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
             return config;
         }
     }
@@ -271,7 +274,7 @@ public class FileExtractorDialog extends BaseConfigDialog<FileExtractorConfig> {
         } else {
             failsWhenErrors.setValue(CONTINUE);
         }
-
+        outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
     }
 
     /**
@@ -551,6 +554,7 @@ public class FileExtractorDialog extends BaseConfigDialog<FileExtractorConfig> {
         horizontalLayoutFormat.addComponent(comboBoxFormat);
 
         gridLayoutCore.addComponent(horizontalLayoutFormat, 0, 3);
+        gridLayoutCore.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
 
         return gridLayoutCore;
     }

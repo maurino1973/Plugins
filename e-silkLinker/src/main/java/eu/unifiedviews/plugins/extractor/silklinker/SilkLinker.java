@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
@@ -242,7 +243,8 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
             connection = outputConfirmed.getConnection();
             String baseURI = "";
-            connection.add(f, baseURI, RDFFormat.TURTLE, outputConfirmed.getBaseDataGraphURI());
+            URI graph = outputConfirmed.addNewDataGraph("confirmed");
+            connection.add(f, baseURI, RDFFormat.TURTLE, graph);
 
         } catch (IOException | RepositoryException | RDFParseException ex) {
             log.error(ex.getLocalizedMessage());
@@ -277,7 +279,8 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
             connection2 = outputToVerify.getConnection();
             String baseURI = "";
-            connection2.add(f, baseURI, RDFFormat.TURTLE, outputToVerify.getBaseDataGraphURI());
+            URI graph = outputToVerify.addNewDataGraph("toverify");
+            connection2.add(f, baseURI, RDFFormat.TURTLE, graph);
         } catch (IOException | RepositoryException | RDFParseException ex) {
             log.error(ex.getLocalizedMessage());
             context.sendMessage(DPUContext.MessageType.ERROR, "RDFException: "

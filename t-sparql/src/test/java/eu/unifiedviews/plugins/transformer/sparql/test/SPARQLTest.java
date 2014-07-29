@@ -1,19 +1,21 @@
 package eu.unifiedviews.plugins.transformer.sparql.test;
 
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformerConfig;
 import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
 
 import org.junit.Test;
+import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
+import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformerConfig;
 
 public class SPARQLTest {
     private static final Logger LOG = LoggerFactory.getLogger(SPARQLTest.class);
@@ -46,15 +48,16 @@ public class SPARQLTest {
         try {
             connection = input.getConnection();
             String baseURI = "";
-            connection.add(inputStream, baseURI, RDFFormat.TURTLE, input.getBaseDataGraphURI());
+            URI graph = input.addNewDataGraph("test");
+            connection.add(inputStream, baseURI, RDFFormat.TURTLE, graph);
 
             // some triples has been loaded
-            assertTrue(connection.size(input.getBaseDataGraphURI()) > 0);
+            assertTrue(connection.size(graph) > 0);
             // run
             env.run(trans);
             connection2 = output.getConnection();
             // verify result
-            assertTrue(connection.size(input.getBaseDataGraphURI()) == connection2.size(output.getBaseDataGraphURI()));
+            assertTrue(connection.size(graph) == connection2.size(RDFHelper.getGraphsArray(output)));
         } finally {
             if (connection != null) {
                 try {

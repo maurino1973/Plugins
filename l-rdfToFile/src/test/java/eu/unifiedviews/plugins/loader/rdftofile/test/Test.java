@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 public class Test {
     private static final Logger LOG = LoggerFactory.getLogger(Test.class);
@@ -49,9 +50,9 @@ public class Test {
             Resource subject = factory.createURI("http://my.subject");
             URI predicate = factory.createURI("http://my.predicate");
             Value object = factory.createLiteral("My company s.r.o. \"HOME\"");
-            connection.add(subject, predicate, object, input.getBaseDataGraphURI());
+            connection.add(subject, predicate, object, input.addNewDataGraph("test"));
             connection.commit();
-            long expectedSize = connection.size(input.getBaseDataGraphURI());
+            long expectedSize = connection.size(RDFHelper.getGraphsArray(input));
             env.run(fileLoader);
             RDFFormat format = Rio.getParserFormatForFileName(tempFile.getName());
 

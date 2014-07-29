@@ -35,6 +35,8 @@ public class RDFExtractorConfig {
     private boolean useSplitConstruct;
 
     private Integer splitConstructSize;
+    
+    private String outputGraphSymbolicName = "E-RDFFromSPARQL/output" + String.valueOf(new java.util.Random().nextInt(100));
 
     public RDFExtractorConfig() {
         this.SPARQL_endpoint = "";
@@ -279,6 +281,14 @@ public class RDFExtractorConfig {
                 && retryTime != null
                 && retryTime > 0
                 && endpointParams != null;
+    }
+
+    public String getOutputGraphSymbolicName() {
+        return outputGraphSymbolicName;
+    }
+
+    public void setOutputGraphSymbolicName(String outputGraphSymbolicName) {
+        this.outputGraphSymbolicName = outputGraphSymbolicName;
     }
 
     /**
