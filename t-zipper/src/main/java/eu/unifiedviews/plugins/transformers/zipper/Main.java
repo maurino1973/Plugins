@@ -1,5 +1,15 @@
 package eu.unifiedviews.plugins.transformers.zipper;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -10,17 +20,10 @@ import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
@@ -58,44 +61,36 @@ public class Main extends ConfigurableBase<Configuration>
 			return;
 		}
 
-        //
+		//
 		// Prepare zip file 
 		//
 		final String zipSymbolicName;
 		final String zipFileUri;
+		final File zipFile;
 		try {
-			zipSymbolicName
-					= outFilesData.getBaseFileURIString() + config.getZipFile();
+			zipSymbolicName = config.getZipFile();
 			zipFileUri = outFilesData.addNewFile(zipSymbolicName);
-		} catch (DataUnitException ex) {
-			context.sendMessage(DPUContext.MessageType.ERROR,
-					"Problem with DataUnit", "Can't add new file.", ex);
-			return;
-		}
-		final File zipFile = new File(java.net.URI.create(zipFileUri));
-		zipFile.mkdirs();
-		try {
+			zipFile = new File(java.net.URI.create(zipFileUri));
+			zipFile.mkdirs();
 			// add metadata 
-			MetadataHelper.set(outFilesData, zipSymbolicName,
-					VirtualPathHelper.PREDICATE_VIRTUAL_PATH,
-					config.getZipFile());
-		} catch (DataUnitException ex) {
-			context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed",
-					"Failed to add metadata.", ex);
-			return;
-		}
-        //
-		// Create zip file
-		//        
-		zipFiles(zipFile, zipSymbolicName, filesIteration);
-		try {
-			filesIteration.close();
+			VirtualPathHelpers.setVirtualPath(outFilesData, zipSymbolicName, config.getZipFile());
 
-// TODO Remove
+			//
+			// Create zip file
+			//        
+			zipFiles(zipFile, zipSymbolicName, filesIteration);
+
+			// TODO Remove
 			MetadataHelper.dump(outFilesData);
 
 		} catch (DataUnitException ex) {
-			LOG.warn("Error in close.", ex);
+			throw new DPUException(ex);
+		} finally {
+			try {
+				filesIteration.close();
+			} catch (DataUnitException ex) {
+				throw new DPUException(ex);
+			}
 		}
 	}
 
@@ -115,7 +110,7 @@ public class Main extends ConfigurableBase<Configuration>
 
 		try (FileOutputStream fos = new FileOutputStream(zipFile);
 				ZipOutputStream zos = new ZipOutputStream(fos)) {
-            //
+			//
 			// Itarate over files and zip them
 			//
 			while (!context.canceled() && filesIteration.hasNext()) {
@@ -169,13 +164,13 @@ public class Main extends ConfigurableBase<Configuration>
 
 		final File sourceFile = new File(
 				java.net.URI.create(entry.getFileURIString()));
-        //
+		//
 		// Do the action .. 
 		//
 		try (FileInputStream in = new FileInputStream(sourceFile)) {
 			final ZipEntry ze = new ZipEntry(virtualPath);
 			zos.putNextEntry(ze);
-            //
+			//
 			// Copy data
 			//
 			int len;
