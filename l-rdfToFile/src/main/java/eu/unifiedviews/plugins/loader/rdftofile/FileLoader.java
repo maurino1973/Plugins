@@ -84,7 +84,7 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
         long triplesCount = 0;
         try {
             connection = inputDataUnit.getConnection();
-            triplesCount = connection.size(RDFHelper.getGraphsArray(inputDataUnit));
+            triplesCount = connection.size(RDFHelper.getGraphsURIArray(inputDataUnit));
             FileOutputStream out = new FileOutputStream(filePath);
             OutputStreamWriter os = new OutputStreamWriter(out, Charset.forName(encode));
             File file = new File(filePath);
@@ -97,7 +97,7 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
             }
 
             RDFWriter rdfWriter = Rio.createWriter(format, os);
-            connection.export(rdfWriter, RDFHelper.getGraphsArray(inputDataUnit));
+            connection.export(rdfWriter, RDFHelper.getGraphsURIArray(inputDataUnit));
 
         } catch (RepositoryException e) {
             context.sendMessage(DPUContext.MessageType.ERROR,

@@ -103,7 +103,7 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
 
             long lastrepoSize = 0;
             connection = outputRdfDataUnit.getConnection();
-            lastrepoSize = connection.size(RDFHelper.getGraphsArray(outputRdfDataUnit));
+            lastrepoSize = connection.size(RDFHelper.getGraphsURIArray(outputRdfDataUnit));
 
             if (usedSplitConstruct) {
                 if (splitConstructSize <= 0) {
@@ -125,7 +125,7 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
                             hostName, password, RDFFormat.NTRIPLES,
                             handlerExtractType, false);
 
-                    long newrepoSize = connection.size(RDFHelper.getGraphsArray(outputRdfDataUnit));
+                    long newrepoSize = connection.size(RDFHelper.getGraphsURIArray(outputRdfDataUnit));
 
                     checkParsingProblems(useStatisticHandler, context);
                     if (lastrepoSize < newrepoSize) {
@@ -149,7 +149,7 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
 
                 checkParsingProblems(useStatisticHandler, context);
             }
-            final long triplesCount = connection.size(RDFHelper.getGraphsArray(outputRdfDataUnit));
+            final long triplesCount = connection.size(RDFHelper.getGraphsURIArray(outputRdfDataUnit));
 
             String tripleInfoMessage = String.format(
                     "Extracted %s triples from SPARQL endpoint %s",

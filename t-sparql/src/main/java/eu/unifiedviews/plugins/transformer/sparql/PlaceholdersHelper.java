@@ -175,7 +175,7 @@ public class PlaceholdersHelper {
                 usedRepositories.add(input);
                 try {
                     //set RIGHT data graph for DPU
-                    next.setGraphName(RDFHelper.getGraphs(input).iterator().next().stringValue());
+                    next.setGraphName(RDFHelper.getGraphsURISet(input).iterator().next().stringValue());
                 } catch (DataUnitException ex) {
                     throw new DPUException(ex);
                 }

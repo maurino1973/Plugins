@@ -57,7 +57,7 @@ public class SPARQLTest {
             env.run(trans);
             connection2 = output.getConnection();
             // verify result
-            assertTrue(connection.size(graph) == connection2.size(RDFHelper.getGraphsArray(output)));
+            assertTrue(connection.size(graph) == connection2.size(RDFHelper.getGraphURIsArray(output)));
         } finally {
             if (connection != null) {
                 try {

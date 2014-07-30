@@ -107,7 +107,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
                 RepositoryConnection connection = null;
                 try {
                     connection = writableRdfDataUnit.getConnection();
-                    triplesCount = connection.size(RDFHelper.getGraphsArray(writableRdfDataUnit));
+                    triplesCount = connection.size(RDFHelper.getGraphsURIArray(writableRdfDataUnit));
                     LOG.info("Extracted {} triples", triplesCount);
                 } catch (DataUnitException ex) {
                     throw new DPUException(ex);
