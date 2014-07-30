@@ -29,7 +29,6 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.AddAllHelper;
-import eu.unifiedviews.helpers.dataunit.dataset.CleverDataset;
 import eu.unifiedviews.helpers.dataunit.dataset.DatasetBuilder;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
