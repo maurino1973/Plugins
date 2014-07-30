@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 
-import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
@@ -25,7 +24,6 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUContext.MessageType;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.AddAllHelper;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
