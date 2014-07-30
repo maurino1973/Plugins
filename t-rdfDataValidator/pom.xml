@@ -12,7 +12,7 @@
 
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-t-rdfDataValidator</artifactId>
-	<name>T-RDFDataValidator</name>
+	<name>T-RdfDataValidator</name>
 	<description>Validate RDF data and create report about that.</description>
 	<version>1.3.0</version>
 	<packaging>bundle</packaging>

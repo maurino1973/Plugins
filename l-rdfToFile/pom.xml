@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-l-rdfToFile</artifactId>
-    <name>L-RDFToFile</name>
+    <name>L-RdfToFile</name>
 	<description>Loads RDF data into file.</description>
 	<version>1.3.0</version>
 	<packaging>bundle</packaging>
