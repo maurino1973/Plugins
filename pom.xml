@@ -20,6 +20,7 @@
 		<module>t-rdfDataValidator</module>
 		<module>t-filesToRdf</module>
 		<module>t-zipper</module>
+        <module>t-unzipper</module>
 		<module>l-rdfToFile</module>
 		<module>l-rdfToSparql</module>
 		<module>l-filesToLocalFS</module>
