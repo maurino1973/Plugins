@@ -19,8 +19,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 
 @DPU.AsTransformer
 public class Main implements DPU {
@@ -71,9 +70,7 @@ public class Main implements DPU {
                 final File sourceFile = new File(java.net.URI.create(
                         entry.getFileURIString()));
 
-                final String zipRelativePath = Manipulator.get(inFilesData,
-                        entry.getSymbolicName(),
-                        VirtualPathHelper.PREDICATE_VIRTUAL_PATH);
+                final String zipRelativePath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
                 if (zipRelativePath == null) {
                     context.sendMessage(DPUContext.MessageType.WARNING,
                             "No virtual path set for: "
@@ -101,9 +98,9 @@ public class Main implements DPU {
                 CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData,
                         outFilesData);
             }
-            
+
 // TODO Remove
-Manipulator.dump(outFilesData);            
+MetadataHelper.dump(outFilesData);
 
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
@@ -133,10 +130,9 @@ Manipulator.dump(outFilesData);
             //
             // add metadata
             //
-            Manipulator.set(outFilesData, newSymbolicName, 
+            VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, relativePath);
+            MetadataHelper.set(outFilesData, newSymbolicName,
                     Ontology.PREDICATE_EXTRACTED_FROM, sourceSymbolicName);
-            Manipulator.set(outFilesData, newSymbolicName,
-                    VirtualPathHelper.PREDICATE_VIRTUAL_PATH, relativePath);
         }
     }
 
