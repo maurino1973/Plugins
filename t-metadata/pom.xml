@@ -9,13 +9,13 @@
     </parent>
     <groupId>eu.unifiedviews.plugins</groupId>
     <artifactId>t-metadata</artifactId>
-    <version>1.0.0</version>
-    <packaging>bundle</packaging>
     <name>T-Metadata</name>
     <description></description>
+    <version>1.0.0</version>
+    <packaging>bundle</packaging>
 
     <properties>    
-        <dpu.package>ue.unifiedviews.plugins.transformer.metadata</dpu.package>
+        <dpu.package>eu.unifiedviews.plugins.transformer.metadata</dpu.package>
         <dpu.mainClass>Main</dpu.mainClass>
     </properties>
 
