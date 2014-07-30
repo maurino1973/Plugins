@@ -51,7 +51,7 @@ public class Test {
             Value object = factory.createLiteral("My company s.r.o. \"HOME\"");
             connection.add(subject, predicate, object, input.addNewDataGraph("test"));
             connection.commit();
-            long expectedSize = connection.size(RDFHelper.getGraphsArray(input));
+            long expectedSize = connection.size(RDFHelper.getGraphsURIArray(input));
             env.run(fileLoader);
             RDFFormat format = Rio.getParserFormatForFileName(tempFile.getName());
 

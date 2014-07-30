@@ -86,7 +86,7 @@ public class RepositoryDataValidator implements DataValidator {
         RepositoryConnection connection = null;
         try {
             connection = input.getConnection();
-            tripleCount = connection.size(RDFHelper.getGraphsArray(input));
+            tripleCount = connection.size(RDFHelper.getGraphsURIArray(input));
 
             if (tripleCount == 0) {
                 isValid = true;
@@ -100,7 +100,7 @@ public class RepositoryDataValidator implements DataValidator {
                     FileOutputStream out = new FileOutputStream(tempFile.getAbsolutePath());
                     OutputStreamWriter os = new OutputStreamWriter(out, Charset.forName(encode));
                     RDFWriter rdfWriter = Rio.createWriter(RDFFormat.N3, os);
-                    connection.export(rdfWriter, RDFHelper.getGraphsArray(input));
+                    connection.export(rdfWriter, RDFHelper.getGraphsURIArray(input));
 
                     try (InputStreamReader fileStream = new InputStreamReader(
                             new FileInputStream(tempFile), Charset.forName("UTF-8"))) {

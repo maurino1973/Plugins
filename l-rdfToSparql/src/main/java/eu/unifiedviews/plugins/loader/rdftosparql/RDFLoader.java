@@ -104,7 +104,7 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
         long triplesCount = 0;
         try {
             connection = inputDataUnit.getConnection();
-            triplesCount = connection.size(RDFHelper.getGraphsArray(inputDataUnit));
+            triplesCount = connection.size(RDFHelper.getGraphsURIArray(inputDataUnit));
         } catch (RepositoryException e) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "connection to repository broke down");

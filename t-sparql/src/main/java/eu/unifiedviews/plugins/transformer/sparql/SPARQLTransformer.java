@@ -92,8 +92,8 @@ public class SPARQLTransformer
         
         for (RDFDataUnit repository : inputs) {
             if (repository != null) {
-                datasetBuilder.withDefaultGraphs(RDFHelper.getGraphs(repository));
-                datasetBuilder.withNamedGraphs(RDFHelper.getGraphs(repository));
+                datasetBuilder.withDefaultGraphs(RDFHelper.getGraphsURISet(repository));
+                datasetBuilder.withNamedGraphs(RDFHelper.getGraphsURISet(repository));
             }
         }
         return datasetBuilder.build();
@@ -294,8 +294,8 @@ public class SPARQLTransformer
         RepositoryConnection connection = null;
         try {
             connection = intputDataUnit.getConnection();
-            final long beforeTriplesCount = connection.size(RDFHelper.getGraphsArray(intputDataUnit));
-            final long afterTriplesCount = connection.size(RDFHelper.getGraphsArray(outputDataUnit));
+            final long beforeTriplesCount = connection.size(RDFHelper.getGraphsURIArray(intputDataUnit));
+            final long afterTriplesCount = connection.size(RDFHelper.getGraphsURIArray(outputDataUnit));
             LOG.info("Transformed thanks {} SPARQL queries {} triples into {}",
                     queryCount, beforeTriplesCount, afterTriplesCount);
         } catch (RepositoryException e) {
