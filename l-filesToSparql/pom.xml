@@ -12,7 +12,7 @@
 
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-l-filesToSparql</artifactId>
-    <name>L-FilesToSPARQL</name>
+    <name>L-FilesToSparqlEndpoint</name>
 	<description>Loads RDF data stored in Files to the specified remote SPARQL endpoint.</description>
 	<version>1.3.0</version>
 	<packaging>bundle</packaging>
