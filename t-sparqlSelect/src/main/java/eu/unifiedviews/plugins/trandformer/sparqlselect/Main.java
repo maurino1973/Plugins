@@ -24,8 +24,8 @@ import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -64,7 +64,7 @@ public class Main extends ConfigurableBase<Configuration>
             outSymbolicName
                     = outFilesData.getBaseFileURIString() + config.
                     getTargetPath();
-            outFileUri = outFilesData.createFile(outSymbolicName);
+            outFileUri = outFilesData.addNewFile(outSymbolicName);
             outFilesData.addExistingFile(outSymbolicName, outFileUri);
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
@@ -73,9 +73,7 @@ public class Main extends ConfigurableBase<Configuration>
         }
         try {
             // add metadata
-            Manipulator.set(outFilesData, outSymbolicName,
-                    VirtualPathHelper.PREDICATE_VIRTUAL_PATH,
-                    config.getTargetPath());
+            VirtualPathHelpers.setVirtualPath(outFilesData, outSymbolicName, config.getTargetPath());
 
             // iterata over imput files
         } catch (DataUnitException ex) {
@@ -98,7 +96,7 @@ public class Main extends ConfigurableBase<Configuration>
         // metadata
         try {
             for (String symbolicName : graphs.keySet()) {
-                Manipulator.add(outFilesData, outSymbolicName,
+                MetadataHelper.add(outFilesData, outSymbolicName,
                         Ontology.PREDICATE_SOURCE_GRAPH, symbolicName);
             }
         } catch (DataUnitException ex) {
@@ -161,18 +159,12 @@ public class Main extends ConfigurableBase<Configuration>
      */
     private Map<String, URI> getGraphs() throws DataUnitException {
         final Map<String, URI> graphUris = new HashMap<>();
-        // delete as the the RDFDataUnit.getIteration() will be implemented
-        for (URI uri : inRdfData.getDataGraphnames()) {
-            graphUris.put(uri.stringValue(), uri);
+        try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
+            while (iter.hasNext()) {
+                final RDFDataUnit.Entry entry = iter.next();
+                graphUris.put(entry.getSymbolicName(), entry.getDataGraphURI());
+            }
         }
-
-        // uncomment as the the RDFDataUnit.getIteration() will be implemented
-//        try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
-//            while (iter.hasNext()) {
-//                final RDFDataUnit.Entry entry = iter.next();
-//                graphUris.put(entry.getSymbolicName(), entry.getDataGraphURI());
-//            }
-//        }
         return graphUris;
     }
 

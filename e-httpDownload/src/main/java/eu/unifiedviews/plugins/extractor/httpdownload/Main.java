@@ -14,7 +14,7 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -52,9 +52,8 @@ public class Main extends ConfigurableBase<Configuration>
         try {
             outSymName = output.getBaseFileURIString() + config.getTarget();
             outUri = output.addNewFile(outSymName);
-              
-            MetadataHelper.add(output, outSymName,
-                    VirtualPathHelper.PREDICATE_VIRTUAL_PATH, config.getTarget());
+
+            VirtualPathHelpers.setVirtualPath(output, outSymName, config.getTarget());
             MetadataHelper.add(output, outSymName,
                     Ontology.PREDICATE_DOWNLOADED_FROM, url.toString());
         } catch (DataUnitException ex) {

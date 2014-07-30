@@ -1,24 +1,12 @@
 package eu.unifiedviews.plugins.transformer.rdftofiles;
 
-import eu.unifiedviews.dataunit.DataUnit;
-import eu.unifiedviews.dataunit.DataUnitException;
-import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
-import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
-import eu.unifiedviews.dpu.DPU;
-import eu.unifiedviews.dpu.DPUContext;
-import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
-import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
-import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
-import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
 import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryConnection;
@@ -28,6 +16,20 @@ import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.unifiedviews.dataunit.DataUnit;
+import eu.unifiedviews.dataunit.DataUnitException;
+import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
+import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
+import eu.unifiedviews.dpu.DPU;
+import eu.unifiedviews.dpu.DPUContext;
+import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
+import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
+import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
+import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration> implements
@@ -61,29 +63,17 @@ public class Main extends ConfigurableBase<Configuration> implements
         // get input graph uris and symbolicNames
         //
         final Map<String, URI> graphUris = new HashMap<>();
-        
-        // delete as the the RDFDataUnit.getIteration() will be implemented
-        try {
-            for (URI uri : inRdfData.getDataGraphnames()) {
-                graphUris.put(uri.stringValue(), uri);
+
+        try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
+            while (iter.hasNext()) {
+                final RDFDataUnit.Entry entry = iter.next();
+                graphUris.put(entry.getSymbolicName(), entry.getDataGraphURI());
             }
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Failed to get graph names.", "", ex);
             return;
         }
-        
-        // uncomment as the the RDFDataUnit.getIteration() will be implemented
-//        try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
-//            while (iter.hasNext()) {
-//                final RDFDataUnit.Entry entry = iter.next();
-//                graphUris.put(entry.getSymbolicName(), entry.getDataGraphURI());
-//            }
-//        } catch (DataUnitException ex) {
-//            context.sendMessage(DPUContext.MessageType.ERROR,
-//                    "Failed to get graph names.", "", ex);
-//            return;
-//        }
         //
         // convert from rdf to files
         //
@@ -95,10 +85,10 @@ public class Main extends ConfigurableBase<Configuration> implements
             } else {
                 exportMultiple(graphUris);
             }
-            
+
 // TODO Remove
-Manipulator.dump(outFilesData);            
-            
+MetadataHelper.dump(outFilesData);
+
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "DPU Failed.", "Problem with DataUnit.", ex);
@@ -177,8 +167,8 @@ Manipulator.dump(outFilesData);
                 CopyHelpers.copyMetadata(sourceSombolicName, inRdfData,
                         outFilesData);
                 // we use symbolic name to denote
-                Manipulator.set(outFilesData, outputSymbolicName, 
-                    Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
+                MetadataHelper.set(outFilesData, outputSymbolicName,
+                        Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
             }
             // check cancel
             if (context.canceled()) {
@@ -227,15 +217,11 @@ Manipulator.dump(outFilesData);
                 }
             }
         }
-        
+
         outFilesData.addExistingFile(outputSymbolicName, outputSymbolicName);
         // add metadata about virtual path
-// TODO: uncomment wher VirtualPathHelpers is fixed        
-//        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, 
-//                fileName);
-        Manipulator.set(outFilesData, outputSymbolicName, 
-                VirtualPathHelper.PREDICATE_VIRTUAL_PATH, fileName);
-        
+        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, fileName);
+
         return outputSymbolicName;
     }
 
@@ -244,24 +230,18 @@ Manipulator.dump(outFilesData);
      *
      * @param graphName
      */
-    private void generateGraphFile(String graphName) 
+    private void generateGraphFile(String graphName)
             throws DataUnitException, IOException {
         final String outputSymbolicName = outFilesData.getBaseFileURIString() + ".graph";
-// TODO: delete when interface support FilesDataUnit.addNewFile
-        final String fileLocation = outFilesData.createFile(outputSymbolicName);
-// TODO: uncomment when interface support FilesDataUnit.addNewFile
-//        final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
+        final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
         // write into file
         LOG.debug("Writing .graph file into: {}", fileLocation.toString());
         FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)),
                 graphName);
         outFilesData.addExistingFile(outputSymbolicName, fileLocation);
         // add metadata about virtual path
-// TODO: uncomment when VirtualPathHelpers is fixed
-//        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, 
-//                ".graph");
-        Manipulator.set(outFilesData, outputSymbolicName, 
-                VirtualPathHelper.PREDICATE_VIRTUAL_PATH, ".graph");        
+        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName,
+                ".graph");
     }
 
 }
