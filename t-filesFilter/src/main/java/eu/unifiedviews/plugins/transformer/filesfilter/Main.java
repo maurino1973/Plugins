@@ -16,8 +16,9 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -106,12 +107,12 @@ public class Main extends ConfigurableBase<Configuration>
 
 // DEBUG
 LOG.info("Input: ");
-Manipulator.dump(inFilesData);
+MetadataHelper.dump(inFilesData);
 
             while (filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
 
-                final String value = Manipulator.get(inFilesData,
+                final String value = MetadataHelper.get(inFilesData,
                         entry.getSymbolicName(),
                         predicate);
 
@@ -146,17 +147,15 @@ Manipulator.dump(inFilesData);
 
                 // TODO Remove this
                 // as a hack copy virtual path now
-                final String virtualPath =
-                        Manipulator.get(inFilesData, entry.getSymbolicName(),
-                                VirtualPathHelper.PREDICATE_VIRTUAL_PATH);
-                Manipulator.set(outFilesData,  entry.getSymbolicName(),
-                                VirtualPathHelper.PREDICATE_VIRTUAL_PATH,
-                                virtualPath);
-
+                final String virtualPath = VirtualPathHelpers.getVirtualPath(
+                        inFilesData, entry.getSymbolicName());
+                
+                VirtualPathHelpers.setVirtualPath(outFilesData,
+                        entry.getSymbolicName(), virtualPath);
             }
 
 LOG.info("Output: ");
-Manipulator.dump(outFilesData);
+MetadataHelper.dump(outFilesData);
 
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
