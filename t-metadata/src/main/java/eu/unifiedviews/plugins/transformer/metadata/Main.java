@@ -279,7 +279,7 @@ public class Main extends ConfigurableBase<Configuration>
                 "Starting statistics computation");
 
         final DatasetImpl dataset = new DatasetImpl();
-        for (URI uri : RDFHelper.getGraphs(inRdfData)) {
+        for (URI uri : RDFHelper.getGraphsURIArray(inRdfData)) {
             dataset.addDefaultGraph(uri);
         }
 
