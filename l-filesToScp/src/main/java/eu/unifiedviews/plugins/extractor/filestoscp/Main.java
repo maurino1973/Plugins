@@ -17,8 +17,7 @@ import eu.unifiedviews.dataunit.files.FilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -79,9 +78,8 @@ public class Main extends ConfigurableBase<Configuration>
             while (!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
 
-                final String relativePath = Manipulator.get(inFilesData, 
-                        entry.getSymbolicName(), 
-                        VirtualPathHelper.PREDICATE_VIRTUAL_PATH);
+                final String relativePath = VirtualPathHelpers.getVirtualPath(
+                        inFilesData, entry.getSymbolicName());
                 
                 // TODO We can try to use symbolicName here
                 if (relativePath == null) {
