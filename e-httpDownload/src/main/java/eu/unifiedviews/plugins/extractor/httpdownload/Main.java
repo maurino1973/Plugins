@@ -49,7 +49,7 @@ public class Main extends ConfigurableBase<Configuration>
         final String outSymName;
         final String outUri;
         try {
-            outSymName = output.getBaseFileURIString() + config.getTarget();
+            outSymName = config.getTarget();
             outUri = output.addNewFile(outSymName);
               
             MetadataHelper.add(output, outSymName,
