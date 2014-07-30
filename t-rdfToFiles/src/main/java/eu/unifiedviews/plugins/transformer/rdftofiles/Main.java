@@ -8,8 +8,9 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.Manipulator;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -62,28 +63,17 @@ public class Main extends ConfigurableBase<Configuration> implements
         //
         final Map<String, URI> graphUris = new HashMap<>();
         
-        // delete as the the RDFDataUnit.getIteration() will be implemented
-        try {
-            for (URI uri : inRdfData.getDataGraphnames()) {
-                graphUris.put(uri.stringValue(), uri);
+        // uncomment as the the RDFDataUnit.getIteration() will be implemented
+        try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
+            while (iter.hasNext()) {
+                final RDFDataUnit.Entry entry = iter.next();
+                graphUris.put(entry.getSymbolicName(), entry.getDataGraphURI());
             }
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Failed to get graph names.", "", ex);
             return;
         }
-        
-        // uncomment as the the RDFDataUnit.getIteration() will be implemented
-//        try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
-//            while (iter.hasNext()) {
-//                final RDFDataUnit.Entry entry = iter.next();
-//                graphUris.put(entry.getSymbolicName(), entry.getDataGraphURI());
-//            }
-//        } catch (DataUnitException ex) {
-//            context.sendMessage(DPUContext.MessageType.ERROR,
-//                    "Failed to get graph names.", "", ex);
-//            return;
-//        }
         //
         // convert from rdf to files
         //
@@ -97,7 +87,7 @@ public class Main extends ConfigurableBase<Configuration> implements
             }
             
 // TODO Remove
-Manipulator.dump(outFilesData);            
+MetadataHelper.dump(outFilesData);
             
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
@@ -137,7 +127,7 @@ Manipulator.dump(outFilesData);
         // transfer metadata
         for (String item : graphUris.keySet()) {
             CopyHelpers.copyMetadata(item, inRdfData, outFilesData);
-            Manipulator.set(outFilesData, outputSymbolicName, 
+            MetadataHelper.set(outFilesData, outputSymbolicName,
                 Ontology.PREDICATE_TRANFORM_FROM, item);            
         }
     }
@@ -177,7 +167,7 @@ Manipulator.dump(outFilesData);
                 CopyHelpers.copyMetadata(sourceSombolicName, inRdfData, 
                         outFilesData);
                 // we use symbolic name to denote
-                Manipulator.set(outFilesData, outputSymbolicName, 
+                MetadataHelper.set(outFilesData, outputSymbolicName,
                     Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
             }
             // check cancel
@@ -198,8 +188,7 @@ Manipulator.dump(outFilesData);
      */
     private String exportGraph(URI[] uris, String fileName) 
             throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName = 
-                outFilesData.getBaseFileURIString() + fileName;        
+        final String outputSymbolicName = fileName;        
         final File outputFile = 
                 new File(java.net.URI.create(outputSymbolicName));
         // create parent
@@ -230,12 +219,9 @@ Manipulator.dump(outFilesData);
         
         outFilesData.addExistingFile(outputSymbolicName, outputSymbolicName);
         // add metadata about virtual path
-// TODO: uncomment wher VirtualPathHelpers is fixed        
-//        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, 
-//                fileName);
-        Manipulator.set(outFilesData, outputSymbolicName, 
-                VirtualPathHelper.PREDICATE_VIRTUAL_PATH, fileName);
-        
+        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, 
+                fileName);
+       
         return outputSymbolicName;
     }
 
@@ -246,22 +232,16 @@ Manipulator.dump(outFilesData);
      */
     private void generateGraphFile(String graphName) 
             throws DataUnitException, IOException {
-        final String outputSymbolicName = outFilesData.getBaseFileURIString() + ".graph";
-// TODO: delete when interface support FilesDataUnit.addNewFile
-        final String fileLocation = outFilesData.createFile(outputSymbolicName);
-// TODO: uncomment when interface support FilesDataUnit.addNewFile
-//        final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
+        final String outputSymbolicName = ".graph";
+        final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
         // write into file
         LOG.debug("Writing .graph file into: {}", fileLocation.toString());
         FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)), 
                 graphName);
         outFilesData.addExistingFile(outputSymbolicName, fileLocation);
         // add metadata about virtual path
-// TODO: uncomment when VirtualPathHelpers is fixed
-//        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, 
-//                ".graph");
-        Manipulator.set(outFilesData, outputSymbolicName, 
-                VirtualPathHelper.PREDICATE_VIRTUAL_PATH, ".graph");        
+        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, 
+                ".graph");
     }
 
 }
