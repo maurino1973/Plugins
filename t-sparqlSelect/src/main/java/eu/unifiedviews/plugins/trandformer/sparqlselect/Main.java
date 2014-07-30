@@ -127,7 +127,7 @@ public class Main extends ConfigurableBase<Configuration>
             TupleQuery query = connection.prepareTupleQuery(
                     QueryLanguage.SPARQL, config.getQuery());
             // TODO add support for placeholders ?
-            
+
             query.setDataset(dataset);
 
             query.evaluate(resultWriter);

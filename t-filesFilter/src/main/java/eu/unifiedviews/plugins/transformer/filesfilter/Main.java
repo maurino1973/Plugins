@@ -51,8 +51,8 @@ public class Main extends ConfigurableBase<Configuration>
                 pattern = Pattern.compile(config.getObject());
             } catch (PatternSyntaxException ex) {
                 context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Configuration problem", "Error in object regexp.", ex);
-            return;
+                        "Configuration problem", "Error in object regexp.", ex);
+                return;
             }
         }
         //
@@ -111,7 +111,7 @@ Manipulator.dump(inFilesData);
             while (filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
 
-                final String value = Manipulator.get(inFilesData,
+                final String value = MetadataHelper.get(inFilesData,
                         entry.getSymbolicName(),
                         predicate);
 

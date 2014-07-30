@@ -36,7 +36,7 @@ public class Main extends ConfigurableBase<Configuration> implements
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
     private static final String FILE_ENCODE = "UTF-8";
-    
+
     @DataUnit.AsInput(name = "input")
     public RDFDataUnit inRdfData;
 
@@ -44,7 +44,7 @@ public class Main extends ConfigurableBase<Configuration> implements
     public WritableFilesDataUnit outFilesData;
 
     private DPUContext context;
-    
+
     public Main() {
         super(Configuration.class);
     }
@@ -89,7 +89,7 @@ public class Main extends ConfigurableBase<Configuration> implements
         //
         try {
             // TODO export metadata graph ?!!
-            
+
             if (config.isMergeGraphs()) {
                 exportSingle(graphUris);
             } else {
@@ -107,7 +107,7 @@ Manipulator.dump(outFilesData);
                     "DPU Failed.", "", ex);
         }
     }
-    
+
     /**
      * Export all data as a single graph. Also take care about generation of
      * .graph file if needed. If generation of .graph file fails then notify
@@ -115,15 +115,15 @@ Manipulator.dump(outFilesData);
      *
      * @param graphUris
      * @throws DataUnitException
-     * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException 
+     * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
-    private void exportSingle(Map<String, URI> graphUris) 
+    private void exportSingle(Map<String, URI> graphUris)
             throws DataUnitException, ExportFailedException {
         final Configuration.GraphToFileInfo info
                 = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
-        final String outputSymbolicName = exportGraph(toExport, 
+        final String outputSymbolicName = exportGraph(toExport,
                 info.getOutFileName());
         // create graph name if needed
         if (config.isGenGraphFile()) {
@@ -137,19 +137,19 @@ Manipulator.dump(outFilesData);
         // transfer metadata
         for (String item : graphUris.keySet()) {
             CopyHelpers.copyMetadata(item, inRdfData, outFilesData);
-            Manipulator.set(outFilesData, outputSymbolicName, 
-                Ontology.PREDICATE_TRANFORM_FROM, item);            
+            MetadataHelper.set(outFilesData, outputSymbolicName,
+                    Ontology.PREDICATE_TRANFORM_FROM, item);
         }
     }
 
     /**
      * Export graphs based on options in {@link #config}.
-     * 
+     *
      * @param graphUris
-     * @throws DataUnitException 
-     * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException 
+     * @throws DataUnitException
+     * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
-    private void exportMultiple(Map<String, URI> graphUris) 
+    private void exportMultiple(Map<String, URI> graphUris)
             throws DataUnitException, ExportFailedException {
         for (Configuration.GraphToFileInfo info : config.getGraphToFileInfo()) {
             //
@@ -174,7 +174,7 @@ Manipulator.dump(outFilesData);
             // transfer metadata
             //
             for (String sourceSombolicName : sourceSymbolicNames) {
-                CopyHelpers.copyMetadata(sourceSombolicName, inRdfData, 
+                CopyHelpers.copyMetadata(sourceSombolicName, inRdfData,
                         outFilesData);
                 // we use symbolic name to denote
                 Manipulator.set(outFilesData, outputSymbolicName, 
@@ -189,29 +189,29 @@ Manipulator.dump(outFilesData);
 
     /**
      * Export content of given graphs into file of given name.
-     * 
+     *
      * @param uris
      * @param fileName File name (suffix), virtual path.
      * @throws DataUnitException
-     * @throws ExportFailedException 
+     * @throws ExportFailedException
      * @return Symbolic name of output file.
      */
-    private String exportGraph(URI[] uris, String fileName) 
+    private String exportGraph(URI[] uris, String fileName)
             throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName = 
-                outFilesData.getBaseFileURIString() + fileName;        
-        final File outputFile = 
-                new File(java.net.URI.create(outputSymbolicName));
+        final String outputSymbolicName
+                = outFilesData.getBaseFileURIString() + fileName;
+        final File outputFile
+                = new File(java.net.URI.create(outputSymbolicName));
         // create parent
         outputFile.getParentFile().mkdirs();
 
         RepositoryConnection connection = null;
         try (FileOutputStream outStream = new FileOutputStream(outputFile);
-                OutputStreamWriter outWriter = new OutputStreamWriter(outStream, 
+                OutputStreamWriter outWriter = new OutputStreamWriter(outStream,
                         Charset.forName(FILE_ENCODE))) {
             connection = inRdfData.getConnection();
-            final RDFWriter writer = 
-                    Rio.createWriter(config.getRdfFileFormat(), outWriter);
+            final RDFWriter writer
+                    = Rio.createWriter(config.getRdfFileFormat(), outWriter);
             // export
             connection.export(writer, uris);
         } catch (IOException ex) {
@@ -253,7 +253,7 @@ Manipulator.dump(outFilesData);
 //        final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
         // write into file
         LOG.debug("Writing .graph file into: {}", fileLocation.toString());
-        FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)), 
+        FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)),
                 graphName);
         outFilesData.addExistingFile(outputSymbolicName, fileLocation);
         // add metadata about virtual path
