@@ -1,16 +1,5 @@
 package eu.unifiedviews.plugins.transformer.unzipper;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Iterator;
-
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -21,6 +10,14 @@ import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Iterator;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @DPU.AsTransformer
 public class Main implements DPU {
