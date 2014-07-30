@@ -1,19 +1,26 @@
 package eu.unifiedviews.plugins.transformer.metadata;
 
-
-
-import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.*;
-import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
-import eu.unifiedviews.dpu.config.DPUConfigException;
-import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.vaadin.shared.ui.datefield.Resolution;
+import com.vaadin.ui.AbstractSelect.ItemCaptionMode;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.TwinColSelect;
+import com.vaadin.ui.VerticalLayout;
+
+import eu.unifiedviews.dpu.config.DPUConfigException;
+import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
 public class Dialog extends BaseConfigDialog<Configuration> {
 

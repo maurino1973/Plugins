@@ -1,7 +1,5 @@
 package eu.unifiedviews.plugins.transformer.metadata;
 
-
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;

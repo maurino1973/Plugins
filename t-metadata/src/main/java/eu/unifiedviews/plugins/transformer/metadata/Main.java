@@ -1,7 +1,5 @@
 package eu.unifiedviews.plugins.transformer.metadata;
 
-
-
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
@@ -13,21 +11,28 @@ import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import org.openrdf.model.URI;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.vocabulary.DCTERMS;
 import org.openrdf.model.vocabulary.RDF;
 import org.openrdf.model.vocabulary.SKOS;
-import org.openrdf.query.*;
+import org.openrdf.query.Dataset;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResult;
 import org.openrdf.query.impl.DatasetImpl;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
@@ -60,7 +65,7 @@ public class Main extends ConfigurableBase<Configuration>
     public void execute(DPUContext context) throws DPUException {
         this.context = context;
 
-        java.util.Date date = new java.util.Date();
+        Date date = new Date();
         long start = date.getTime();
 
         try {
@@ -72,25 +77,24 @@ public class Main extends ConfigurableBase<Configuration>
         } catch (DataUnitException | RepositoryException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "DPU Failed", "", ex);
-        }
-
-        try {
+        } finally {
             if (inConnection != null) {
-                inConnection.close();
+                try {
+                    inConnection.close();
+                } catch (RepositoryException ex) {
+                    LOG.warn("Error in close.", ex);
+                }
             }
-        } catch (RepositoryException ex) {
-            LOG.warn("Error in close.", ex);
-        }
-
-        try {
             if (outConnection != null) {
-                outConnection.close();
+                try {
+                    outConnection.close();
+                } catch (RepositoryException ex) {
+                    LOG.warn("Error in close.", ex);
+                }
             }
-        } catch (RepositoryException ex) {
-            LOG.warn("Error in close.", ex);
         }
 
-        java.util.Date date2 = new java.util.Date();
+        Date date2 = new Date();
         long end = date2.getTime();
         context.sendMessage(DPUContext.MessageType.INFO,
                 "Done in " + (end - start) + "ms");
@@ -169,7 +173,7 @@ public class Main extends ConfigurableBase<Configuration>
         if (config.getSparqlEndpoint() != null) {
             outConnection.add(datasetURI, valueFactory.createURI(
                     ns_void + "sparqlEndpoint"), valueFactory.createURI(config
-                            .getSparqlEndpoint().toString()));
+                    .getSparqlEndpoint().toString()));
         }
 
         for (URL u : config.getAuthors()) {
@@ -250,12 +254,12 @@ public class Main extends ConfigurableBase<Configuration>
         if (config.getDataDump() != null) {
             outConnection.add(distroURI, dcat_downloadURL, valueFactory
                     .createURI(
-                            config.getDataDump().toString()));
+                    config.getDataDump().toString()));
         }
         if (config.getDataDump() != null) {
             outConnection.add(distroURI, dcat_mediaType, valueFactory
                     .createLiteral(
-                            config.getMime()));
+                    config.getMime()));
         }
         for (URL u : config.getLicenses()) {
             outConnection.add(distroURI, DCTERMS.LICENSE, valueFactory
@@ -320,7 +324,7 @@ public class Main extends ConfigurableBase<Configuration>
                     .stringValue());
             outConnection.add(datasetURI, property, valueFactory.createLiteral(
                     Integer
-                    .toString(number), xsd_integer));
+                            .toString(number), xsd_integer));
         } catch (MalformedQueryException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Wrong query format", "", ex);
