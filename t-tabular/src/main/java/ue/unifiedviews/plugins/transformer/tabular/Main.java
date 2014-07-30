@@ -33,11 +33,10 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
@@ -95,9 +94,8 @@ public class Main extends ConfigurableBase<Configuration>
             while (!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
 
-                String virtualPath = Manipulator.get(inFilesTable,
-                        entry.getSymbolicName(),
-                        VirtualPathHelper.PREDICATE_VIRTUAL_PATH);
+                String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesTable,
+                        entry.getSymbolicName());
 
                 // TODO We can try to use symbolicName here
                 if (virtualPath == null) {
