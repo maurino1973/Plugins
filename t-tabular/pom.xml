@@ -21,12 +21,6 @@
     </properties>
 	
     <dependencies>
-        <dependency>
-            <groupId>cz.cuni.mff.xrg.uv</groupId>
-            <artifactId>dataunit-rdf-simple</artifactId>
-            <version>1.1.0</version>
-            <scope>compile</scope>
-        </dependency>
 		<dependency>
 		    <groupId>org.jamel.dbf</groupId>
 		    <artifactId>dbf-reader</artifactId>

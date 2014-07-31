@@ -1,14 +1,4 @@
-package eu.unifiedviews.plugins.transformers.zipper;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package eu.unifiedviews.plugins.transformer.zipper;
 
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
@@ -19,11 +9,20 @@ import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
-import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
@@ -61,7 +60,7 @@ public class Main extends ConfigurableBase<Configuration>
             return;
         }
 
-		//
+        //
         // Prepare zip file 
         //
         final String zipSymbolicName;
@@ -71,17 +70,14 @@ public class Main extends ConfigurableBase<Configuration>
             zipSymbolicName = config.getZipFile();
             zipFileUri = outFilesData.addNewFile(zipSymbolicName);
             zipFile = new File(java.net.URI.create(zipFileUri));
-            zipFile.mkdirs();
+
             // add metadata 
             VirtualPathHelpers.setVirtualPath(outFilesData, zipSymbolicName, config.getZipFile());
 
-			//
+            //
             // Create zip file
             //        
             zipFiles(zipFile, zipSymbolicName, filesIteration);
-
-            // TODO Remove
-            MetadataHelper.dump(outFilesData);
 
         } catch (DataUnitException ex) {
             throw new DPUException(ex);
@@ -96,7 +92,7 @@ public class Main extends ConfigurableBase<Configuration>
 
     /**
      * Pack files in given iterator into zip file and add metadata.
-     *
+     * 
      * @param zipFile
      * @param zipSymbolicName
      * @param filesIteration
@@ -110,7 +106,7 @@ public class Main extends ConfigurableBase<Configuration>
 
         try (FileOutputStream fos = new FileOutputStream(zipFile);
                 ZipOutputStream zos = new ZipOutputStream(fos)) {
-			//
+            //
             // Itarate over files and zip them
             //
             while (!context.canceled() && filesIteration.hasNext()) {
@@ -124,8 +120,8 @@ public class Main extends ConfigurableBase<Configuration>
                     firstFailure = false;
                 } else {
                     // add metadata
-                    CopyHelpers.copyMetadata(entry.getSymbolicName(),
-                            inFilesData, outFilesData);
+//                    CopyHelpers.copyMetadata(entry.getSymbolicName(),
+//                            inFilesData, outFilesData);
                     MetadataHelper.add(outFilesData, zipSymbolicName,
                             Ontology.PREDICATE_CONTAINS_FILE,
                             entry.getSymbolicName());
@@ -140,7 +136,7 @@ public class Main extends ConfigurableBase<Configuration>
 
     /**
      * Add single file into stream as zip entry.
-     *
+     * 
      * @param zos
      * @param buffer
      * @param entry
@@ -155,19 +151,19 @@ public class Main extends ConfigurableBase<Configuration>
         if (virtualPath == null) {
             context.sendMessage(DPUContext.MessageType.WARNING,
                     "No virtual path set for: " + entry.getSymbolicName()
-                    + ". File is ignored.");
+                            + ". File is ignored.");
             return false;
         }
 
         final File sourceFile = new File(
                 java.net.URI.create(entry.getFileURIString()));
-		//
+        //
         // Do the action .. 
         //
         try (FileInputStream in = new FileInputStream(sourceFile)) {
             final ZipEntry ze = new ZipEntry(virtualPath);
             zos.putNextEntry(ze);
-			//
+            //
             // Copy data
             //
             int len;

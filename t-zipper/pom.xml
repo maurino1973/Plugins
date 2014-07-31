@@ -9,14 +9,14 @@
 	</parent>    
 	
 	<groupId>eu.unifiedviews.plugins</groupId>
-	<artifactId>t-zipper</artifactId>
+	<artifactId>uv-t-zipper</artifactId>
 	<name>T-Zipper</name>
 	<description>Zip input files into zip file of given name.</description>
 	<version>1.0.0</version>
 	<packaging>bundle</packaging>
 	
 	<properties>    
-		<dpu.package>eu.unifiedviews.plugins.transformers.zipper</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.transformer.zipper</dpu.package>
 		<dpu.mainClass>Main</dpu.mainClass>
 	</properties>
 	

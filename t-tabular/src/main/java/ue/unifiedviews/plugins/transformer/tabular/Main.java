@@ -20,12 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.io.ICsvListReader;
 import org.supercsv.prefs.CsvPreference;
-
-import cz.cuni.mff.xrg.uv.rdf.simple.AddPolicy;
-import cz.cuni.mff.xrg.uv.rdf.simple.OperationFailedException;
-import cz.cuni.mff.xrg.uv.rdf.simple.SimpleRdfFactory;
-import cz.cuni.mff.xrg.uv.rdf.simple.SimpleRdfWrite;
-import cz.cuni.mff.xrg.uv.utils.dataunit.metadata.Manipulator;
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -33,10 +27,13 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
@@ -52,6 +49,8 @@ public class Main extends ConfigurableBase<Configuration>
     @DataUnit.AsOutput(name = "triplifiedTable")
     public WritableRDFDataUnit outRdfTriplifiedTable;
 
+    private RepositoryConnection outConnection;
+
     public Main() {
         super(Configuration.class);
     }
@@ -64,27 +63,24 @@ public class Main extends ConfigurableBase<Configuration>
     @Override
     public void execute(DPUContext context) throws DPUException {
         //
-        // Prepare rdf wrap
-        //
-        final SimpleRdfWrite triplifiedTableWrap;
-        try {
-            triplifiedTableWrap
-                    = SimpleRdfFactory.create(outRdfTriplifiedTable, context);
-        } catch (OperationFailedException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed",
-                    "Can't create simple rdf dataUnit", ex);
-            return;
-        }
-        triplifiedTableWrap.setPolicy(AddPolicy.BUFFERED);
-        //
         // Get file iterator
-        //        
+        //
         final FilesDataUnit.Iteration filesIteration;
         try {
             filesIteration = inFilesTable.getIteration();
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "DPU Failed", "Can't get file iterator.", ex);
+            return;
+        }
+        //
+        // Get connection
+        //
+        try {
+            outConnection = outRdfTriplifiedTable.getConnection();
+        } catch (DataUnitException ex) {
+            context.sendMessage(DPUContext.MessageType.ERROR,
+                    "DataUnit problem", "Can't get connection.", ex);
             return;
         }
         //
@@ -109,8 +105,8 @@ public class Main extends ConfigurableBase<Configuration>
                 final File sourceFile = new File(
                         java.net.URI.create(entry.getFileURIString()));
 
-// TODO Add support for multiple graphs                
-                proceedFile(context, triplifiedTableWrap, sourceFile);
+// TODO Add support for multiple graphs
+                proceedFile(context, sourceFile);
 
                 //
                 // Add metadata
@@ -119,23 +115,35 @@ public class Main extends ConfigurableBase<Configuration>
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Problem with DataUnit", "", ex);
+        } catch (RepositoryException ex) {
+            context.sendMessage(DPUContext.MessageType.ERROR,
+                    "Problem with repository", "", ex);
         }
 
         try {
             filesIteration.close();
 
 // TODO Remove
-            Manipulator.dump(outRdfTriplifiedTable);
+            MetadataHelper.dump(outRdfTriplifiedTable);
 
         } catch (DataUnitException ex) {
             LOG.warn("Error in close.", ex);
         }
+
+        try {
+            if (outConnection != null) {
+                outConnection.close();
+            }
+        } catch (RepositoryException ex) {
+            LOG.warn("Error in close.", ex);
+        }
+
     }
 
-// TODO Rework this method !!    
-    private void proceedFile(DPUContext context,
-            SimpleRdfWrite triplifiedTableWrap, File tableFile) throws OperationFailedException {
-        final ValueFactory valueFactory = triplifiedTableWrap.getValueFactory();
+// TODO Rework this method !!
+    private void proceedFile(DPUContext context, File tableFile)
+            throws RepositoryException {
+        final ValueFactory valueFactory = outConnection.getValueFactory();
 
         String tableFileName = tableFile.getName();
 
@@ -227,6 +235,8 @@ public class Main extends ConfigurableBase<Configuration>
                         }
                     }
 
+                    outConnection.begin();
+
                     String suffixURI;
                     if (columnWithURISupplementNumber >= 0) {
                         suffixURI = this.convertStringToURIPart(row.get(
@@ -242,17 +252,17 @@ public class Main extends ConfigurableBase<Configuration>
                         if (strValue == null || "".equals(strValue)) {
                             URI obj = valueFactory.createURI(
                                     "http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
-                            triplifiedTableWrap.add(subj, propertyMap[i], obj);
+                            outConnection.add(subj, propertyMap[i], obj);
                         } else {
                             Value obj = valueFactory.createLiteral(strValue);
-                            triplifiedTableWrap.add(subj, propertyMap[i], obj);
+                            outConnection.add(subj, propertyMap[i], obj);
                         }
                         i++;
                     }
 
                     Value rowvalue = valueFactory.createLiteral(String.valueOf(
                             rowno));
-                    triplifiedTableWrap.add(subj, propertyRow, rowvalue);
+                    outConnection.add(subj, propertyRow, rowvalue);
 
                     if ((rowno % 1000) == 0) {
                         LOG.debug("Row number {} processed.", rowno);
@@ -261,25 +271,28 @@ public class Main extends ConfigurableBase<Configuration>
                     rowno++;
                     row = listReader.read();
 
+                    outConnection.commit();
+
                     if (context.canceled()) {
                         LOG.info("DPU cancelled");
                         listReader.close();
                         return;
                     }
                 }
-            } catch (IOException e) {
+            } catch (IOException ex) {
                 context.sendMessage(DPUContext.MessageType.ERROR,
-                        "IO exception during processing the input CSV file.");
-                return;
+                        "DPU failed",
+                        "IO exception during processing the input CSV file.",
+                        ex);
             } finally {
-
                 if (listReader != null) {
                     try {
                         listReader.close();
-                    } catch (IOException e) {
+                    } catch (IOException ex) {
                         context.sendMessage(DPUContext.MessageType.ERROR,
-                                "IO exception when closing the reader of the input CSV file.");
-                        return;
+                                "DPU failed",
+                                "IO exception when closing the reader of the input CSV file.",
+                                ex);
                     }
                 }
 
@@ -352,24 +365,28 @@ public class Main extends ConfigurableBase<Configuration>
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
 
+                outConnection.begin();
+
                 for (int i = 0; i < row.length; i++) {
 
                     String strValue = this.getCellValue(row[i], encoding);
                     if (strValue == null || "".equals(strValue)) {
                         URI obj = valueFactory.createURI(
                                 "http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
-                        triplifiedTableWrap.add(subj, propertyMap[i], obj);
+                        outConnection.add(subj, propertyMap[i], obj);
                     } else {
                         Value obj = valueFactory.createLiteral(this
                                 .getCellValue(row[i], encoding));
-                        triplifiedTableWrap.add(subj, propertyMap[i], obj);
+                        outConnection.add(subj, propertyMap[i], obj);
                     }
 
                 }
 
                 Value rowvalue = valueFactory.createLiteral(this.getCellValue(
                         rowno, encoding));
-                triplifiedTableWrap.add(subj, propertyRow, rowvalue);
+                outConnection.add(subj, propertyRow, rowvalue);
+
+                outConnection.commit();
 
                 if ((rowno % 1000) == 0) {
                     LOG.debug("Row number {} processed.", rowno);

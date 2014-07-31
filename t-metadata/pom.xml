@@ -6,32 +6,21 @@
 		<artifactId>dpu-base-pom</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../dpu-base-pom.xml</relativePath>
-	</parent>    
-	
+	</parent>
+
 	<groupId>eu.unifiedviews.plugins</groupId>
-	<artifactId>uv-t-unzipper</artifactId>
-	<name>T-UnZipper</name>
-	<description>UnZip input file into files based on zip content.</description>
+	<artifactId>uv-t-metadata</artifactId>
+	<name>T-Metadata</name>
+	<description>Generates metadata on output from input</description>
 	<version>1.0.0</version>
 	<packaging>bundle</packaging>
-	
+
 	<properties>    
-		<dpu.package>eu.unifiedviews.plugins.transformer.unzipper</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.transformer.metadata</dpu.package>
 		<dpu.mainClass>Main</dpu.mainClass>
 	</properties>
-	
+
 	<dependencies>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.lingala.zip4j</groupId>
-			<artifactId>zip4j</artifactId>
-			<version>1.2.3</version>
-		</dependency>	
 	</dependencies>
-	
+
 </project>
