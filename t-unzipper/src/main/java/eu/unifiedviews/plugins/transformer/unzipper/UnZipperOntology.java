@@ -4,9 +4,9 @@ package eu.unifiedviews.plugins.transformer.unzipper;
  *
  * @author Škoda Petr
  */
-public class Ontology {
+public class UnZipperOntology {
     
-    private Ontology() {
+    private UnZipperOntology() {
         
     }
     

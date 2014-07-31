@@ -20,9 +20,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @DPU.AsTransformer
-public class Main implements DPU {
+public class UnZipper implements DPU {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UnZipper.class);
 
     @DataUnit.AsInput(name = "input")
     public FilesDataUnit inFilesData;
@@ -32,7 +32,7 @@ public class Main implements DPU {
 
     private DPUContext context;
 
-    public Main() {
+    public UnZipper() {
 
     }
 
@@ -130,7 +130,7 @@ MetadataHelper.dump(outFilesData);
             //
             VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, relativePath);
             MetadataHelper.set(outFilesData, newSymbolicName,
-                    Ontology.PREDICATE_EXTRACTED_FROM, sourceSymbolicName);
+                    UnZipperOntology.PREDICATE_EXTRACTED_FROM, sourceSymbolicName);
         }
     }
 

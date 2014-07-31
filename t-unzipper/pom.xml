@@ -17,7 +17,7 @@
 	
 	<properties>    
 		<dpu.package>eu.unifiedviews.plugins.transformer.unzipper</dpu.package>
-		<dpu.mainClass>Main</dpu.mainClass>
+		<dpu.mainClass>UnZipper</dpu.mainClass>
 	</properties>
 	
 	<dependencies>
