@@ -7,7 +7,6 @@
 		<version>1.0.0</version>
 		<relativePath>../dpu-base-pom.xml</relativePath>
 	</parent>
-
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-t-metadata</artifactId>
 	<name>T-Metadata</name>
@@ -17,7 +16,7 @@
 
 	<properties>    
 		<dpu.package>eu.unifiedviews.plugins.transformer.metadata</dpu.package>
-		<dpu.mainClass>Main</dpu.mainClass>
+		<dpu.mainClass>Metadata</dpu.mainClass>
 	</properties>
 
 	<dependencies>

@@ -35,10 +35,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @DPU.AsTransformer
-public class Main extends ConfigurableBase<Configuration>
-        implements ConfigDialogProvider<Configuration> {
+public class Metadata extends ConfigurableBase<MetadataConfiguration>
+        implements ConfigDialogProvider<MetadataConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Metadata.class);
 
     @DataUnit.AsInput(name = "data")
     public RDFDataUnit inRdfData;
@@ -52,13 +52,13 @@ public class Main extends ConfigurableBase<Configuration>
 
     private RepositoryConnection outConnection;
 
-    public Main() {
-        super(Configuration.class);
+    public Metadata() {
+        super(MetadataConfiguration.class);
     }
 
     @Override
-    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-        return new Dialog();
+    public AbstractConfigDialog<MetadataConfiguration> getConfigurationDialog() {
+        return new MetadataDialog();
     }
 
     @Override

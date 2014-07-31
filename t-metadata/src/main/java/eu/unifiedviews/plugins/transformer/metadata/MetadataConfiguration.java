@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class Configuration {
+public class MetadataConfiguration {
 
     private URL datasetURI;
 
@@ -67,7 +67,7 @@ public class Configuration {
 
     private Date modified = new Date();
 
-    public Configuration() {
+    public MetadataConfiguration() {
         try {
             datasetURI = new URL(
                     "http://linked.opendata.cz/resource/dataset/");

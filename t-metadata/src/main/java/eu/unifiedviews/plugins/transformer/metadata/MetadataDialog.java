@@ -22,9 +22,9 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Dialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MetadataDialog.class);
 
     private class URLandCaption {
 
@@ -90,8 +90,8 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 
     private final String[] mimes = {"application/zip", "text/csv", "application/rdf+xml", "text/plain", "application/x-turtle"};
 
-    public Dialog() {
-        super(Configuration.class);
+    public MetadataDialog() {
+        super(MetadataConfiguration.class);
         try {
             periodicities.add(new URLandCaption(new URL(
                     "http://purl.org/linked-data/sdmx/2009/code#freq-A"),
@@ -284,7 +284,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
     }
 
     @Override
-    public void setConfiguration(Configuration conf) throws DPUConfigException {
+    public void setConfiguration(MetadataConfiguration conf) throws DPUConfigException {
         tfDatasetUri.setValue(conf.getDatasetURI().toString());
         tfDistributionUri.setValue(conf.getDistroURI().toString());
         tfDataDumpUrl.setValue(conf.getDataDump().toString());
@@ -366,8 +366,8 @@ public class Dialog extends BaseConfigDialog<Configuration> {
     }
 
     @Override
-    public Configuration getConfiguration() throws DPUConfigException {
-        Configuration conf = new Configuration();
+    public MetadataConfiguration getConfiguration() throws DPUConfigException {
+        MetadataConfiguration conf = new MetadataConfiguration();
 
         conf.setTitle_cs(tfTitleCs.getValue());
         conf.setTitle_en(tfTitleEn.getValue());
