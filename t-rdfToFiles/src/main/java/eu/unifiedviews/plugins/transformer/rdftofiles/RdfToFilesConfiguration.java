@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.openrdf.rio.RDFFormat;
 
-public class RdfToFilesTransformerConfiguration {
+public class RdfToFilesConfiguration {
 
     public class GraphToFileInfo {
 
@@ -72,7 +72,7 @@ public class RdfToFilesTransformerConfiguration {
      */
     private List<GraphToFileInfo> graphToFileInfo = Arrays.asList(new GraphToFileInfo("", "data", ""));
 
-    public RdfToFilesTransformerConfiguration() {
+    public RdfToFilesConfiguration() {
     }
 
     public String getRdfFileFormat() {

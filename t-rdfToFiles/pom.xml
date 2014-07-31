@@ -16,7 +16,7 @@
 	
     <properties>    
         <dpu.package>eu.unifiedviews.plugins.transformer.rdftofiles</dpu.package>
-        <dpu.mainClass>RdfToFilesTransformer</dpu.mainClass>
+        <dpu.mainClass>RdfToFiles</dpu.mainClass>
     </properties>
 	
     <dependencies>

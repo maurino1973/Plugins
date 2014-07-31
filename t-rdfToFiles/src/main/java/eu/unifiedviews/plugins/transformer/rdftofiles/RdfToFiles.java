@@ -33,10 +33,10 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 import org.openrdf.rio.RDFFormat;
 
 @DPU.AsTransformer
-public class RdfToFilesTransformer extends ConfigurableBase<RdfToFilesTransformerConfiguration> implements
-        ConfigDialogProvider<RdfToFilesTransformerConfiguration> {
+public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implements
+        ConfigDialogProvider<RdfToFilesConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesTransformer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RdfToFiles.class);
 
     private static final String FILE_ENCODE = "UTF-8";
 
@@ -48,13 +48,13 @@ public class RdfToFilesTransformer extends ConfigurableBase<RdfToFilesTransforme
 
     private DPUContext context;
 
-    public RdfToFilesTransformer() {
-        super(RdfToFilesTransformerConfiguration.class);
+    public RdfToFiles() {
+        super(RdfToFilesConfiguration.class);
     }
 
     @Override
-    public AbstractConfigDialog<RdfToFilesTransformerConfiguration> getConfigurationDialog() {
-        return new RdfToFilesTransformerDialog();
+    public AbstractConfigDialog<RdfToFilesConfiguration> getConfigurationDialog() {
+        return new RdfToFilesDialog();
     }
 
     @Override
@@ -110,7 +110,7 @@ MetadataHelper.dump(outFilesData);
      */
     private void exportSingle(Map<String, URI> graphUris)
             throws DataUnitException, ExportFailedException {
-        final RdfToFilesTransformerConfiguration.GraphToFileInfo info
+        final RdfToFilesConfiguration.GraphToFileInfo info
                 = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
@@ -119,7 +119,8 @@ MetadataHelper.dump(outFilesData);
         // create graph name if needed
         if (config.isGenGraphFile()) {
             try {
-                generateGraphFile(config.getOutGraphName());
+                generateGraphFile(info.getOutFileName(),
+                        config.getOutGraphName());
             } catch (IOException ex) {
                 context.sendMessage(DPUContext.MessageType.ERROR,
                         "Failed to create .graph file", "", ex);
@@ -142,7 +143,7 @@ MetadataHelper.dump(outFilesData);
      */
     private void exportMultiple(Map<String, URI> graphUris)
             throws DataUnitException, ExportFailedException {
-        for (RdfToFilesTransformerConfiguration.GraphToFileInfo info : config.getGraphToFileInfo()) {
+        for (RdfToFilesConfiguration.GraphToFileInfo info : config.getGraphToFileInfo()) {
             //
             // get URIs (graphs) to export and transfer metadata
             //
@@ -189,8 +190,7 @@ MetadataHelper.dump(outFilesData);
      */
     private String exportGraph(URI[] uris, String fileName)
             throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName
-                = outFilesData.getBaseFileURIString() + fileName;
+        final String outputSymbolicName = fileName;
         final File outputFile
                 = new File(java.net.URI.create(outputSymbolicName));
         // create parent
@@ -201,9 +201,9 @@ MetadataHelper.dump(outFilesData);
                 OutputStreamWriter outWriter = new OutputStreamWriter(outStream,
                         Charset.forName(FILE_ENCODE))) {
             connection = inRdfData.getConnection();
-            final RDFWriter writer
-                    = Rio.createWriter(
-                            RDFFormat.valueOf(config.getRdfFileFormat()), outWriter);
+            final RDFWriter writer = Rio.createWriter(
+                            RDFFormat.valueOf(config.getRdfFileFormat()),
+                            outWriter);
             // export
             connection.export(writer, uris);
         } catch (IOException ex) {
@@ -232,18 +232,17 @@ MetadataHelper.dump(outFilesData);
      *
      * @param graphName
      */
-    private void generateGraphFile(String graphName)
+    private void generateGraphFile(String filePrefix, String graphName)
             throws DataUnitException, IOException {
-        final String outputSymbolicName = outFilesData.getBaseFileURIString() + ".graph";
+        final String outputSymbolicName = filePrefix + ".graph";
         final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
         // write into file
         LOG.debug("Writing .graph file into: {}", fileLocation.toString());
         FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)),
                 graphName);
-        outFilesData.addExistingFile(outputSymbolicName, fileLocation);
         // add metadata about virtual path
         VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName,
-                ".graph");
+                outputSymbolicName);
     }
 
 }
