@@ -16,7 +16,7 @@
 	<packaging>bundle</packaging>
 	
 	<properties>    
-		<dpu.package>ue.unifiedviews.plugins.transformers.unzipper</dpu.package>
+		<dpu.package>eu.unifiedviews.plugins.transformer.unzipper</dpu.package>
 		<dpu.mainClass>Main</dpu.mainClass>
 	</properties>
 	

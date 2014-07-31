@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformers.zipper;
+package eu.unifiedviews.plugins.transformer.zipper;
 
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
