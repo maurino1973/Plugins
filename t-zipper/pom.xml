@@ -17,7 +17,7 @@
 	
 	<properties>    
 		<dpu.package>eu.unifiedviews.plugins.transformer.zipper</dpu.package>
-		<dpu.mainClass>Main</dpu.mainClass>
+		<dpu.mainClass>Zipper</dpu.mainClass>
 	</properties>
 	
 	<dependencies>

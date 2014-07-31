@@ -7,7 +7,6 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
@@ -25,10 +24,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @DPU.AsTransformer
-public class Main extends ConfigurableBase<Configuration>
-        implements ConfigDialogProvider<Configuration> {
+public class ZipperMain extends ConfigurableBase<ZipperConfiguration>
+        implements ConfigDialogProvider<ZipperConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ZipperMain.class);
 
     @DataUnit.AsInput(name = "input")
     public FilesDataUnit inFilesData;
@@ -38,13 +37,13 @@ public class Main extends ConfigurableBase<Configuration>
 
     private DPUContext context;
 
-    public Main() {
-        super(Configuration.class);
+    public ZipperMain() {
+        super(ZipperConfiguration.class);
     }
 
     @Override
-    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-        return new Dialog();
+    public AbstractConfigDialog<ZipperConfiguration> getConfigurationDialog() {
+        return new ZipperDialog();
     }
 
     @Override
@@ -123,7 +122,7 @@ public class Main extends ConfigurableBase<Configuration>
 //                    CopyHelpers.copyMetadata(entry.getSymbolicName(),
 //                            inFilesData, outFilesData);
                     MetadataHelper.add(outFilesData, zipSymbolicName,
-                            Ontology.PREDICATE_CONTAINS_FILE,
+                            ZipperOntology.PREDICATE_CONTAINS_FILE,
                             entry.getSymbolicName());
                 }
             }
@@ -145,6 +144,8 @@ public class Main extends ConfigurableBase<Configuration>
      */
     private boolean addZipEntry(ZipOutputStream zos, byte[] buffer,
             FilesDataUnit.Entry entry) throws DataUnitException {
+
+        LOG.debug("File to zip: {}", entry.getSymbolicName());
 
         String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
         // TODO We can try to use symbolicName here

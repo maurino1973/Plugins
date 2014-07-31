@@ -5,14 +5,14 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class ZipperDialog extends BaseConfigDialog<ZipperConfiguration> {
 	
 	private VerticalLayout mainLayout;
 	
     private TextField txtZipFile;
     
-	public Dialog() {
-		super(Configuration.class);
+	public ZipperDialog() {
+		super(ZipperConfiguration.class);
 		buildMainLayout();
 	}
 	
@@ -25,7 +25,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("-1px");
 		
-        txtZipFile = new TextField("Zip file path/name:");
+        txtZipFile = new TextField("Zip file path/name (with extension):");
         txtZipFile.setWidth("100%");
         txtZipFile.setRequired(true);
 		mainLayout.addComponent(txtZipFile);
@@ -34,18 +34,18 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 	}
 
 	@Override
-	protected void setConfiguration(Configuration c) throws DPUConfigException {
+	protected void setConfiguration(ZipperConfiguration c) throws DPUConfigException {
 		txtZipFile.setValue(c.getZipFile());
 	}
 
 	@Override
-	protected Configuration getConfiguration() throws DPUConfigException {
+	protected ZipperConfiguration getConfiguration() throws DPUConfigException {
 		
         if (!txtZipFile.isValid()) {
 			throw new DPUConfigException("Destination must be filled.");
 		}
         
-        Configuration cnf = new Configuration();
+        ZipperConfiguration cnf = new ZipperConfiguration();
 		
         cnf.setZipFile(txtZipFile.getValue());
         
