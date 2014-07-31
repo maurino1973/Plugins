@@ -17,7 +17,7 @@
 
     <properties>
         <dpu.package>ue.unifiedviews.plugins.extractors.filestoscp</dpu.package>
-        <dpu.mainClass>Main</dpu.mainClass>
+        <dpu.mainClass>FilesToScp</dpu.mainClass>
     </properties>
 
     <dependencies>

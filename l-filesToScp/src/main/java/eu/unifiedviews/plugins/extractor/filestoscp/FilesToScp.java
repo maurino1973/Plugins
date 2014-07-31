@@ -23,18 +23,18 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class Main extends ConfigurableBase<Configuration>
-        implements ConfigDialogProvider<Configuration> {
+public class FilesToScp extends ConfigurableBase<FilesToScpConfiguration>
+        implements ConfigDialogProvider<FilesToScpConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FilesToScp.class);
 
     @DataUnit.AsInput(name = "input")
     public FilesDataUnit inFilesData;
 
     private DPUContext context;
 
-    public Main() {
-        super(Configuration.class);
+    public FilesToScp() {
+        super(FilesToScpConfiguration.class);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class Main extends ConfigurableBase<Configuration>
     }
 
     @Override
-    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesToScpConfiguration> getConfigurationDialog() {
         return new Dialog();
     }
 
