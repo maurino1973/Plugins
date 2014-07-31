@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformers.zipper;
+package eu.unifiedviews.plugins.transformer.zipper;
 
 import java.io.File;
 import java.io.FileInputStream;
