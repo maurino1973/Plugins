@@ -9,9 +9,9 @@ import org.openrdf.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class RdfToFilesTransformerDialog extends BaseConfigDialog<RdfToFilesTransformerConfiguration> {
 	
-    private static final Logger LOG = LoggerFactory.getLogger(Dialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesTransformerDialog.class);
     
 	private VerticalLayout mainLayout;
 	
@@ -29,8 +29,8 @@ public class Dialog extends BaseConfigDialog<Configuration> {
     
     private Panel panelMultipleGraphs;
         
-	public Dialog() {
-		super(Configuration.class);
+	public RdfToFilesTransformerDialog() {
+		super(RdfToFilesTransformerConfiguration.class);
 		buildMainLayout();
 	}
 	
@@ -46,7 +46,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 		
         selectRdfFormat = new NativeSelect("RDF format:");
         for (RDFFormat item : RDFFormat.values()) {
-            selectRdfFormat.addItem(item);
+            selectRdfFormat.addItem(item.getName());
             selectRdfFormat.setItemCaption(item, item.getName());
         }
         selectRdfFormat.setNullSelectionAllowed(false);
@@ -100,7 +100,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
     }
     
 	@Override
-	protected void setConfiguration(Configuration c) throws DPUConfigException {
+	protected void setConfiguration(RdfToFilesTransformerConfiguration c) throws DPUConfigException {
 		selectRdfFormat.setValue(c.getRdfFileFormat());
         checkMergeGraphs.setValue(c.isMergeGraphs());
         if (c.isMergeGraphs()) {
@@ -111,7 +111,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
             }
             
             if (!c.getGraphToFileInfo().isEmpty()) {
-                final Configuration.GraphToFileInfo info =
+                final RdfToFilesTransformerConfiguration.GraphToFileInfo info =
                         c.getGraphToFileInfo().get(0);
                 txtSingleFileSymbolicName.setValue(info.getOutFileName());
                 if (c.getGraphToFileInfo().size() > 1) {
@@ -126,10 +126,10 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 	}
 
 	@Override
-	protected Configuration getConfiguration() throws DPUConfigException {
-		Configuration cnf = new Configuration();
+	protected RdfToFilesTransformerConfiguration getConfiguration() throws DPUConfigException {
+		RdfToFilesTransformerConfiguration cnf = new RdfToFilesTransformerConfiguration();
 		
-        cnf.setRdfFileFormat((RDFFormat)selectRdfFormat.getValue());
+        cnf.setRdfFileFormat((String)selectRdfFormat.getValue());
         cnf.setMergeGraphs(checkMergeGraphs.getValue());
         
         if (cnf.isMergeGraphs()) {
@@ -138,7 +138,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
             if (cnf.isGenGraphFile()) {
                 cnf.setOutGraphName(txtOutGraphName.getValue());
             }
-            final Configuration.GraphToFileInfo info = cnf.new GraphToFileInfo();
+            final RdfToFilesTransformerConfiguration.GraphToFileInfo info = cnf.new GraphToFileInfo();
             info.setInSymbolicName("");
             info.setOutFileName(txtSingleFileSymbolicName.getValue());
             cnf.setGraphToFileInfo(Arrays.asList(info));

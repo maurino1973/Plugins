@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.openrdf.rio.RDFFormat;
 
-public class Configuration {
+public class RdfToFilesTransformerConfiguration {
 
     public class GraphToFileInfo {
 
@@ -49,7 +49,7 @@ public class Configuration {
     /**
      * Format of output data files.
      */
-    private RDFFormat rdfFileFormat = RDFFormat.TURTLE;
+    private String rdfFileFormat = RDFFormat.TURTLE.getName();
 
     /**
      * If true then .graph file is generated.
@@ -72,14 +72,14 @@ public class Configuration {
      */
     private List<GraphToFileInfo> graphToFileInfo = Arrays.asList(new GraphToFileInfo("", "data", ""));
 
-    public Configuration() {
+    public RdfToFilesTransformerConfiguration() {
     }
 
-    public RDFFormat getRdfFileFormat() {
+    public String getRdfFileFormat() {
         return rdfFileFormat;
     }
 
-    public void setRdfFileFormat(RDFFormat rdfFileFormat) {
+    public void setRdfFileFormat(String rdfFileFormat) {
         this.rdfFileFormat = rdfFileFormat;
     }
 

@@ -16,16 +16,10 @@
 	
     <properties>    
         <dpu.package>eu.unifiedviews.plugins.transformer.rdftofiles</dpu.package>
-        <dpu.mainClass>Main</dpu.mainClass>
+        <dpu.mainClass>RdfToFilesTransformer</dpu.mainClass>
     </properties>
 	
     <dependencies>
-        <dependency>
-            <groupId>cz.cuni.mff.xrg.uv</groupId>
-            <artifactId>utils-dataunit</artifactId>
-            <version>1.1.0</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

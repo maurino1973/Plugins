@@ -30,12 +30,13 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+import org.openrdf.rio.RDFFormat;
 
 @DPU.AsTransformer
-public class Main extends ConfigurableBase<Configuration> implements
-        ConfigDialogProvider<Configuration> {
+public class RdfToFilesTransformer extends ConfigurableBase<RdfToFilesTransformerConfiguration> implements
+        ConfigDialogProvider<RdfToFilesTransformerConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesTransformer.class);
 
     private static final String FILE_ENCODE = "UTF-8";
 
@@ -47,13 +48,13 @@ public class Main extends ConfigurableBase<Configuration> implements
 
     private DPUContext context;
 
-    public Main() {
-        super(Configuration.class);
+    public RdfToFilesTransformer() {
+        super(RdfToFilesTransformerConfiguration.class);
     }
 
     @Override
-    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-        return new Dialog();
+    public AbstractConfigDialog<RdfToFilesTransformerConfiguration> getConfigurationDialog() {
+        return new RdfToFilesTransformerDialog();
     }
 
     @Override
@@ -109,7 +110,7 @@ MetadataHelper.dump(outFilesData);
      */
     private void exportSingle(Map<String, URI> graphUris)
             throws DataUnitException, ExportFailedException {
-        final Configuration.GraphToFileInfo info
+        final RdfToFilesTransformerConfiguration.GraphToFileInfo info
                 = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
@@ -141,7 +142,7 @@ MetadataHelper.dump(outFilesData);
      */
     private void exportMultiple(Map<String, URI> graphUris)
             throws DataUnitException, ExportFailedException {
-        for (Configuration.GraphToFileInfo info : config.getGraphToFileInfo()) {
+        for (RdfToFilesTransformerConfiguration.GraphToFileInfo info : config.getGraphToFileInfo()) {
             //
             // get URIs (graphs) to export and transfer metadata
             //
@@ -201,7 +202,8 @@ MetadataHelper.dump(outFilesData);
                         Charset.forName(FILE_ENCODE))) {
             connection = inRdfData.getConnection();
             final RDFWriter writer
-                    = Rio.createWriter(config.getRdfFileFormat(), outWriter);
+                    = Rio.createWriter(
+                            RDFFormat.valueOf(config.getRdfFileFormat()), outWriter);
             // export
             connection.export(writer, uris);
         } catch (IOException ex) {
