@@ -1,4 +1,4 @@
-package ue.unifiedviews.plugins.transformer.tabular;
+package eu.unifiedviews.plugins.transformer.tabular;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

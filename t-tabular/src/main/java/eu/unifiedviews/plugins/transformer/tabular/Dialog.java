@@ -1,4 +1,4 @@
-package ue.unifiedviews.plugins.transformer.tabular;
+package eu.unifiedviews.plugins.transformer.tabular;
 
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;

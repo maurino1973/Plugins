@@ -1,4 +1,4 @@
-package ue.unifiedviews.plugins.transformer.tabular;
+package eu.unifiedviews.plugins.transformer.tabular;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -32,12 +32,16 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+import java.util.ArrayList;
+import org.openrdf.model.*;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
         implements ConfigDialogProvider<Configuration> {
+
+    private static final int COMMIT_SIZE = 50000;
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
@@ -51,8 +55,30 @@ public class Main extends ConfigurableBase<Configuration>
 
     private RepositoryConnection outConnection;
 
+    private URI currentGraphURI;
+
+    private final List<Statement> buffer = new ArrayList<>(COMMIT_SIZE);
+
+    private ValueFactory valueFactory;
+
     public Main() {
         super(Configuration.class);
+    }
+
+    private void add(Resource rsrc, URI uri, Value value) throws RepositoryException {
+        buffer.add(valueFactory.createStatement(rsrc, uri, value));
+        if (buffer.size() > COMMIT_SIZE) {
+            flushBuffer();
+        }
+    }
+
+    private void flushBuffer() throws RepositoryException {
+        outConnection.begin();
+        for (Statement state : buffer) {
+            outConnection.add(state, currentGraphURI);
+        }
+        outConnection.commit();
+        buffer.clear();
     }
 
     @Override
@@ -83,6 +109,7 @@ public class Main extends ConfigurableBase<Configuration>
                     "DataUnit problem", "Can't get connection.", ex);
             return;
         }
+        valueFactory = outConnection.getValueFactory();
         //
         // Iterate over files
         //
@@ -105,8 +132,13 @@ public class Main extends ConfigurableBase<Configuration>
                 final File sourceFile = new File(
                         java.net.URI.create(entry.getFileURIString()));
 
+                currentGraphURI = outRdfTriplifiedTable.addNewDataGraph(
+                        entry.getSymbolicName());
+
 // TODO Add support for multiple graphs
                 proceedFile(context, sourceFile);
+                // store buffer
+                flushBuffer();
 
                 //
                 // Add metadata
@@ -143,7 +175,7 @@ public class Main extends ConfigurableBase<Configuration>
 // TODO Rework this method !!
     private void proceedFile(DPUContext context, File tableFile)
             throws RepositoryException {
-        final ValueFactory valueFactory = outConnection.getValueFactory();
+        
 
         String tableFileName = tableFile.getName();
 
@@ -235,8 +267,6 @@ public class Main extends ConfigurableBase<Configuration>
                         }
                     }
 
-                    outConnection.begin();
-
                     String suffixURI;
                     if (columnWithURISupplementNumber >= 0) {
                         suffixURI = this.convertStringToURIPart(row.get(
@@ -252,17 +282,18 @@ public class Main extends ConfigurableBase<Configuration>
                         if (strValue == null || "".equals(strValue)) {
                             URI obj = valueFactory.createURI(
                                     "http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
-                            outConnection.add(subj, propertyMap[i], obj);
+                            add(subj, propertyMap[i], obj);
                         } else {
                             Value obj = valueFactory.createLiteral(strValue);
-                            outConnection.add(subj, propertyMap[i], obj);
+                            add(subj, propertyMap[i], obj);
                         }
                         i++;
                     }
 
                     Value rowvalue = valueFactory.createLiteral(String.valueOf(
                             rowno));
-                    outConnection.add(subj, propertyRow, rowvalue);
+                    add(subj, propertyRow, rowvalue);
+
 
                     if ((rowno % 1000) == 0) {
                         LOG.debug("Row number {} processed.", rowno);
@@ -270,8 +301,6 @@ public class Main extends ConfigurableBase<Configuration>
 
                     rowno++;
                     row = listReader.read();
-
-                    outConnection.commit();
 
                     if (context.canceled()) {
                         LOG.info("DPU cancelled");
@@ -364,29 +393,26 @@ public class Main extends ConfigurableBase<Configuration>
                 }
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
-
-                outConnection.begin();
-
+                
                 for (int i = 0; i < row.length; i++) {
 
                     String strValue = this.getCellValue(row[i], encoding);
                     if (strValue == null || "".equals(strValue)) {
                         URI obj = valueFactory.createURI(
                                 "http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
-                        outConnection.add(subj, propertyMap[i], obj);
+                        add(subj, propertyMap[i], obj);
                     } else {
                         Value obj = valueFactory.createLiteral(this
                                 .getCellValue(row[i], encoding));
-                        outConnection.add(subj, propertyMap[i], obj);
+                        add(subj, propertyMap[i], obj);
                     }
 
                 }
 
                 Value rowvalue = valueFactory.createLiteral(this.getCellValue(
                         rowno, encoding));
-                outConnection.add(subj, propertyRow, rowvalue);
+                add(subj, propertyRow, rowvalue);
 
-                outConnection.commit();
 
                 if ((rowno % 1000) == 0) {
                     LOG.debug("Row number {} processed.", rowno);
