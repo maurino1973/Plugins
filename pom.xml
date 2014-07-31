@@ -21,6 +21,7 @@
 		<module>t-filesFilter</module>
 		<module>t-rdfDataValidator</module>
 		<module>t-filesToRdf</module>
+		<module>t-rdfToFiles</module>
 		<module>t-zipper</module>
 		<module>t-unzipper</module>
 		<module>t-tabular</module>
