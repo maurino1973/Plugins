@@ -10,7 +10,7 @@
     <groupId>eu.unifiedviews.plugins</groupId>
     <artifactId>uv-e-httpDownload</artifactId>
     <name>E-HttpDownload</name>
-    <description>Download given file.</description>
+    <description>Download a single file from given URL and save it with given virtualPath.</description>
     <version>1.0.0</version>
     <packaging>bundle</packaging>
 	
