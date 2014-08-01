@@ -24,10 +24,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @DPU.AsTransformer
-public class ZipperMain extends ConfigurableBase<ZipperConfiguration>
+public class Zipper extends ConfigurableBase<ZipperConfiguration>
         implements ConfigDialogProvider<ZipperConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ZipperMain.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Zipper.class);
 
     @DataUnit.AsInput(name = "input")
     public FilesDataUnit inFilesData;
@@ -37,7 +37,14 @@ public class ZipperMain extends ConfigurableBase<ZipperConfiguration>
 
     private DPUContext context;
 
-    public ZipperMain() {
+    /**
+     * Is set to true if the symbolicName is used as a path/file name.
+     * The purpose is to secure that the warning log message will be logged
+     * only once.
+     */
+    private boolean symbolicNameUsed = false;
+
+    public Zipper() {
         super(ZipperConfiguration.class);
     }
 
@@ -126,6 +133,10 @@ public class ZipperMain extends ConfigurableBase<ZipperConfiguration>
                             entry.getSymbolicName());
                 }
             }
+
+            // TODO Remove, dump metadata
+            MetadataHelper.dump(outFilesData);
+
         } catch (IOException | DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Failed to create zip file.", "", ex);
@@ -145,15 +156,15 @@ public class ZipperMain extends ConfigurableBase<ZipperConfiguration>
     private boolean addZipEntry(ZipOutputStream zos, byte[] buffer,
             FilesDataUnit.Entry entry) throws DataUnitException {
 
-        LOG.debug("File to zip: {}", entry.getSymbolicName());
-
         String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
-        // TODO We can try to use symbolicName here
         if (virtualPath == null) {
-            context.sendMessage(DPUContext.MessageType.WARNING,
-                    "No virtual path set for: " + entry.getSymbolicName()
-                            + ". File is ignored.");
-            return false;
+            // use symbolicv name
+            virtualPath = entry.getSymbolicName();
+            if (!symbolicNameUsed) {
+                // first usage
+                LOG.warn("Not all input files use VirtualPath, symbolic name is used instead.");
+            }
+            symbolicNameUsed = true;
         }
 
         final File sourceFile = new File(
