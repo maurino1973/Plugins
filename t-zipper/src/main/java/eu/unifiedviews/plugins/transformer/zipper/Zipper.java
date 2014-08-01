@@ -7,7 +7,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -23,9 +23,11 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * @author Škoda Petr
+ */
 @DPU.AsTransformer
-public class Zipper extends ConfigurableBase<ZipperConfiguration>
-        implements ConfigDialogProvider<ZipperConfiguration> {
+public class Zipper extends ConfigurableBase<ZipperConfiguration> implements ConfigDialogProvider<ZipperConfiguration> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Zipper.class);
 
@@ -56,16 +58,13 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration>
     @Override
     public void execute(DPUContext context) throws DPUException {
         this.context = context;
-
         final FilesDataUnit.Iteration filesIteration;
         try {
             filesIteration = inFilesData.getIteration();
         } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed", "Can't get file iterator.", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
         }
-
         //
         // Prepare zip file 
         //
@@ -76,15 +75,12 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration>
             zipSymbolicName = config.getZipFile();
             zipFileUri = outFilesData.addNewFile(zipSymbolicName);
             zipFile = new File(java.net.URI.create(zipFileUri));
-
             // add metadata 
             VirtualPathHelpers.setVirtualPath(outFilesData, zipSymbolicName, config.getZipFile());
-
             //
             // Create zip file
             //        
             zipFiles(zipFile, zipSymbolicName, filesIteration);
-
         } catch (DataUnitException ex) {
             throw new DPUException(ex);
         } finally {
@@ -103,15 +99,13 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration>
      * @param zipSymbolicName
      * @param filesIteration
      */
-    private void zipFiles(File zipFile, String zipSymbolicName,
-            FilesDataUnit.Iteration filesIteration) {
+    private void zipFiles(File zipFile, String zipSymbolicName, FilesDataUnit.Iteration filesIteration) {
         final byte[] buffer = new byte[8196];
 
         // used to publish the error mesage only for the first time
         boolean firstFailure = true;
 
-        try (FileOutputStream fos = new FileOutputStream(zipFile);
-                ZipOutputStream zos = new ZipOutputStream(fos)) {
+        try (FileOutputStream fos = new FileOutputStream(zipFile); ZipOutputStream zos = new ZipOutputStream(fos)) {
             //
             // Itarate over files and zip them
             //
@@ -120,26 +114,16 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration>
                 LOG.debug("Adding file: {}", entry.getSymbolicName());
                 if (!addZipEntry(zos, buffer, entry)) {
                     if (firstFailure) {
-                        context.sendMessage(DPUContext.MessageType.ERROR,
-                                "Faild to zip all files");
+                        context.sendMessage(DPUContext.MessageType.ERROR, "Faild to zip all files");
                     }
                     firstFailure = false;
                 } else {
                     // add metadata
-//                    CopyHelpers.copyMetadata(entry.getSymbolicName(),
-//                            inFilesData, outFilesData);
-                    MetadataHelper.add(outFilesData, zipSymbolicName,
-                            ZipperOntology.PREDICATE_CONTAINS_FILE,
-                            entry.getSymbolicName());
+                    CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData, outFilesData);
                 }
             }
-
-            // TODO Remove, dump metadata
-            MetadataHelper.dump(outFilesData);
-
         } catch (IOException | DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Failed to create zip file.", "", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "Failed to create zip file.", "", ex);
         }
 
     }
@@ -153,8 +137,7 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration>
      * @return True if file has been added.
      * @throws DataUnitException
      */
-    private boolean addZipEntry(ZipOutputStream zos, byte[] buffer,
-            FilesDataUnit.Entry entry) throws DataUnitException {
+    private boolean addZipEntry(ZipOutputStream zos, byte[] buffer, FilesDataUnit.Entry entry) throws DataUnitException {
 
         String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
         if (virtualPath == null) {
@@ -167,8 +150,7 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration>
             symbolicNameUsed = true;
         }
 
-        final File sourceFile = new File(
-                java.net.URI.create(entry.getFileURIString()));
+        final File sourceFile = new File(java.net.URI.create(entry.getFileURIString()));
         //
         // Do the action .. 
         //
