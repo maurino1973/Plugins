@@ -27,7 +27,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -156,7 +156,7 @@ public class Main extends ConfigurableBase<Configuration>
             filesIteration.close();
 
 // TODO Remove
-            MetadataHelper.dump(outRdfTriplifiedTable);
+            MetadataHelpers.dump(outRdfTriplifiedTable);
 
         } catch (DataUnitException ex) {
             LOG.warn("Error in close.", ex);

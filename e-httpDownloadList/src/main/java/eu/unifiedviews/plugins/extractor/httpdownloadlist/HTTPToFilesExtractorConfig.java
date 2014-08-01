@@ -11,6 +11,8 @@ public class HTTPToFilesExtractorConfig {
 
     private Map<String, String> symbolicNameToURIMap;
 
+    private Map<String, String> symbolicNameToVirtualPathMap;
+    
     // DPUTemplateConfig must provide public non-parametric constructor
     public HTTPToFilesExtractorConfig() {
         this.symbolicNameToURIMap = new LinkedHashMap<>();
@@ -38,5 +40,13 @@ public class HTTPToFilesExtractorConfig {
 
     public void setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
+    }
+
+    public Map<String, String> getSymbolicNameToVirtualPathMap() {
+        return symbolicNameToVirtualPathMap;
+    }
+
+    public void setSymbolicNameToVirtualPathMap(Map<String, String> symbolicNameToVirtualPathMap) {
+        this.symbolicNameToVirtualPathMap = symbolicNameToVirtualPathMap;
     }
 }
