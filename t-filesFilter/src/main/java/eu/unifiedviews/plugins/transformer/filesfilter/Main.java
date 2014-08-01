@@ -16,7 +16,6 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
@@ -106,9 +105,9 @@ public class Main extends ConfigurableBase<Configuration>
 
         try {
 
-// TODO DEBUG remove
-LOG.info("Input: ");
-MetadataHelper.dump(inFilesData);
+            // TODO DEBUG remove
+            LOG.info("Input: ");
+            MetadataHelper.dump(inFilesData);
 
             while (filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
@@ -135,17 +134,15 @@ MetadataHelper.dump(inFilesData);
                 }
 
                 // if we are here, then file pass through our filters
-                CopyHelpers.copyMetadata(entry.getSymbolicName(),
-                        inFilesData, outFilesData);
+//                CopyHelpers.copyMetadata(entry.getSymbolicName(),
+//                        inFilesData, outFilesData);
 
                 //
                 // TODO here we should rather somehow copy metadata from input
                 //  to output metadata graps, as otherwise we create new
                 //  triples
-
                 outFilesData.addExistingFile(entry.getSymbolicName(),
                         entry.getFileURIString());
-
                 // TODO Remove this
                 // as a hack copy virtual path now
                 final String virtualPath
@@ -155,9 +152,9 @@ MetadataHelper.dump(inFilesData);
 
             }
 
- // TODO remove
- LOG.info("Output: ");
- MetadataHelper.dump(outFilesData);
+            // TODO remove
+            LOG.info("Output: ");
+            MetadataHelper.dump(outFilesData);
 
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,

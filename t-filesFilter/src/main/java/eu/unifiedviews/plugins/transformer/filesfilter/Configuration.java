@@ -5,7 +5,7 @@ public class Configuration {
 
     private String predicate = FixedPredicates.SYMBOLIC_NAME;
 
-    private String object = "*";
+    private String object = ".*";
 
     /**
      * If false then {@link #predicate} represents one of {@link FixedPredicates}
