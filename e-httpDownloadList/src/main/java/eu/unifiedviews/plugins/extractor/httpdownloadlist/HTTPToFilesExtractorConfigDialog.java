@@ -13,6 +13,7 @@ import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
@@ -31,7 +32,7 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
 
     private static final String READ_TIMEOUT_LABEL = "Read timeout (HTTP)";
 
-    private static final String MAP_TEXT = "Files to download (each on one line in format symbolicName;URL)";
+    private static final String MAP_TEXT = "Files to download (one file = one line in format <symbolicName>;<URL>;[virtualPath])";
 
     private ObjectProperty<Integer> connectionTimeout = new ObjectProperty<Integer>(0);
 
@@ -45,19 +46,20 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
     }
 
     private void initialize() {
-        FormLayout mainLayout = new FormLayout();
+        FormLayout formLayout = new FormLayout();
 
-        // top-level component properties
-        setWidth("100%");
-        setHeight("100%");
+        formLayout.addComponent(new TextField(CONNECTION_TIMEOUT_LABEL, connectionTimeout));
+        formLayout.addComponent(new TextField(READ_TIMEOUT_LABEL, readTimeout));
 
-        mainLayout.addComponent(new TextField(CONNECTION_TIMEOUT_LABEL, connectionTimeout));
-        mainLayout.addComponent(new TextField(READ_TIMEOUT_LABEL, readTimeout));
+        VerticalLayout mainLayout = new VerticalLayout();
 
-        TextArea ta = new TextArea(MAP_TEXT, mapText);
-        ta.setRows(50);
-        ta.setColumns(50);
-        mainLayout.addComponent(ta);
+        TextArea textArea = new TextArea(MAP_TEXT, mapText);
+        textArea.setWidth("100%");
+        textArea.setInputPrompt("shakespeare;https://commondatastorage.googleapis.com/ckannet-storage/2012-04-24T183403/will_play_text.csv;inputs/shakespeare.csv");
+
+        mainLayout.addComponent(formLayout);
+        mainLayout.addComponent(textArea);
+
         setCompositionRoot(mainLayout);
     }
 
@@ -65,12 +67,15 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
     public void setConfiguration(HTTPToFilesExtractorConfig conf) throws DPUConfigException {
         connectionTimeout.setValue(conf.getConnectionTimeout());
         readTimeout.setValue(conf.getReadTimeout());
-
         StringBuilder sb = new StringBuilder();
         for (String key : conf.getSymbolicNameToURIMap().keySet()) {
             sb.append(key);
             sb.append(";");
             sb.append(conf.getSymbolicNameToURIMap().get(key));
+            if (conf.getSymbolicNameToVirtualPathMap().containsKey(key)) {
+                sb.append(";");
+                sb.append(conf.getSymbolicNameToVirtualPathMap().get(key));
+            }
             sb.append("\n");
         }
         mapText.setValue(sb.toString());
@@ -79,6 +84,7 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
     @Override
     public HTTPToFilesExtractorConfig getConfiguration() throws DPUConfigException {
         Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
+        Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
         BufferedReader br = new BufferedReader(new StringReader(mapText.getValue()));
 
         String line;
@@ -86,7 +92,7 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
         try {
             while ((line = br.readLine()) != null) {
                 String[] val = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, ";");
-                if (val.length != 2) {
+                if (val.length < 2) {
                     throw new DPUConfigException(String.format("Line %d %s has invalid format.", i, line));
                 }
 
@@ -100,14 +106,18 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
                     throw new DPUConfigException(String.format("Wrong URL on line %d symbolic name", i, val[0]), ex);
                 }
                 symbolicNameToURIMap.put(val[0], val[1]);
+                if (val.length >= 3) {
+                    symbolicNameToVirtualPathMap.put(val[0], val[2]);
+                }
                 i++;
             }
         } catch (IOException ex) {
             throw new DPUConfigException(ex);
         }
-        
+
         HTTPToFilesExtractorConfig conf = new HTTPToFilesExtractorConfig();
         conf.setSymbolicNameToURIMap(symbolicNameToURIMap);
+        conf.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
         conf.setConnectionTimeout(connectionTimeout.getValue());
         conf.setReadTimeout(readTimeout.getValue());
         return conf;

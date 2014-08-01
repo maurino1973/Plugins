@@ -6,7 +6,7 @@ import eu.unifiedviews.dataunit.files.FilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -65,7 +65,7 @@ public class Main extends ConfigurableBase<Configuration> implements
 		try {
 
 // TODO Remove
-MetadataHelper.dump(inFilesData);
+MetadataHelpers.dump(inFilesData);
 
 			while (!context.canceled() && filesIteration.hasNext()) {
 				final FilesDataUnit.Entry entry = filesIteration.next();

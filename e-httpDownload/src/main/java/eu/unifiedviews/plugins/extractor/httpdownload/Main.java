@@ -13,7 +13,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -54,7 +54,7 @@ public class Main extends ConfigurableBase<Configuration>
             outUri = output.addNewFile(outSymName);
 
             VirtualPathHelpers.setVirtualPath(output, outSymName, config.getTarget());
-            MetadataHelper.add(output, outSymName,
+            MetadataHelpers.add(output, outSymName,
                     Ontology.PREDICATE_DOWNLOADED_FROM, url.toString());
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,

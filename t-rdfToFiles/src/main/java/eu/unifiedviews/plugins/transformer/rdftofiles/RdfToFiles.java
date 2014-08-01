@@ -1,22 +1,5 @@
 package eu.unifiedviews.plugins.transformer.rdftofiles;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import org.openrdf.model.URI;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
-import org.openrdf.rio.RDFHandlerException;
-import org.openrdf.rio.RDFWriter;
-import org.openrdf.rio.Rio;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
@@ -26,11 +9,32 @@ import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+
+import org.apache.commons.io.FileUtils;
+import org.openrdf.model.URI;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
+import org.openrdf.rio.RDFHandlerException;
+import org.openrdf.rio.RDFWriter;
+import org.openrdf.rio.Rio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 @DPU.AsTransformer
 public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implements
@@ -88,7 +92,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
             }
 
 // TODO Remove
-MetadataHelper.dump(outFilesData);
+MetadataHelpers.dump(outFilesData);
 
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
@@ -129,7 +133,7 @@ MetadataHelper.dump(outFilesData);
         // transfer metadata
         for (String item : graphUris.keySet()) {
             CopyHelpers.copyMetadata(item, inRdfData, outFilesData);
-            MetadataHelper.set(outFilesData, outputSymbolicName,
+            MetadataHelpers.set(outFilesData, outputSymbolicName,
                     Ontology.PREDICATE_TRANFORM_FROM, item);
         }
     }
@@ -169,7 +173,7 @@ MetadataHelper.dump(outFilesData);
                 CopyHelpers.copyMetadata(sourceSombolicName, inRdfData,
                         outFilesData);
                 // we use symbolic name to denote
-                MetadataHelper.set(outFilesData, outputSymbolicName,
+                MetadataHelpers.set(outFilesData, outputSymbolicName,
                         Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
             }
             // check cancel
