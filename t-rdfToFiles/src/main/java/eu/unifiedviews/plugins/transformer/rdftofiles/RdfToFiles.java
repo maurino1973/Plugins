@@ -48,6 +48,8 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
 
     private DPUContext context;
 
+    private  RDFFormat rdfFormat;
+
     public RdfToFiles() {
         super(RdfToFilesConfiguration.class);
     }
@@ -60,11 +62,16 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
     @Override
     public void execute(DPUContext context) throws DPUException {
         this.context = context;
+        rdfFormat = RDFFormat.valueOf(config.getRdfFileFormat());
+        if (rdfFormat == null) {
+            context.sendMessage(DPUContext.MessageType.ERROR,
+                    "Unknonw RDF format: " + config.getRdfFileFormat());
+            return;
+        }
         //
         // get input graph uris and symbolicNames
         //
         final Map<String, URI> graphUris = new HashMap<>();
-
         try (RDFDataUnit.Iteration iter = inRdfData.getIteration()) {
             while (iter.hasNext()) {
                 final RDFDataUnit.Entry entry = iter.next();
@@ -75,11 +82,14 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
                     "Failed to get graph names.", "", ex);
             return;
         }
+        
         //
         // convert from rdf to files
         //
         try {
             // TODO export metadata graph ?!!
+
+
 
             if (config.isMergeGraphs()) {
                 exportSingle(graphUris);
@@ -190,9 +200,13 @@ MetadataHelper.dump(outFilesData);
      */
     private String exportGraph(URI[] uris, String fileName)
             throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName = fileName;
+        final String outputSymbolicName =
+                fileName + rdfFormat.getDefaultFileExtension();
+        final String outputFileUri =
+                outFilesData.addNewFile(outputSymbolicName);
+
         final File outputFile
-                = new File(java.net.URI.create(outputSymbolicName));
+                = new File(java.net.URI.create(outputFileUri));
         // create parent
         outputFile.getParentFile().mkdirs();
 
@@ -202,8 +216,7 @@ MetadataHelper.dump(outFilesData);
                         Charset.forName(FILE_ENCODE))) {
             connection = inRdfData.getConnection();
             final RDFWriter writer = Rio.createWriter(
-                            RDFFormat.valueOf(config.getRdfFileFormat()),
-                            outWriter);
+                            rdfFormat,outWriter);
             // export
             connection.export(writer, uris);
         } catch (IOException ex) {
@@ -220,7 +233,6 @@ MetadataHelper.dump(outFilesData);
             }
         }
 
-        outFilesData.addExistingFile(outputSymbolicName, outputSymbolicName);
         // add metadata about virtual path
         VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, fileName);
 
