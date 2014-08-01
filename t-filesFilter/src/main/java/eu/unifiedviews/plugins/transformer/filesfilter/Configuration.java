@@ -3,19 +3,15 @@ package eu.unifiedviews.plugins.transformer.filesfilter;
 
 public class Configuration {
 
-    private String predicate = FixedPredicates.SYMBOLIC_NAME;
+     public static final String SYMBOLIC_NAME = "FIXED_SYMBOLIC_NAME";
+
+    public static final String VIRTUAL_PATH = "VIRTUAL_PATH";
+
+    private String predicate = SYMBOLIC_NAME;
 
     private String object = ".*";
 
-    /**
-     * If false then {@link #predicate} represents one of {@link FixedPredicates}
-     * values and should be evaluated at runtime.
-     */
-    private boolean customPredicate = false;
-
     private boolean useRegExp = true;
-
-    // TODO we can utilize also some option like: is part of string
 
     public Configuration() {
     }
@@ -34,14 +30,6 @@ public class Configuration {
 
     public void setObject(String object) {
         this.object = object;
-    }
-
-    public boolean isCustomPredicate() {
-        return customPredicate;
-    }
-
-    public void setCustomPredicate(boolean isCustom) {
-        this.customPredicate = isCustom;
     }
 
     public boolean isUseRegExp() {
