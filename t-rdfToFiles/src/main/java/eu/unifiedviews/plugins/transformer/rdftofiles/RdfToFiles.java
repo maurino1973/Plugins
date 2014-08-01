@@ -7,9 +7,6 @@ import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -36,6 +33,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Škoda Petr
+ */
 @DPU.AsTransformer
 public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implements
         ConfigDialogProvider<RdfToFilesConfiguration> {
@@ -52,7 +52,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
 
     private DPUContext context;
 
-    private  RDFFormat rdfFormat;
+    private RDFFormat rdfFormat;
 
     public RdfToFiles() {
         super(RdfToFilesConfiguration.class);
@@ -68,8 +68,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
         this.context = context;
         rdfFormat = RDFFormat.valueOf(config.getRdfFileFormat());
         if (rdfFormat == null) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Unknonw RDF format: " + config.getRdfFileFormat());
+            context.sendMessage(DPUContext.MessageType.ERROR, "Unknonw RDF format: " + config.getRdfFileFormat());
             return;
         }
         //
@@ -86,30 +85,22 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
                     "Failed to get graph names.", "", ex);
             return;
         }
-        
+
         //
         // convert from rdf to files
         //
         try {
             // TODO export metadata graph ?!!
-
-
-
             if (config.isMergeGraphs()) {
                 exportSingle(graphUris);
             } else {
                 exportMultiple(graphUris);
             }
 
-// TODO Remove
-MetadataHelpers.dump(outFilesData);
-
         } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed.", "Problem with DataUnit.", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed.", "Problem with DataUnit.", ex);
         } catch (ExportFailedException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed.", "", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed.", "", ex);
         }
     }
 
@@ -117,46 +108,35 @@ MetadataHelpers.dump(outFilesData);
      * Export all data as a single graph. Also take care about generation of
      * .graph file if needed. If generation of .graph file fails then notify
      * backend with ERROR message.
-     *
+     * 
      * @param graphUris
      * @throws DataUnitException
      * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
-    private void exportSingle(Map<String, URI> graphUris)
-            throws DataUnitException, ExportFailedException {
-        final RdfToFilesConfiguration.GraphToFileInfo info
-                = config.getGraphToFileInfo().get(0);
+    private void exportSingle(Map<String, URI> graphUris) throws DataUnitException, ExportFailedException {
+        final RdfToFilesConfiguration.GraphToFileInfo info = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
-        final String outputSymbolicName = exportGraph(toExport,
-                info.getOutFileName());
+        final String outputSymbolicName = exportGraph(toExport, info.getOutFileName());
         // create graph name if needed
         if (config.isGenGraphFile()) {
             try {
-                generateGraphFile(info.getOutFileName(),
-                        config.getOutGraphName());
+                generateGraphFile(info.getOutFileName(), config.getOutGraphName());
             } catch (IOException ex) {
-                context.sendMessage(DPUContext.MessageType.ERROR,
-                        "Failed to create .graph file", "", ex);
+                context.sendMessage(DPUContext.MessageType.ERROR, "Failed to create .graph file", "", ex);
             }
         }
-        // transfer metadata
-        for (String item : graphUris.keySet()) {
-            CopyHelpers.copyMetadata(item, inRdfData, outFilesData);
-            MetadataHelpers.set(outFilesData, outputSymbolicName,
-                    Ontology.PREDICATE_TRANFORM_FROM, item);
-        }
+        // TODO transfer metadata + data about source?
     }
 
     /**
      * Export graphs based on options in {@link #config}.
-     *
+     * 
      * @param graphUris
      * @throws DataUnitException
      * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
-    private void exportMultiple(Map<String, URI> graphUris)
-            throws DataUnitException, ExportFailedException {
+    private void exportMultiple(Map<String, URI> graphUris) throws DataUnitException, ExportFailedException {
         for (RdfToFilesConfiguration.GraphToFileInfo info : config.getGraphToFileInfo()) {
             //
             // get URIs (graphs) to export and transfer metadata
@@ -174,18 +154,11 @@ MetadataHelpers.dump(outFilesData);
             //
             // export
             //
-            final String outputSymbolicName = exportGraph(
-                    sourceUri.toArray(new URI[0]), info.getOutFileName());
+            final String outputSymbolicName = exportGraph(sourceUri.toArray(new URI[0]), info.getOutFileName());
             //
-            // transfer metadata
+            // TODO transfer metadata
             //
-            for (String sourceSombolicName : sourceSymbolicNames) {
-                CopyHelpers.copyMetadata(sourceSombolicName, inRdfData,
-                        outFilesData);
-                // we use symbolic name to denote
-                MetadataHelpers.set(outFilesData, outputSymbolicName,
-                        Ontology.PREDICATE_TRANFORM_FROM, sourceSombolicName);
-            }
+
             // check cancel
             if (context.canceled()) {
                 return;
@@ -195,32 +168,26 @@ MetadataHelpers.dump(outFilesData);
 
     /**
      * Export content of given graphs into file of given name.
-     *
+     * 
      * @param uris
-     * @param fileName File name (suffix), virtual path.
+     * @param fileName
+     *            File name (suffix), virtual path.
      * @throws DataUnitException
      * @throws ExportFailedException
      * @return Symbolic name of output file.
      */
-    private String exportGraph(URI[] uris, String fileName)
-            throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName =
-                fileName + rdfFormat.getDefaultFileExtension();
-        final String outputFileUri =
-                outFilesData.addNewFile(outputSymbolicName);
+    private String exportGraph(URI[] uris, String fileName) throws DataUnitException, ExportFailedException {
+        final String outputSymbolicName = fileName + rdfFormat.getDefaultFileExtension();
+        final String outputFileUri = outFilesData.addNewFile(outputSymbolicName);
 
-        final File outputFile
-                = new File(java.net.URI.create(outputFileUri));
+        final File outputFile = new File(java.net.URI.create(outputFileUri));
         // create parent
         outputFile.getParentFile().mkdirs();
 
         RepositoryConnection connection = null;
-        try (FileOutputStream outStream = new FileOutputStream(outputFile);
-                OutputStreamWriter outWriter = new OutputStreamWriter(outStream,
-                        Charset.forName(FILE_ENCODE))) {
+        try (FileOutputStream outStream = new FileOutputStream(outputFile); OutputStreamWriter outWriter = new OutputStreamWriter(outStream, Charset.forName(FILE_ENCODE))) {
             connection = inRdfData.getConnection();
-            final RDFWriter writer = Rio.createWriter(
-                            rdfFormat,outWriter);
+            final RDFWriter writer = Rio.createWriter(rdfFormat, outWriter);
             // export
             connection.export(writer, uris);
         } catch (IOException ex) {
@@ -239,26 +206,22 @@ MetadataHelpers.dump(outFilesData);
 
         // add metadata about virtual path
         VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, fileName);
-
         return outputSymbolicName;
     }
 
     /**
      * Generate .graph file with give names.
-     *
+     * 
      * @param graphName
      */
-    private void generateGraphFile(String filePrefix, String graphName)
-            throws DataUnitException, IOException {
+    private void generateGraphFile(String filePrefix, String graphName) throws DataUnitException, IOException {
         final String outputSymbolicName = filePrefix + ".graph";
         final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
         // write into file
         LOG.debug("Writing .graph file into: {}", fileLocation.toString());
-        FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)),
-                graphName);
+        FileUtils.writeStringToFile(new File(java.net.URI.create(fileLocation)), graphName);
         // add metadata about virtual path
-        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName,
-                outputSymbolicName);
+        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, outputSymbolicName);
     }
 
 }

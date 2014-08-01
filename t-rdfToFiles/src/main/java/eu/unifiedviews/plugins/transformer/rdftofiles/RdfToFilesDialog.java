@@ -10,40 +10,40 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> {
-	
+
     private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesDialog.class);
-    
-	private VerticalLayout mainLayout;
-	
+
+    private VerticalLayout mainLayout;
+
     private NativeSelect selectRdfFormat;
-    
+
     private CheckBox checkMergeGraphs;
-    
+
     private Panel panelSingleGraph;
-    
+
     private CheckBox checkGenGraphFile;
-    
+
     private TextField txtOutGraphName;
 
     private TextField txtSingleFileSymbolicName;
-    
-    private Panel panelMultipleGraphs;
-        
-	public RdfToFilesDialog() {
-		super(RdfToFilesConfiguration.class);
-		buildMainLayout();
-	}
-	
-	private void buildMainLayout() {
-		setWidth("100%");
-		setHeight("100%");
 
-		mainLayout = new VerticalLayout();
-		mainLayout.setImmediate(false);
-		mainLayout.setWidth("100%");
-		mainLayout.setHeight("-1px");
+    private Panel panelMultipleGraphs;
+
+    public RdfToFilesDialog() {
+        super(RdfToFilesConfiguration.class);
+        buildMainLayout();
+    }
+
+    private void buildMainLayout() {
+        setWidth("100%");
+        setHeight("100%");
+
+        mainLayout = new VerticalLayout();
+        mainLayout.setImmediate(false);
+        mainLayout.setWidth("100%");
+        mainLayout.setHeight("-1px");
         mainLayout.setSpacing(true);
-		
+
         selectRdfFormat = new NativeSelect("RDF format:");
         for (RDFFormat item : RDFFormat.values()) {
             selectRdfFormat.addItem(item.getName());
@@ -51,57 +51,55 @@ public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> 
         }
         selectRdfFormat.setNullSelectionAllowed(false);
         mainLayout.addComponent(selectRdfFormat);
-        
+
         checkMergeGraphs = new CheckBox("Merge graphs:");
         mainLayout.addComponent(checkMergeGraphs);
-        
+
         buildPanelSingleGraph();
-		mainLayout.addComponent(panelSingleGraph);
-		
-        
+        mainLayout.addComponent(panelSingleGraph);
+
         checkMergeGraphs.addValueChangeListener(new Property.ValueChangeListener() {
 
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                
+
             }
         });
-        
-		setCompositionRoot(mainLayout);
-	}
+
+        setCompositionRoot(mainLayout);
+    }
 
     private void buildPanelSingleGraph() {
         final VerticalLayout layout = new VerticalLayout();
-		mainLayout.setWidth("100%");
-		mainLayout.setHeight("-1px");        
+        mainLayout.setWidth("100%");
+        mainLayout.setHeight("-1px");
         mainLayout.setSpacing(true);
-       
+
         checkGenGraphFile = new CheckBox("Generate graph file:");
         mainLayout.addComponent(checkGenGraphFile);
-                
+
         txtOutGraphName = new TextField("Output graph name:");
         txtOutGraphName.setWidth("100%");
         mainLayout.addComponent(txtOutGraphName);
-        
+
         checkGenGraphFile.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                txtOutGraphName.setEnabled((Boolean)event.getProperty().getValue());
+                txtOutGraphName.setEnabled((Boolean) event.getProperty().getValue());
             }
         });
-        
-        txtSingleFileSymbolicName = new TextField(
-                "File path/name without extension:");
+
+        txtSingleFileSymbolicName = new TextField("File path/name without extension:");
         txtSingleFileSymbolicName.setWidth("100%");
         mainLayout.addComponent(txtSingleFileSymbolicName);
-        
+
         panelSingleGraph = new Panel();
         panelSingleGraph.setContent(layout);
     }
-    
-	@Override
-	protected void setConfiguration(RdfToFilesConfiguration c) throws DPUConfigException {
-		selectRdfFormat.setValue(c.getRdfFileFormat());
+
+    @Override
+    protected void setConfiguration(RdfToFilesConfiguration c) throws DPUConfigException {
+        selectRdfFormat.setValue(c.getRdfFileFormat());
         checkMergeGraphs.setValue(c.isMergeGraphs());
         if (c.isMergeGraphs()) {
             // single graph
@@ -109,10 +107,9 @@ public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> 
             if (c.isGenGraphFile()) {
                 txtOutGraphName.setValue(c.getOutGraphName());
             }
-            
+
             if (!c.getGraphToFileInfo().isEmpty()) {
-                final RdfToFilesConfiguration.GraphToFileInfo info =
-                        c.getGraphToFileInfo().get(0);
+                final RdfToFilesConfiguration.GraphToFileInfo info = c.getGraphToFileInfo().get(0);
                 txtSingleFileSymbolicName.setValue(info.getOutFileName());
                 if (c.getGraphToFileInfo().size() > 1) {
                     LOG.warn("GraphToFileInfo.size() > 1, but were expected equal to 1.");
@@ -123,15 +120,15 @@ public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> 
         } else {
             // multiple files
         }
-	}
+    }
 
-	@Override
-	protected RdfToFilesConfiguration getConfiguration() throws DPUConfigException {
-		RdfToFilesConfiguration cnf = new RdfToFilesConfiguration();
-		
-        cnf.setRdfFileFormat((String)selectRdfFormat.getValue());
+    @Override
+    protected RdfToFilesConfiguration getConfiguration() throws DPUConfigException {
+        RdfToFilesConfiguration cnf = new RdfToFilesConfiguration();
+
+        cnf.setRdfFileFormat((String) selectRdfFormat.getValue());
         cnf.setMergeGraphs(checkMergeGraphs.getValue());
-        
+
         if (cnf.isMergeGraphs()) {
             // single graph
             cnf.setGenGraphFile(checkGenGraphFile.getValue());
@@ -144,29 +141,29 @@ public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> 
             cnf.setGraphToFileInfo(Arrays.asList(info));
         } else {
             // multiple files
-            
-        }
-		return cnf;
-	}
 
-	@Override
-	public String getDescription() {
-		StringBuilder desc = new StringBuilder();
-		
+        }
+        return cnf;
+    }
+
+    @Override
+    public String getDescription() {
+        StringBuilder desc = new StringBuilder();
+
         if (checkMergeGraphs.getValue()) {
             // single file
             desc.append("input->");
             desc.append(txtSingleFileSymbolicName);
             desc.append(".");
-            desc.append(((RDFFormat)selectRdfFormat.getValue()).getDefaultFileExtension());
+            desc.append(((RDFFormat) selectRdfFormat.getValue()).getDefaultFileExtension());
             if (checkGenGraphFile.getValue()) {
                 desc.append(" .graph is generated.");
             }
         } else {
             // multiple graphs
         }
-        
-		return desc.toString();
-	}
+
+        return desc.toString();
+    }
 
 }
