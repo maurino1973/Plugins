@@ -1,15 +1,15 @@
 package eu.unifiedviews.plugins.transformer.metadata;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 import java.util.LinkedList;
 
 public class MetadataConfiguration {
 
-    private URL datasetURI;
+    private String outputGraphName = "http://localhost/metadata";
 
-    private URL distroURI;
+    private String datasetURI;
+
+    private String distroURI;
 
     private String title_cs = "Název datasetu";
 
@@ -21,45 +21,45 @@ public class MetadataConfiguration {
 
     private String mime = "application/zip";
 
-    private LinkedList<URL> authors = new LinkedList<>();
+    private LinkedList<String> authors = new LinkedList<>();
 
-    private LinkedList<URL> possibleAuthors = new LinkedList<>();
+    private LinkedList<String> possibleAuthors = new LinkedList<>();
 
-    private LinkedList<URL> publishers = new LinkedList<>();
+    private LinkedList<String> publishers = new LinkedList<>();
 
-    private LinkedList<URL> possiblePublishers = new LinkedList<>();
+    private LinkedList<String> possiblePublishers = new LinkedList<>();
 
-    private LinkedList<URL> licenses = new LinkedList<>();
+    private LinkedList<String> licenses = new LinkedList<>();
 
-    private LinkedList<URL> possibleLicenses = new LinkedList<>();
+    private LinkedList<String> possibleLicenses = new LinkedList<>();
 
-    private LinkedList<URL> sources = new LinkedList<>();
+    private LinkedList<String> sources = new LinkedList<>();
 
-    private LinkedList<URL> possibleSources = new LinkedList<>();
+    private LinkedList<String> possibleSources = new LinkedList<>();
 
-    private LinkedList<URL> exampleResources = new LinkedList<>();
+    private LinkedList<String> exampleResources = new LinkedList<>();
 
-    private LinkedList<URL> possibleExampleResources = new LinkedList<>();
+    private LinkedList<String> possibleExampleResources = new LinkedList<>();
 
-    private LinkedList<URL> languages = new LinkedList<>();
+    private LinkedList<String> languages = new LinkedList<>();
 
-    private LinkedList<URL> possibleLanguages = new LinkedList<>();
+    private LinkedList<String> possibleLanguages = new LinkedList<>();
 
     private LinkedList<String> keywords = new LinkedList<>();
 
     private LinkedList<String> possibleKeywords = new LinkedList<>();
 
-    private LinkedList<URL> themes = new LinkedList<>();
+    private LinkedList<String> themes = new LinkedList<>();
 
-    private LinkedList<URL> possibleThemes = new LinkedList<>();
+    private LinkedList<String> possibleThemes = new LinkedList<>();
 
-    private URL contactPoint;
+    private String contactPoint;
 
-    private URL sparqlEndpoint;
+    private String sparqlEndpoint;
 
-    private URL dataDump;
+    private String dataDump;
 
-    private URL periodicity;
+    private String periodicity;
 
     private boolean useNow = true;
 
@@ -68,64 +68,49 @@ public class MetadataConfiguration {
     private Date modified = new Date();
 
     public MetadataConfiguration() {
-        try {
-            datasetURI = new URL(
-                    "http://linked.opendata.cz/resource/dataset/");
-            distroURI = new URL(
-                    "http://linked.opendata.cz/resource/dataset//distribution");
-            licenses.add(new URL(
-                    "http://opendatacommons.org/licenses/pddl/1-0/"));
-            sparqlEndpoint = new URL(
-                    "http://linked.opendata.cz/sparql");
-            dataDump = new URL(
-                    "http://linked.opendata.cz/dump/");
-            contactPoint = new URL(
-                    "http://opendata.cz/contacts");
-            periodicity = new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-M");
-            modified = new Date();
-            possibleSources.add(new URL(
-                    "http://linked.opendata.cz"));
-            possibleLicenses.add(new URL(
-                    "http://opendatacommons.org/licenses/pddl/1-0/"));
-            possibleLicenses.add(new URL(
-                    "http://creativecommons.org/licenses/by/3.0/lu/"));
-            possiblePublishers.add(new URL(
-                    "http://opendata.cz"));
-            publishers.add(new URL(
-                    "http://opendata.cz"));
-            possibleAuthors.add(new URL(
-                    "http://purl.org/klimek#me"));
-            possibleAuthors.add(new URL(
-                    "http://opendata.cz/necasky#me"));
-            possibleAuthors.add(new URL(
-                    "http://mynarz.net/#jindrich"));
-            possibleThemes.add(new URL(
-                    "http://dbpedia.org/resource/EHealth"));
-            possibleLanguages.add(new URL(
-                    "http://id.loc.gov/vocabulary/iso639-1/en"));
-            possibleLanguages.add(new URL(
-                    "http://id.loc.gov/vocabulary/iso639-1/cs"));
-            licenses.add(new URL(
-                    "http://opendatacommons.org/licenses/pddl/1-0/"));
-        } catch (MalformedURLException ex) {
-
-        }
+        datasetURI = "http://linked.opendata.cz/resource/dataset/";
+        distroURI = "http://linked.opendata.cz/resource/dataset//distribution";
+        licenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
+        sparqlEndpoint = "http://linked.opendata.cz/sparql";
+        dataDump = "http://linked.opendata.cz/dump/";
+        contactPoint = "http://opendata.cz/contacts";
+        periodicity = "http://purl.org/linked-data/sdmx/2009/code#freq-M";
+        modified = new Date();
+        possibleSources.add("http://linked.opendata.cz");
+        possibleLicenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
+        possibleLicenses.add("http://creativecommons.org/licenses/by/3.0/lu/");
+        possiblePublishers.add("http://opendata.cz");
+        publishers.add("http://opendata.cz");
+        possibleAuthors.add("http://purl.org/klimek#me");
+        possibleAuthors.add("http://opendata.cz/necasky#me");
+        possibleAuthors.add("http://mynarz.net/#jindrich");
+        possibleThemes.add("http://dbpedia.org/resource/EHealth");
+        possibleLanguages.add("http://id.loc.gov/vocabulary/iso639-1/en");
+        possibleLanguages.add("http://id.loc.gov/vocabulary/iso639-1/cs");
+        licenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
     }
 
-    public URL getDatasetURI() {
+    public String getOutputGraphName() {
+        return outputGraphName;
+    }
+
+    public void setOutputGraphName(String outputGraphName) {
+        this.outputGraphName = outputGraphName;
+    }
+
+    public String getDatasetURI() {
         return datasetURI;
     }
 
-    public void setDatasetURI(URL datasetURI) {
+    public void setDatasetURI(String datasetURI) {
         this.datasetURI = datasetURI;
     }
 
-    public URL getDistroURI() {
+    public String getDistroURI() {
         return distroURI;
     }
 
-    public void setDistroURI(URL distroURI) {
+    public void setDistroURI(String distroURI) {
         this.distroURI = distroURI;
     }
 
@@ -169,106 +154,106 @@ public class MetadataConfiguration {
         this.mime = mime;
     }
 
-    public LinkedList<URL> getAuthors() {
+    public LinkedList<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(LinkedList<URL> authors) {
+    public void setAuthors(LinkedList<String> authors) {
         this.authors = authors;
     }
 
-    public LinkedList<URL> getPossibleAuthors() {
+    public LinkedList<String> getPossibleAuthors() {
         return possibleAuthors;
     }
 
     public void setPossibleAuthors(
-            LinkedList<URL> possibleAuthors) {
+            LinkedList<String> possibleAuthors) {
         this.possibleAuthors = possibleAuthors;
     }
 
-    public LinkedList<URL> getPublishers() {
+    public LinkedList<String> getPublishers() {
         return publishers;
     }
 
-    public void setPublishers(LinkedList<URL> publishers) {
+    public void setPublishers(LinkedList<String> publishers) {
         this.publishers = publishers;
     }
 
-    public LinkedList<URL> getPossiblePublishers() {
+    public LinkedList<String> getPossiblePublishers() {
         return possiblePublishers;
     }
 
     public void setPossiblePublishers(
-            LinkedList<URL> possiblePublishers) {
+            LinkedList<String> possiblePublishers) {
         this.possiblePublishers = possiblePublishers;
     }
 
-    public LinkedList<URL> getLicenses() {
+    public LinkedList<String> getLicenses() {
         return licenses;
     }
 
-    public void setLicenses(LinkedList<URL> licenses) {
+    public void setLicenses(LinkedList<String> licenses) {
         this.licenses = licenses;
     }
 
-    public LinkedList<URL> getPossibleLicenses() {
+    public LinkedList<String> getPossibleLicenses() {
         return possibleLicenses;
     }
 
     public void setPossibleLicenses(
-            LinkedList<URL> possibleLicenses) {
+            LinkedList<String> possibleLicenses) {
         this.possibleLicenses = possibleLicenses;
     }
 
-    public LinkedList<URL> getSources() {
+    public LinkedList<String> getSources() {
         return sources;
     }
 
-    public void setSources(LinkedList<URL> sources) {
+    public void setSources(LinkedList<String> sources) {
         this.sources = sources;
     }
 
-    public LinkedList<URL> getPossibleSources() {
+    public LinkedList<String> getPossibleSources() {
         return possibleSources;
     }
 
     public void setPossibleSources(
-            LinkedList<URL> possibleSources) {
+            LinkedList<String> possibleSources) {
         this.possibleSources = possibleSources;
     }
 
-    public LinkedList<URL> getExampleResources() {
+    public LinkedList<String> getExampleResources() {
         return exampleResources;
     }
 
     public void setExampleResources(
-            LinkedList<URL> exampleResources) {
+            LinkedList<String> exampleResources) {
         this.exampleResources = exampleResources;
     }
 
-    public LinkedList<URL> getPossibleExampleResources() {
+    public LinkedList<String> getPossibleExampleResources() {
         return possibleExampleResources;
     }
 
     public void setPossibleExampleResources(
-            LinkedList<URL> possibleExampleResources) {
+            LinkedList<String> possibleExampleResources) {
         this.possibleExampleResources = possibleExampleResources;
     }
 
-    public LinkedList<URL> getLanguages() {
+    public LinkedList<String> getLanguages() {
         return languages;
     }
 
-    public void setLanguages(LinkedList<URL> languages) {
+    public void setLanguages(LinkedList<String> languages) {
         this.languages = languages;
     }
 
-    public LinkedList<URL> getPossibleLanguages() {
+    public LinkedList<String> getPossibleLanguages() {
         return possibleLanguages;
     }
 
     public void setPossibleLanguages(
-            LinkedList<URL> possibleLanguages) {
+            LinkedList<String> possibleLanguages) {
         this.possibleLanguages = possibleLanguages;
     }
 
@@ -289,52 +274,52 @@ public class MetadataConfiguration {
         this.possibleKeywords = possibleKeywords;
     }
 
-    public LinkedList<URL> getThemes() {
+    public LinkedList<String> getThemes() {
         return themes;
     }
 
-    public void setThemes(LinkedList<URL> themes) {
+    public void setThemes(LinkedList<String> themes) {
         this.themes = themes;
     }
 
-    public LinkedList<URL> getPossibleThemes() {
+    public LinkedList<String> getPossibleThemes() {
         return possibleThemes;
     }
 
     public void setPossibleThemes(
-            LinkedList<URL> possibleThemes) {
+            LinkedList<String> possibleThemes) {
         this.possibleThemes = possibleThemes;
     }
 
-    public URL getSparqlEndpoint() {
+    public String getSparqlEndpoint() {
         return sparqlEndpoint;
     }
 
-    public void setSparqlEndpoint(URL sparqlEndpoint) {
+    public void setSparqlEndpoint(String sparqlEndpoint) {
         this.sparqlEndpoint = sparqlEndpoint;
     }
 
-    public URL getDataDump() {
+    public String getDataDump() {
         return dataDump;
     }
 
-    public void setDataDump(URL dataDump) {
+    public void setDataDump(String dataDump) {
         this.dataDump = dataDump;
     }
 
-    public URL getContactPoint() {
+    public String getContactPoint() {
         return contactPoint;
     }
 
-    public void setContactPoint(URL contactPoint) {
+    public void setContactPoint(String contactPoint) {
         this.contactPoint = contactPoint;
     }
 
-    public URL getPeriodicity() {
+    public String getPeriodicity() {
         return periodicity;
     }
 
-    public void setPeriodicity(URL periodicity) {
+    public void setPeriodicity(String periodicity) {
         this.periodicity = periodicity;
     }
 

@@ -42,6 +42,8 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
     private VerticalLayout mainLayout;
 
+    private TextField txtOutSymbolicName;
+
     private TextField tfTitleCs;
 
     private TextField tfTitleEn;
@@ -86,37 +88,21 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
     private TwinColSelect tcsLanguages;
 
-    private final List<URLandCaption> periodicities = new LinkedList<URLandCaption>();
+    private final List<URLandCaption> periodicities = new LinkedList<>();
 
-    private final String[] mimes = {"application/zip", "text/csv", "application/rdf+xml", "text/plain", "application/x-turtle"};
+    private final String[] mimes = { "application/zip", "text/csv", "application/rdf+xml", "text/plain", "application/x-turtle" };
 
     public MetadataDialog() {
         super(MetadataConfiguration.class);
         try {
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-A"),
-                    "Annual"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-B"),
-                    "Daily - business week"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-D"),
-                    "Daily"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-M"),
-                    "Monthly"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-N"),
-                    "Minutely"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-Q"),
-                    "Quarterly"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-S"),
-                    "Half Yearly, semester"));
-            periodicities.add(new URLandCaption(new URL(
-                    "http://purl.org/linked-data/sdmx/2009/code#freq-W"),
-                    "Weekly"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-A"), "Annual"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-B"), "Daily - business week"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-D"), "Daily"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-M"), "Monthly"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-N"), "Minutely"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-Q"), "Quarterly"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-S"), "Half Yearly, semester"));
+            periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-W"), "Weekly"));
         } catch (MalformedURLException ex) {
             LOG.warn("Error in ctor.", ex);
         }
@@ -141,6 +127,11 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
         // top-level component properties
         setWidth("100%");
         setHeight("100%");
+
+        txtOutSymbolicName = new TextField();
+        txtOutSymbolicName.setCaption("Output graph name:");
+        txtOutSymbolicName.setWidth("100%");
+        mainLayout.addComponent(txtOutSymbolicName);
 
         tfDatasetUri = new TextField();
         tfDatasetUri.setCaption("Dataset URI:");
@@ -285,6 +276,7 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
     @Override
     public void setConfiguration(MetadataConfiguration conf) throws DPUConfigException {
+        txtOutSymbolicName.setValue(conf.getOutputGraphName());
         tfDatasetUri.setValue(conf.getDatasetURI().toString());
         tfDistributionUri.setValue(conf.getDistroURI().toString());
         tfDataDumpUrl.setValue(conf.getDataDump().toString());
@@ -302,14 +294,11 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
         setTcsConfig(conf.getSources(), conf.getPossibleSources(), tcsSources);
         setTcsConfig(conf.getAuthors(), conf.getPossibleAuthors(), tcsAuthors);
-        setTcsConfig(conf.getPublishers(), conf.getPossiblePublishers(),
-                tcsPublishers);
-        setTcsConfig(conf.getExampleResources(), conf
-                .getPossibleExampleResources(), tcsExamples);
+        setTcsConfig(conf.getPublishers(), conf.getPossiblePublishers(), tcsPublishers);
+        setTcsConfig(conf.getExampleResources(), conf.getPossibleExampleResources(), tcsExamples);
         setTcsConfig(conf.getLicenses(), conf.getPossibleLicenses(), tcsLicenses);
         setTcsConfig(conf.getThemes(), conf.getPossibleThemes(), tcsThemes);
-        setTcsConfig(conf.getLanguages(), conf.getPossibleLanguages(),
-                tcsLanguages);
+        setTcsConfig(conf.getLanguages(), conf.getPossibleLanguages(), tcsLanguages);
 
         for (String c : conf.getPossibleKeywords()) {
             tcsKeywords.addItem(c);
@@ -324,43 +313,43 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
     }
 
-    private void setTcsConfig(LinkedList<URL> list, LinkedList<URL> possibleList,
+    private void setTcsConfig(LinkedList<String> list, LinkedList<String> possibleList,
             TwinColSelect tcs) {
-        for (URL c : possibleList) {
+        for (String c : possibleList) {
             tcs.addItem(c.toString());
         }
         tcs.setRows(possibleList.size());
 
-        for (URL l : list) {
+        for (String l : list) {
             if (!tcs.containsId(l.toString())) {
                 tcs.addItem(l.toString());
             }
         }
 
-        Collection<String> srcs = new LinkedList<String>();
-        for (URL l : list) {
+        Collection<String> srcs = new LinkedList<>();
+        for (String l : list) {
             srcs.add(l.toString());
         }
         tcs.setValue(srcs);
     }
 
-    private void getTcsConfig(LinkedList<URL> list, LinkedList<URL> possibleList,
+    private void getTcsConfig(LinkedList<String> list, LinkedList<String> possibleList,
             TwinColSelect tcs) throws MalformedURLException {
         list.clear();
         for (Object u : (Collection<Object>) tcs.getValue()) {
             if (u instanceof URL) {
-                list.add((URL) u);
+                list.add(u.toString());
             } else if (u instanceof String) {
-                list.add(new URL((String) u));
+                list.add((new URL((String) u)).toString());
             }
         }
 
         possibleList.clear();
         for (Object u : (Collection<Object>) tcs.getItemIds()) {
             if (u instanceof URL) {
-                possibleList.add((URL) u);
+                possibleList.add(u.toString());
             } else if (u instanceof String) {
-                possibleList.add(new URL((String) u));
+                possibleList.add((new URL((String) u)).toString());
             }
         }
     }
@@ -373,41 +362,35 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
         conf.setTitle_en(tfTitleEn.getValue());
         conf.setDesc_cs(tfDescCs.getValue());
         conf.setDesc_en(tfDescEn.getValue());
-        conf.setLicenses(new LinkedList<URL>());
+        conf.setLicenses(new LinkedList<String>());
         conf.setUseNow((boolean) chkNow.getValue());
         conf.setIsQb((boolean) chkQb.getValue());
         conf.setModified(dfModified.getValue());
         conf.setMime((String) cbMime.getValue());
 
         try {
-            conf.setDatasetURI(new URL(tfDatasetUri.getValue()));
-            conf.setDistroURI(new URL(tfDistributionUri.getValue()));
-            conf.setDataDump(new URL(tfDataDumpUrl.getValue()));
-            conf.setSparqlEndpoint(new URL(tfSparqlEndpointUrl.getValue()));
-            conf.setContactPoint(new URL(tfContactPoint.getValue()));
-            conf.setPeriodicity(new URL((String) cbPeriodicity.getValue()));
+            conf.setOutputGraphName((new URL(txtOutSymbolicName.getValue())).toString());
 
-            getTcsConfig(conf.getAuthors(), conf.getPossibleAuthors(),
-                    tcsAuthors);
-            getTcsConfig(conf.getPublishers(), conf.getPossiblePublishers(),
-                    tcsPublishers);
-            getTcsConfig(conf.getLicenses(), conf.getPossibleLicenses(),
-                    tcsLicenses);
-            getTcsConfig(conf.getExampleResources(), conf
-                    .getPossibleExampleResources(), tcsExamples);
-            getTcsConfig(conf.getSources(), conf.getPossibleSources(),
-                    tcsSources);
+            conf.setDatasetURI((new URL(tfDatasetUri.getValue())).toString());
+            conf.setDistroURI((new URL(tfDistributionUri.getValue())).toString());
+            conf.setDataDump((new URL(tfDataDumpUrl.getValue())).toString());
+            conf.setSparqlEndpoint((new URL(tfSparqlEndpointUrl.getValue())).toString());
+            conf.setContactPoint((new URL(tfContactPoint.getValue())).toString());
+            conf.setPeriodicity((new URL((String) cbPeriodicity.getValue())).toString());
+
+            getTcsConfig(conf.getAuthors(), conf.getPossibleAuthors(), tcsAuthors);
+            getTcsConfig(conf.getPublishers(), conf.getPossiblePublishers(), tcsPublishers);
+            getTcsConfig(conf.getLicenses(), conf.getPossibleLicenses(), tcsLicenses);
+            getTcsConfig(conf.getExampleResources(), conf.getPossibleExampleResources(), tcsExamples);
+            getTcsConfig(conf.getSources(), conf.getPossibleSources(), tcsSources);
             getTcsConfig(conf.getThemes(), conf.getPossibleThemes(), tcsThemes);
-            getTcsConfig(conf.getLanguages(), conf.getPossibleLanguages(),
-                    tcsLanguages);
+            getTcsConfig(conf.getLanguages(), conf.getPossibleLanguages(), tcsLanguages);
 
             conf.getKeywords().clear();
-            conf.getKeywords().addAll((Collection<String>) tcsKeywords
-                    .getValue());
+            conf.getKeywords().addAll((Collection<String>) tcsKeywords.getValue());
 
             conf.getPossibleKeywords().clear();
-            conf.getPossibleKeywords().addAll((Collection<String>) tcsKeywords
-                    .getItemIds());
+            conf.getPossibleKeywords().addAll((Collection<String>) tcsKeywords.getItemIds());
 
         } catch (MalformedURLException ex) {
             throw new DPUConfigException("Wrong configuration.", ex);
