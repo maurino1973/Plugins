@@ -8,7 +8,6 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import java.io.File;
 import java.nio.file.Path;
@@ -19,6 +18,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author Škoda Petr
+ */
 @DPU.AsTransformer
 public class UnZipper implements DPU {
 
@@ -44,15 +46,13 @@ public class UnZipper implements DPU {
         try {
             filesIteration = inFilesData.getIteration();
         } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed", "Can't get file iterator.", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
         }
 
         final File baseTargetDirectory;
         try {
-            baseTargetDirectory = new File(
-                    java.net.URI.create(outFilesData.getBaseFileURIString()));
+            baseTargetDirectory = new File(java.net.URI.create(outFilesData.getBaseFileURIString()));
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "DPU Failed", "Can't get base output directory.", ex);
@@ -67,12 +67,9 @@ public class UnZipper implements DPU {
                 //
                 // Prepare source/target file/directory
                 //                
-                final File sourceFile = new File(java.net.URI.create(
-                        entry.getFileURIString()));
+                final File sourceFile = new File(java.net.URI.create(entry.getFileURIString()));
 
-                String zipRelativePath = 
-                        VirtualPathHelpers.getVirtualPath(inFilesData,
-                                entry.getSymbolicName());
+                String zipRelativePath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
                 if (zipRelativePath == null) {
                     // use symbolicv name
                     zipRelativePath = entry.getSymbolicName();
@@ -98,13 +95,8 @@ public class UnZipper implements DPU {
                 //
                 // Copy metadata
                 //
-                CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData,
-                        outFilesData);
+                CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData, outFilesData);
             }
-
-        // TODO Remove, dump metadata
-        MetadataHelper.dump(outFilesData);
-
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Problem with data unit.", "", ex);
@@ -117,15 +109,12 @@ public class UnZipper implements DPU {
         }
     }
 
-    private void scanDirectory(File directory, String sourceSymbolicName)
-            throws DataUnitException {
+    private void scanDirectory(File directory, String sourceSymbolicName) throws DataUnitException {
         final Path directoryPath = directory.toPath();
-        final Iterator<File> iter = FileUtils.iterateFiles(
-                directory, null, true);
+        final Iterator<File> iter = FileUtils.iterateFiles(directory, null, true);
         while (iter.hasNext()) {
             final File newFile = iter.next();
-            final String relativePath
-                    = directoryPath.relativize(newFile.toPath()).toString();
+            final String relativePath = directoryPath.relativize(newFile.toPath()).toString();
             final String newSymbolicName = relativePath;
             // add file
             outFilesData.addExistingFile(newSymbolicName, newFile.toURI().toString());
@@ -133,14 +122,12 @@ public class UnZipper implements DPU {
             // add metadata
             //
             VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, relativePath);
-            MetadataHelper.set(outFilesData, newSymbolicName,
-                    UnZipperOntology.PREDICATE_EXTRACTED_FROM, sourceSymbolicName);
         }
     }
 
     /**
      * Unzip given file into given directory.
-     *
+     * 
      * @param zipFile
      * @param targetDirectory
      * @return
@@ -149,14 +136,12 @@ public class UnZipper implements DPU {
         try {
             final ZipFile zip = new ZipFile(zipFile);
             if (zip.isEncrypted()) {
-                context.sendMessage(DPUContext.MessageType.ERROR,
-                        "Extraction failed.", "Zip file is encrypted.");
+                context.sendMessage(DPUContext.MessageType.ERROR, "Extraction failed.", "Zip file is encrypted.");
                 return false;
             }
             zip.extractAll(targetDirectory.toString());
         } catch (ZipException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Extraction failed.", "", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "Extraction failed.", "", ex);
             return false;
         }
         return true;
