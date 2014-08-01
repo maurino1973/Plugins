@@ -27,7 +27,6 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -37,6 +36,9 @@ import org.openrdf.model.*;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 
+/**
+ * @author Škoda Petr
+ */
 @DPU.AsTransformer
 public class Main extends ConfigurableBase<Configuration>
         implements ConfigDialogProvider<Configuration> {
@@ -117,25 +119,19 @@ public class Main extends ConfigurableBase<Configuration>
             while (!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
 
-                String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesTable,
-                        entry.getSymbolicName());
+                String virtualPath = VirtualPathHelpers.getVirtualPath(inFilesTable, entry.getSymbolicName());
 
                 // TODO We can try to use symbolicName here
                 if (virtualPath == null) {
-                    context.sendMessage(DPUContext.MessageType.WARNING,
-                            "No virtual path set for: " + entry
-                            .getSymbolicName()
-                            + ". File is ignored.");
+                    context.sendMessage(DPUContext.MessageType.WARNING, "No virtual path set for: " + entry.getSymbolicName() + ". File is ignored.");
                     continue;
                 }
 
-                final File sourceFile = new File(
-                        java.net.URI.create(entry.getFileURIString()));
+                final File sourceFile = new File(java.net.URI.create(entry.getFileURIString()));
 
-                currentGraphURI = outRdfTriplifiedTable.addNewDataGraph(
-                        entry.getSymbolicName());
+                currentGraphURI = outRdfTriplifiedTable.addNewDataGraph(entry.getSymbolicName());
 
-// TODO Add support for multiple graphs
+                // TODO Add support for multiple graphs
                 proceedFile(context, sourceFile);
                 // store buffer
                 flushBuffer();
@@ -145,19 +141,13 @@ public class Main extends ConfigurableBase<Configuration>
                 //
             }
         } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Problem with DataUnit", "", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "Problem with DataUnit", "", ex);
         } catch (RepositoryException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Problem with repository", "", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "Problem with repository", "", ex);
         }
 
         try {
             filesIteration.close();
-
-// TODO Remove
-            MetadataHelpers.dump(outRdfTriplifiedTable);
-
         } catch (DataUnitException ex) {
             LOG.warn("Error in close.", ex);
         }
@@ -172,32 +162,25 @@ public class Main extends ConfigurableBase<Configuration>
 
     }
 
-// TODO Rework this method !!
+    // TODO Rework this method !!
     private void proceedFile(DPUContext context, File tableFile)
             throws RepositoryException {
-        
 
         String tableFileName = tableFile.getName();
 
-        Map<String, String> columnPropertyMap = this.config
-                .getColumnPropertyMap();
+        Map<String, String> columnPropertyMap = this.config.getColumnPropertyMap();
         if (columnPropertyMap == null) {
-            LOG.warn(
-                    "No mapping of table columns to RDF properties have been specified.");
+            LOG.warn("No mapping of table columns to RDF properties have been specified.");
             columnPropertyMap = new HashMap<>();
         }
         String baseURI = this.config.getBaseURI();
         if (baseURI == null || "".equals(baseURI)) {
-            LOG.info(
-                    "No base for URIs of resources extracted from rows of the table has been specified. Default base will be applied (http://linked.opendata.cz/resource/odcs/tabular/" + tableFileName + "/row/)");
+            LOG.info("No base for URIs of resources extracted from rows of the table has been specified. Default base will be applied (http://linked.opendata.cz/resource/odcs/tabular/" + tableFileName + "/row/)");
             baseURI = "http://linked.opendata.cz/resource/odcs/tabular/" + tableFileName + "/row/";
         }
-        String columnWithURISupplement = this.config
-                .getColumnWithURISupplement();
-        if (columnWithURISupplement == null || ""
-                .equals(columnWithURISupplement)) {
-            LOG.info(
-                    "No column with values supplementing the base for URIs of resources extracted from rows of the table has been specified. Row number (starting at 0) will be used instead.");
+        String columnWithURISupplement = this.config.getColumnWithURISupplement();
+        if (columnWithURISupplement == null || "".equals(columnWithURISupplement)) {
+            LOG.info("No column with values supplementing the base for URIs of resources extracted from rows of the table has been specified. Row number (starting at 0) will be used instead.");
             columnWithURISupplement = null;
         }
 
@@ -210,40 +193,32 @@ public class Main extends ConfigurableBase<Configuration>
 
             if (quoteChar == null || "".equals(quoteChar)) {
                 quoteChar = "\"";
-                LOG.info(
-                        "No quote char supplied. Default quote char '\"' will be used.");
+                LOG.info("No quote char supplied. Default quote char '\"' will be used.");
             }
 
             if (delimiterChar == null || "".equals(delimiterChar)) {
                 delimiterChar = "\"";
-                LOG.info(
-                        "No delimiter char supplied. Default delimiter char ',' will be used.");
+                LOG.info("No delimiter char supplied. Default delimiter char ',' will be used.");
             }
 
             if (eofSymbols == null || "".equals(eofSymbols)) {
                 eofSymbols = "\n";
-                LOG.info(
-                        "No end of line symbols supplied. Default end of line symbols '\\n' will be used.");
+                LOG.info("No end of line symbols supplied. Default end of line symbols '\\n' will be used.");
             }
 
-            final CsvPreference CSV_PREFERENCE = new CsvPreference.Builder(
-                    quoteChar.charAt(0), delimiterChar.charAt(0), eofSymbols)
-                    .build();
+            final CsvPreference CSV_PREFERENCE = new CsvPreference.Builder(quoteChar.charAt(0), delimiterChar.charAt(0), eofSymbols).build();
 
             ICsvListReader listReader = null;
             try {
 
-                listReader = new CsvListReader(new BufferedReader(
-                        new InputStreamReader(new FileInputStream(tableFile),
-                                config.getEncoding())), CSV_PREFERENCE);
+                listReader = new CsvListReader(new BufferedReader(new InputStreamReader(new FileInputStream(tableFile), config.getEncoding())), CSV_PREFERENCE);
 
                 final String[] header = listReader.getHeader(true);
                 int columnWithURISupplementNumber = -1;
                 URI[] propertyMap = new URI[header.length];
                 for (int i = 0; i < header.length; i++) {
                     String fieldName = header[i];
-                    if (columnWithURISupplement != null && columnWithURISupplement
-                            .equals(fieldName)) {
+                    if (columnWithURISupplement != null && columnWithURISupplement.equals(fieldName)) {
                         columnWithURISupplementNumber = i;
                     }
                     if (columnPropertyMap.containsKey(fieldName)) {
@@ -251,8 +226,7 @@ public class Main extends ConfigurableBase<Configuration>
                                 columnPropertyMap.get(fieldName));
                     } else {
                         fieldName = this.convertStringToURIPart(fieldName);
-                        propertyMap[i] = valueFactory.createURI(
-                                baseODCSPropertyURI + fieldName);
+                        propertyMap[i] = valueFactory.createURI(baseODCSPropertyURI + fieldName);
                     }
                 }
 
@@ -269,8 +243,7 @@ public class Main extends ConfigurableBase<Configuration>
 
                     String suffixURI;
                     if (columnWithURISupplementNumber >= 0) {
-                        suffixURI = this.convertStringToURIPart(row.get(
-                                columnWithURISupplementNumber));
+                        suffixURI = this.convertStringToURIPart(row.get(columnWithURISupplementNumber));
                     } else {
                         suffixURI = (new Integer(rowno)).toString();
                     }
@@ -280,8 +253,7 @@ public class Main extends ConfigurableBase<Configuration>
                     int i = 0;
                     for (String strValue : row) {
                         if (strValue == null || "".equals(strValue)) {
-                            URI obj = valueFactory.createURI(
-                                    "http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
+                            URI obj = valueFactory.createURI("http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
                             add(subj, propertyMap[i], obj);
                         } else {
                             Value obj = valueFactory.createLiteral(strValue);
@@ -290,10 +262,8 @@ public class Main extends ConfigurableBase<Configuration>
                         i++;
                     }
 
-                    Value rowvalue = valueFactory.createLiteral(String.valueOf(
-                            rowno));
+                    Value rowvalue = valueFactory.createLiteral(String.valueOf(rowno));
                     add(subj, propertyRow, rowvalue);
-
 
                     if ((rowno % 1000) == 0) {
                         LOG.debug("Row number {} processed.", rowno);
@@ -309,19 +279,13 @@ public class Main extends ConfigurableBase<Configuration>
                     }
                 }
             } catch (IOException ex) {
-                context.sendMessage(DPUContext.MessageType.ERROR,
-                        "DPU failed",
-                        "IO exception during processing the input CSV file.",
-                        ex);
+                context.sendMessage(DPUContext.MessageType.ERROR, "DPU failed", "IO exception during processing the input CSV file.", ex);
             } finally {
                 if (listReader != null) {
                     try {
                         listReader.close();
                     } catch (IOException ex) {
-                        context.sendMessage(DPUContext.MessageType.ERROR,
-                                "DPU failed",
-                                "IO exception when closing the reader of the input CSV file.",
-                                ex);
+                        context.sendMessage(DPUContext.MessageType.ERROR, "DPU failed", "IO exception when closing the reader of the input CSV file.", ex);
                     }
                 }
 
@@ -331,10 +295,8 @@ public class Main extends ConfigurableBase<Configuration>
 
             String encoding = this.config.getEncoding();
             if (encoding == null || "".equals(encoding)) {
-                DbfReaderLanguageDriver languageDriverReader = new DbfReaderLanguageDriver(
-                        tableFile);
-                DbfHeaderLanguageDriver languageDriverHeader = languageDriverReader
-                        .getHeader();
+                DbfReaderLanguageDriver languageDriverReader = new DbfReaderLanguageDriver(tableFile);
+                DbfHeaderLanguageDriver languageDriverHeader = languageDriverReader.getHeader();
                 languageDriverHeader.getLanguageDriver();
                 languageDriverReader.close();
 
@@ -342,8 +304,7 @@ public class Main extends ConfigurableBase<Configuration>
                 encoding = "UTF-8";
             }
             if (!Charset.isSupported(encoding)) {
-                context.sendMessage(DPUContext.MessageType.ERROR,
-                        "Charset " + encoding + " is not supported.");
+                context.sendMessage(DPUContext.MessageType.ERROR, "Charset " + encoding + " is not supported.");
                 return;
             }
 
@@ -356,20 +317,16 @@ public class Main extends ConfigurableBase<Configuration>
                 DbfField field = header.getField(i);
                 String fieldName = field.getName();
 
-                LOG.debug("Filed: {} type: {} len: {}", field.getName(), field
-                        .getDataType(), field.getFieldLength());
+                LOG.debug("Filed: {} type: {} len: {}", field.getName(), field.getDataType(), field.getFieldLength());
 
-                if (columnWithURISupplement != null && columnWithURISupplement
-                        .equals(fieldName)) {
+                if (columnWithURISupplement != null && columnWithURISupplement.equals(fieldName)) {
                     columnWithURISupplementNumber = i;
                 }
                 if (columnPropertyMap.containsKey(fieldName)) {
-                    propertyMap[i] = valueFactory.createURI(columnPropertyMap
-                            .get(fieldName));
+                    propertyMap[i] = valueFactory.createURI(columnPropertyMap.get(fieldName));
                 } else {
                     fieldName = this.convertStringToURIPart(fieldName);
-                    propertyMap[i] = valueFactory.createURI(
-                            baseODCSPropertyURI + fieldName);
+                    propertyMap[i] = valueFactory.createURI(baseODCSPropertyURI + fieldName);
                 }
             }
 
@@ -386,47 +343,37 @@ public class Main extends ConfigurableBase<Configuration>
 
                 String suffixURI;
                 if (columnWithURISupplementNumber >= 0) {
-                    suffixURI = this.convertStringToURIPart(this.getCellValue(
-                            row[columnWithURISupplementNumber], encoding));
+                    suffixURI = this.convertStringToURIPart(this.getCellValue(row[columnWithURISupplementNumber], encoding));
                 } else {
                     suffixURI = (new Integer(rowno)).toString();
                 }
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
-                
-                for (int i = 0; i < row.length; i++) {
 
+                for (int i = 0; i < row.length; i++) {
                     String strValue = this.getCellValue(row[i], encoding);
                     if (strValue == null || "".equals(strValue)) {
-                        URI obj = valueFactory.createURI(
-                                "http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
+                        URI obj = valueFactory.createURI("http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
                         add(subj, propertyMap[i], obj);
                     } else {
-                        Value obj = valueFactory.createLiteral(this
-                                .getCellValue(row[i], encoding));
+                        Value obj = valueFactory.createLiteral(this.getCellValue(row[i], encoding));
                         add(subj, propertyMap[i], obj);
                     }
-
                 }
 
-                Value rowvalue = valueFactory.createLiteral(this.getCellValue(
-                        rowno, encoding));
+                Value rowvalue = valueFactory.createLiteral(this.getCellValue(rowno, encoding));
                 add(subj, propertyRow, rowvalue);
-
 
                 if ((rowno % 1000) == 0) {
                     LOG.debug("Row number {} processed.", rowno);
                 }
                 rowno++;
-
                 if (context.canceled()) {
                     LOG.info("DPU cancelled");
                     reader.close();
                     return;
                 }
-
             }
-
             reader.close();
         }
     }

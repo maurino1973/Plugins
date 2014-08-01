@@ -122,8 +122,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
         this.mainLayout.addComponent(bAddColumnToPropertyMapping);
     }
 
-    private void addColumnToPropertyMapping(String columnName,
-            String propertyURI) {
+    private void addColumnToPropertyMapping(String columnName, String propertyURI) {
         //int rowCount = this.propertiesGridLayout.getRows();
 
         TextField tfColumnName = new TextField();
@@ -202,10 +201,13 @@ public class Dialog extends BaseConfigDialog<Configuration> {
         }
 
         final String tableType = c.getTableType();
-        if (tableType.equals(TableType.DBF)) {
-            this.ogInputFileType.setValue("DBF");
-        } else if (tableType.equals(TableType.CSV)) {
-            this.ogInputFileType.setValue("CSV");
+        switch (tableType) {
+            case TableType.DBF:
+                this.ogInputFileType.setValue("DBF");
+                break;
+            case TableType.CSV:
+                this.ogInputFileType.setValue("CSV");
+                break;
         }
 
         if (c.getColumnPropertyMap() != null) {
@@ -234,16 +236,12 @@ public class Dialog extends BaseConfigDialog<Configuration> {
         // the first row is heading !
         for (int row = 1; row < this.propertiesGridLayout.getRows(); row++) {
 
-            String columnName = ((TextField) this.propertiesGridLayout
-                    .getComponent(0, row)).getValue();
-            String propertyURI = ((TextField) this.propertiesGridLayout
-                    .getComponent(1, row)).getValue();
+            String columnName = ((TextField) this.propertiesGridLayout.getComponent(0, row)).getValue();
+            String propertyURI = ((TextField) this.propertiesGridLayout.getComponent(1, row)).getValue();
 
-            if (columnName != null && columnName.length() > 0 && propertyURI != null && propertyURI
-                    .length() > 0) {
+            if (columnName != null && columnName.length() > 0 && propertyURI != null && propertyURI.length() > 0) {
                 columnPropertiesMap.put(columnName, propertyURI);
             }
-
         }
 
         String baseURI = this.tfBaseURI.getValue();
@@ -253,8 +251,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
             cnf.setBaseURI(baseURI);
         }
 
-        String columnWithURISupplement = this.tfColumnWithURISupplement
-                .getValue();
+        String columnWithURISupplement = this.tfColumnWithURISupplement.getValue();
         if (columnWithURISupplement == null || columnWithURISupplement.length() == 0) {
             cnf.setColumnWithURISupplement(null);
         } else {
