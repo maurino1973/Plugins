@@ -59,6 +59,8 @@ public class UnZipper implements DPU {
             return;
         }
 
+        boolean symbolicNameUsed = false;
+
         try {
             while (!context.canceled() && filesIteration.hasNext()) {
                 FilesDataUnit.Entry entry = filesIteration.next();
@@ -68,15 +70,18 @@ public class UnZipper implements DPU {
                 final File sourceFile = new File(java.net.URI.create(
                         entry.getFileURIString()));
 
-                final String zipRelativePath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
+                String zipRelativePath = 
+                        VirtualPathHelpers.getVirtualPath(inFilesData,
+                                entry.getSymbolicName());
                 if (zipRelativePath == null) {
-                    context.sendMessage(DPUContext.MessageType.WARNING,
-                            "No virtual path set for: "
-                            + entry.getSymbolicName()
-                            + ". File is ignored.");
-                    continue;
+                    // use symbolicv name
+                    zipRelativePath = entry.getSymbolicName();
+                    if (!symbolicNameUsed) {
+                        // first usage
+                        LOG.warn("Not all input files use VirtualPath, symbolic name is used instead.");
+                    }
+                    symbolicNameUsed = true;
                 }
-                // TODO Use szmbolic name
 
                 final File targetDirectory = new File(baseTargetDirectory, zipRelativePath);
                 //
@@ -91,14 +96,14 @@ public class UnZipper implements DPU {
                 //
                 scanDirectory(targetDirectory, entry.getSymbolicName());
                 //
-                // Copy metadta                
+                // Copy metadata
                 //
                 CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData,
                         outFilesData);
             }
 
-// TODO Remove
-MetadataHelper.dump(outFilesData);
+        // TODO Remove, dump metadata
+        MetadataHelper.dump(outFilesData);
 
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
@@ -121,8 +126,7 @@ MetadataHelper.dump(outFilesData);
             final File newFile = iter.next();
             final String relativePath
                     = directoryPath.relativize(newFile.toPath()).toString();
-            final String newSymbolicName = outFilesData.getBaseFileURIString()
-                    + relativePath;
+            final String newSymbolicName = relativePath;
             // add file
             outFilesData.addExistingFile(newSymbolicName, newFile.toURI().toString());
             //
