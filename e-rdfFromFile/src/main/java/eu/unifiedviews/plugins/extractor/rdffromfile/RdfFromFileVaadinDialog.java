@@ -30,7 +30,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class FileExtractorVaadinDialog extends BaseConfigDialog<FileExtractorConfig> {
+public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig> {
 
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
@@ -101,8 +101,8 @@ public class FileExtractorVaadinDialog extends BaseConfigDialog<FileExtractorCon
     /**
      * Basic constructor.
      */
-    public FileExtractorVaadinDialog() {
-        super(FileExtractorConfig.class);
+    public RdfFromFileVaadinDialog() {
+        super(RdfFromFileConfig.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -154,7 +154,7 @@ public class FileExtractorVaadinDialog extends BaseConfigDialog<FileExtractorCon
      *         configuration dialog.
      */
     @Override
-    public FileExtractorConfig getConfiguration() throws DPUConfigException {
+    public RdfFromFileConfig getConfiguration() throws DPUConfigException {
 
         if (getContext().isTemplate()) {
         }
@@ -208,7 +208,7 @@ public class FileExtractorVaadinDialog extends BaseConfigDialog<FileExtractorCon
                         "No value for case using statistical and error handler");
             }
 
-            FileExtractorConfig config = new FileExtractorConfig(path,
+            RdfFromFileConfig config = new RdfFromFileConfig(path,
                     fileSuffix,
                     RDFFormatValue, extractType, onlyThisSuffix,
                     useStatisticalHandler, failWhenErrors);
@@ -226,7 +226,7 @@ public class FileExtractorVaadinDialog extends BaseConfigDialog<FileExtractorCon
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(FileExtractorConfig conf) {
+    public void setConfiguration(RdfFromFileConfig conf) {
 
         extractType = conf.getFileExtractType();
         pathType.setValue(FileExtractType.getDescriptionByType(
@@ -741,7 +741,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final ClickEvent event) {
                 upload.interruptUpload();
-                FileExtractorVaadinDialog.fl = 1;
+                RdfFromFileVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);

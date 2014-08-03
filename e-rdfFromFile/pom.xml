@@ -19,6 +19,6 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.extractor.rdffromfile</dpu.package>
-		<dpu.mainClass>FileExtractor</dpu.mainClass>
+		<dpu.mainClass>RdfFromFile</dpu.mainClass>
 	</properties>
 </project>

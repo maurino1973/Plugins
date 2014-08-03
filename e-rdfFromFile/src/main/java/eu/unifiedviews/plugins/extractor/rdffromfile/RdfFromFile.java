@@ -37,15 +37,15 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 /**
  * Extracts RDF data from a file.
- *
+ * 
  * @author Jiri Tomes
  * @author Petyr
  */
 @DPU.AsExtractor
-public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
-        implements ConfigDialogProvider<FileExtractorConfig> {
+public class RdfFromFile extends ConfigurableBase<RdfFromFileConfig>
+        implements ConfigDialogProvider<RdfFromFileConfig> {
 
-    private final Logger LOG = LoggerFactory.getLogger(FileExtractor.class);
+    private final Logger LOG = LoggerFactory.getLogger(RdfFromFile.class);
 
     protected final String encode = "UTF-8";
 
@@ -55,15 +55,17 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
     @DataUnit.AsOutput(name = "output")
     public WritableRDFDataUnit writableRdfDataUnit;
 
-    public FileExtractor() {
-        super(FileExtractorConfig.class);
+    public RdfFromFile() {
+        super(RdfFromFileConfig.class);
     }
 
     /**
      * Execute the file extractor.
-     *
-     * @param context File extractor context.
-     * @throws DPUException if this DPU fails.
+     * 
+     * @param context
+     *            File extractor context.
+     * @throws DPUException
+     *             if this DPU fails.
      */
     @Override
     public void execute(DPUContext context) throws DPUException {
@@ -173,12 +175,12 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
 
     /**
      * Returns the configuration dialogue for File extractor.
-     *
+     * 
      * @return the configuration dialogue for File extractor.
      */
     @Override
-    public AbstractConfigDialog<FileExtractorConfig> getConfigurationDialog() {
-        return new FileExtractorVaadinDialog();
+    public AbstractConfigDialog<RdfFromFileConfig> getConfigurationDialog() {
+        return new RdfFromFileVaadinDialog();
     }
 
     private void parseFileUsingHandler(TripleCountHandler handler,
@@ -363,7 +365,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
             }
             final String message = String.format(
                     "RDF data from file <%s> was skiped", nextFile
-                    .getAbsolutePath());
+                            .getAbsolutePath());
             LOG.error(message);
 
         }
@@ -400,25 +402,33 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
         } else {
             throw new DPUException(
                     "Path to directory \"" + dirFile.getAbsolutePath()
-                    + "\" doesnt exist");
+                            + "\" doesnt exist");
         }
     }
 
     /**
      * Extract RDF triples from RDF file to repository.
-     *
-     * @param extractType One of defined enum type for extraction data from
-     * file.
-     * @param format One of RDFFormat value for parsing triples, if value is
-     * null RDFFormat is selected by filename.
-     * @param path String path to file/directory
-     * @param suffix String suffix of fileName (example: ".ttl", ".xml", etc)
-     * @param baseURI String name of defined used URI
-     * @param useSuffix boolean value, if extract files only with defined suffix
-     * or not.
-     * @param handlerExtractType Possibilities how to choose handler for data
-     * extraction and how to solve found problems with no valid data.
-     * @throws DPUException when extraction fail.
+     * 
+     * @param extractType
+     *            One of defined enum type for extraction data from
+     *            file.
+     * @param format
+     *            One of RDFFormat value for parsing triples, if value is
+     *            null RDFFormat is selected by filename.
+     * @param path
+     *            String path to file/directory
+     * @param suffix
+     *            String suffix of fileName (example: ".ttl", ".xml", etc)
+     * @param baseURI
+     *            String name of defined used URI
+     * @param useSuffix
+     *            boolean value, if extract files only with defined suffix
+     *            or not.
+     * @param handlerExtractType
+     *            Possibilities how to choose handler for data
+     *            extraction and how to solve found problems with no valid data.
+     * @throws DPUException
+     *             when extraction fail.
      */
     public void extractFromFile(FileExtractType extractType,
             RDFFormat format,
