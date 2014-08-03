@@ -13,7 +13,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Petyr
  * @author Jiri Tomes
  */
-public class RDFDataValidatorDialog extends BaseConfigDialog<RDFDataValidatorConfig> {
+public class RDFDataValidatorVaadinDialog extends BaseConfigDialog<RDFDataValidatorConfig> {
 
     private VerticalLayout verticalLayoutCore;
 
@@ -25,7 +25,7 @@ public class RDFDataValidatorDialog extends BaseConfigDialog<RDFDataValidatorCon
 
     private CheckBox createOutput;
 
-    public RDFDataValidatorDialog() {
+    public RDFDataValidatorVaadinDialog() {
         super(RDFDataValidatorConfig.class);
         buildMainLayout();
     }

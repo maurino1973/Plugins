@@ -58,7 +58,7 @@ public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig>
      */
     @Override
     public AbstractConfigDialog<RDFDataValidatorConfig> getConfigurationDialog() {
-        return new RDFDataValidatorDialog();
+        return new RDFDataValidatorVaadinDialog();
     }
 
     private void makeValidationReport(DataValidator validator,
