@@ -89,7 +89,7 @@ public class HTTPToFilesExtractor extends ConfigurableBase<HTTPToFilesExtractorC
 
     @Override
     public AbstractConfigDialog<HTTPToFilesExtractorConfig> getConfigurationDialog() {
-        return new HTTPToFilesExtractorConfigDialog();
+        return new HTTPToFilesExtractoVaadinDialog();
     }
 
 }

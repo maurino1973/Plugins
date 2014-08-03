@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFilesExtractorConfig> {
+public class HTTPToFilesExtractoVaadinDialog extends BaseConfigDialog<HTTPToFilesExtractorConfig> {
     /**
      * 
      */
@@ -40,7 +40,7 @@ public class HTTPToFilesExtractorConfigDialog extends BaseConfigDialog<HTTPToFil
 
     private ObjectProperty<String> mapText = new ObjectProperty<String>("");
 
-    public HTTPToFilesExtractorConfigDialog() {
+    public HTTPToFilesExtractoVaadinDialog() {
         super(HTTPToFilesExtractorConfig.class);
         initialize();
     }
