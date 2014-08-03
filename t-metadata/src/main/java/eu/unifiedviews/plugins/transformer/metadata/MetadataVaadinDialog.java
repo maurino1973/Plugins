@@ -22,9 +22,9 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
+public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MetadataDialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MetadataVaadinDialog.class);
 
     private class URLandCaption {
 
@@ -92,7 +92,7 @@ public class MetadataDialog extends BaseConfigDialog<MetadataConfiguration> {
 
     private final String[] mimes = { "application/zip", "text/csv", "application/rdf+xml", "text/plain", "application/x-turtle" };
 
-    public MetadataDialog() {
+    public MetadataVaadinDialog() {
         super(MetadataConfiguration.class);
         try {
             periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-A"), "Annual"));

@@ -62,7 +62,7 @@ public class Metadata extends ConfigurableBase<MetadataConfiguration>
 
     @Override
     public AbstractConfigDialog<MetadataConfiguration> getConfigurationDialog() {
-        return new MetadataDialog();
+        return new MetadataVaadinDialog();
     }
 
     @Override
