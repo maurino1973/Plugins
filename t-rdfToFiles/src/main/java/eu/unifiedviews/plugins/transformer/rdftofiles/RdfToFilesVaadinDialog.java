@@ -9,9 +9,9 @@ import org.openrdf.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> {
+public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfiguration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesDialog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesVaadinDialog.class);
 
     private VerticalLayout mainLayout;
 
@@ -29,7 +29,7 @@ public class RdfToFilesDialog extends BaseConfigDialog<RdfToFilesConfiguration> 
 
     private Panel panelMultipleGraphs;
 
-    public RdfToFilesDialog() {
+    public RdfToFilesVaadinDialog() {
         super(RdfToFilesConfiguration.class);
         buildMainLayout();
     }

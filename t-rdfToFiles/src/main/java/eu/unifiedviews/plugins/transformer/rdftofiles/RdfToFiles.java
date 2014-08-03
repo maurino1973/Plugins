@@ -60,7 +60,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
 
     @Override
     public AbstractConfigDialog<RdfToFilesConfiguration> getConfigurationDialog() {
-        return new RdfToFilesDialog();
+        return new RdfToFilesVaadinDialog();
     }
 
     @Override
