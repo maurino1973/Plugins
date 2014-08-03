@@ -21,7 +21,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class SilkLinkerDialog extends BaseConfigDialog<SilkLinkerConfig> {
+public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig> {
 
     private GridLayout mainLayout;
 
@@ -39,7 +39,7 @@ public class SilkLinkerDialog extends BaseConfigDialog<SilkLinkerConfig> {
 
     //private DPUContext context;
 
-    public SilkLinkerDialog() {
+    public SilkLinkerVaadinDialog() {
 
         super(SilkLinkerConfig.class);
 
@@ -414,7 +414,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 upload.interruptUpload();
-                SilkLinkerDialog.fl = 1;
+                SilkLinkerVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);

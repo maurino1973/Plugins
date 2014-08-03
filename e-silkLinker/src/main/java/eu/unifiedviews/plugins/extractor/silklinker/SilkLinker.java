@@ -66,7 +66,7 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
     @Override
     public AbstractConfigDialog<SilkLinkerConfig> getConfigurationDialog() {
-        return new SilkLinkerDialog();
+        return new SilkLinkerVaadinDialog();
     }
 
     @Override
@@ -207,7 +207,7 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
         //File conf = new File(config.getSilkConf());
 
-        //((SilkLinkerDialog)getConfigurationDialog()).setContext(context);
+        //((SilkLinkerVaadinDialog)getConfigurationDialog()).setContext(context);
 
         //Execution of the Silk linker (xml conf is an important input!)
         //TODO Petr: solve the problem when loading XML conf
