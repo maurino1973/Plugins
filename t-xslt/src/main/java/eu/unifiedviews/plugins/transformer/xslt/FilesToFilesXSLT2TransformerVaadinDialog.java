@@ -20,7 +20,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToFilesXSLT2TransformerConfigDialog extends
+public class FilesToFilesXSLT2TransformerVaadinDialog extends
         BaseConfigDialog<FilesToFilesXSLT2TransformerConfig> {
 
     /**
@@ -29,7 +29,7 @@ public class FilesToFilesXSLT2TransformerConfigDialog extends
     private static final long serialVersionUID = 63148374398039L;
 
     private static final Logger log = LoggerFactory
-            .getLogger(FilesToFilesXSLT2TransformerConfigDialog.class);
+            .getLogger(FilesToFilesXSLT2TransformerVaadinDialog.class);
 
     private static final String SKIP_ON_ERROR_LABEL = "Skip file on error";
 
@@ -47,7 +47,7 @@ public class FilesToFilesXSLT2TransformerConfigDialog extends
     // TODO refactor
     static int fl = 0;
 
-    public FilesToFilesXSLT2TransformerConfigDialog() {
+    public FilesToFilesXSLT2TransformerVaadinDialog() {
         super(FilesToFilesXSLT2TransformerConfig.class);
         buildMainLayout();
         Panel panel = new Panel();
@@ -325,7 +325,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 upload.interruptUpload();
-                FilesToFilesXSLT2TransformerConfigDialog.fl = 1;
+                FilesToFilesXSLT2TransformerVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);

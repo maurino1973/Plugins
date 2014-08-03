@@ -49,7 +49,7 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
 
     @Override
     public AbstractConfigDialog<FilesToFilesXSLT2TransformerConfig> getConfigurationDialog() {
-        return new FilesToFilesXSLT2TransformerConfigDialog();
+        return new FilesToFilesXSLT2TransformerVaadinDialog();
     }
 
     @Override
