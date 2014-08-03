@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.rdftosparql</dpu.package>
-		<dpu.mainClass>RDFLoader</dpu.mainClass>
+		<dpu.mainClass>RdfToSparqlEndpoint</dpu.mainClass>
 	</properties>
 
 	<dependencies>

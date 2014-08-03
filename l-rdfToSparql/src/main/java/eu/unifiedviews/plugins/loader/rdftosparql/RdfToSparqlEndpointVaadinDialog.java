@@ -17,7 +17,7 @@ import java.util.List;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class RDFLoaderVaadinDialog extends BaseConfigDialog<RDFLoaderConfig> {
+public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparqlEndpointConfig> {
 
     private static final long serialVersionUID = 1L;
 
@@ -126,8 +126,8 @@ public class RDFLoaderVaadinDialog extends BaseConfigDialog<RDFLoaderConfig> {
     /**
      * Basic constructor.
      */
-    public RDFLoaderVaadinDialog() {
-        super(RDFLoaderConfig.class);
+    public RdfToSparqlEndpointVaadinDialog() {
+        super(RdfToSparqlEndpointConfig.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -983,7 +983,7 @@ public class RDFLoaderVaadinDialog extends BaseConfigDialog<RDFLoaderConfig> {
      *         configuration dialog.
      */
     @Override
-    public RDFLoaderConfig getConfiguration() throws DPUConfigException {
+    public RdfToSparqlEndpointConfig getConfiguration() throws DPUConfigException {
         if (!allComponentAreValid()) {
             String message = validationMessage();
 
@@ -1016,7 +1016,7 @@ public class RDFLoaderVaadinDialog extends BaseConfigDialog<RDFLoaderConfig> {
 
 //            Boolean useSparqlGraphProtocol = useGraphProtocol.getValue();
 
-            RDFLoaderConfig config = new RDFLoaderConfig(SPARQLEndpoint,
+            RdfToSparqlEndpointConfig config = new RdfToSparqlEndpointConfig(SPARQLEndpoint,
                     hostName, password, getDefaultGraphs(), graphType,
                     insertType,
                     1, validDataBefore, retryTime, retrySize,
@@ -1039,7 +1039,7 @@ public class RDFLoaderVaadinDialog extends BaseConfigDialog<RDFLoaderConfig> {
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(RDFLoaderConfig conf) throws DPUConfigException {
+    public void setConfiguration(RdfToSparqlEndpointConfig conf) throws DPUConfigException {
         try {
             String endp = conf.getSPARQLEndpoint().trim();
 

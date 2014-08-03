@@ -29,10 +29,10 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Petyr
  */
 @DPU.AsLoader
-public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
-        implements ConfigDialogProvider<RDFLoaderConfig> {
+public class RdfToSparqlEndpoint extends ConfigurableBase<RdfToSparqlEndpointConfig>
+        implements ConfigDialogProvider<RdfToSparqlEndpointConfig> {
 
-    private final Logger LOG = LoggerFactory.getLogger(RDFLoader.class);
+    private final Logger LOG = LoggerFactory.getLogger(RdfToSparqlEndpoint.class);
 
     /**
      * The repository for SPARQL loader.
@@ -43,8 +43,8 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
     @DataUnit.AsOutput(name = "validationDataUnit", description = "Never connect any data to this unit please!")
     public WritableRDFDataUnit validationDataUnit;
 
-    public RDFLoader() {
-        super(RDFLoaderConfig.class);
+    public RdfToSparqlEndpoint() {
+        super(RdfToSparqlEndpointConfig.class);
     }
 
     /**
@@ -143,7 +143,7 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
      * @return the configuration dialogue for SPARQL loader.
      */
     @Override
-    public AbstractConfigDialog<RDFLoaderConfig> getConfigurationDialog() {
-        return new RDFLoaderVaadinDialog();
+    public AbstractConfigDialog<RdfToSparqlEndpointConfig> getConfigurationDialog() {
+        return new RdfToSparqlEndpointVaadinDialog();
     }
 }

@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.loader.rdftosparql;
 
-import eu.unifiedviews.plugins.loader.rdftosparql.RDFLoaderConfig;
+import eu.unifiedviews.plugins.loader.rdftosparql.RdfToSparqlEndpointConfig;
 import eu.unifiedviews.plugins.loader.rdftosparql.InsertType;
 import eu.unifiedviews.plugins.loader.rdftosparql.LoaderEndpointParams;
 import eu.unifiedviews.plugins.loader.rdftosparql.SPARQLoader;
@@ -99,7 +99,7 @@ public class SPARQLLoaderTest1 {
         String goalGraphName = OUTPUT_GRAPH;
 
         boolean isLoaded = false;
-        RDFLoaderConfig c = new RDFLoaderConfig();
+        RdfToSparqlEndpointConfig c = new RdfToSparqlEndpointConfig();
         c.setEndpointParams(virtuosoParams);
         c.setHost_name(USER);
         c.setPassword(PASSWORD);

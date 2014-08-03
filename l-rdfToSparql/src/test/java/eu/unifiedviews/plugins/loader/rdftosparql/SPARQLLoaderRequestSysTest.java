@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.loader.rdftosparql;
 
-import eu.unifiedviews.plugins.loader.rdftosparql.RDFLoaderConfig;
+import eu.unifiedviews.plugins.loader.rdftosparql.RdfToSparqlEndpointConfig;
 import eu.unifiedviews.plugins.loader.rdftosparql.InsertType;
 import eu.unifiedviews.plugins.loader.rdftosparql.LoaderEndpointParams;
 import eu.unifiedviews.plugins.loader.rdftosparql.SPARQLoader;
@@ -73,7 +73,7 @@ public class SPARQLLoaderRequestSysTest {
 
             connection.add(subject, predicate, object, repository.getBaseDataGraphURI());
         }
-        RDFLoaderConfig c = new RDFLoaderConfig();
+        RdfToSparqlEndpointConfig c = new RdfToSparqlEndpointConfig();
         c.setEndpointParams(params);
         c.setHost_name(USER);
         c.setPassword(PASSWORD);

@@ -64,7 +64,7 @@ public class SPARQLoader {
 
     private RDFDataUnit inputRdfDataUnit;
 
-    private RDFLoaderConfig config;
+    private RdfToSparqlEndpointConfig config;
 
     private DPUContext context;
 
@@ -97,7 +97,7 @@ public class SPARQLoader {
      * @param password
      */
     public SPARQLoader(RDFDataUnit rdfDataUnit, DPUContext context,
-            RDFLoaderConfig config) {
+            RdfToSparqlEndpointConfig config) {
         this.inputRdfDataUnit = rdfDataUnit;
         this.context = context;
         this.config = config;
