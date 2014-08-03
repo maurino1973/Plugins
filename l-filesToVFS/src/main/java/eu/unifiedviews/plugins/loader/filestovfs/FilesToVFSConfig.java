@@ -3,7 +3,7 @@ package eu.unifiedviews.plugins.loader.filestovfs;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class FilesToVFSLoaderConfig {
+public class FilesToVFSConfig {
     /**
      * 
      */
@@ -22,7 +22,7 @@ public class FilesToVFSLoaderConfig {
     private String password = null;
 
     // DPUTemplateConfig must provide public non-parametric constructor
-    public FilesToVFSLoaderConfig() {
+    public FilesToVFSConfig() {
     }
 
     public String getDestination() {

@@ -29,17 +29,17 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class FilesToVFSLoader extends
-        ConfigurableBase<FilesToVFSLoaderConfig> implements
-        ConfigDialogProvider<FilesToVFSLoaderConfig> {
+public class FilesToVFS extends
+        ConfigurableBase<FilesToVFSConfig> implements
+        ConfigDialogProvider<FilesToVFSConfig> {
     private static final Logger LOG = LoggerFactory
-            .getLogger(FilesToVFSLoader.class);
+            .getLogger(FilesToVFS.class);
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
 
-    public FilesToVFSLoader() {
-        super(FilesToVFSLoaderConfig.class);
+    public FilesToVFS() {
+        super(FilesToVFSConfig.class);
     }
 
     @Override
@@ -158,8 +158,8 @@ public class FilesToVFSLoader extends
     }
 
     @Override
-    public AbstractConfigDialog<FilesToVFSLoaderConfig> getConfigurationDialog() {
-        return new FilesToVFSLoaderVaadinDialog();
+    public AbstractConfigDialog<FilesToVFSConfig> getConfigurationDialog() {
+        return new FilesToVFSVaadinDialog();
     }
 
     public static String appendNumber(long number) {

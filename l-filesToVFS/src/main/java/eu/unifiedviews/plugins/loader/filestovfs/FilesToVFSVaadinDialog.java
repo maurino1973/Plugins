@@ -12,8 +12,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToVFSLoaderVaadinDialog extends
-		BaseConfigDialog<FilesToVFSLoaderConfig> {
+public class FilesToVFSVaadinDialog extends
+		BaseConfigDialog<FilesToVFSConfig> {
 	/**
      * 
      */
@@ -45,8 +45,8 @@ public class FilesToVFSLoaderVaadinDialog extends
     private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(
             false);
 
-    public FilesToVFSLoaderVaadinDialog() {
-		super(FilesToVFSLoaderConfig.class);
+    public FilesToVFSVaadinDialog() {
+		super(FilesToVFSConfig.class);
 		initialize();
 	}
 
@@ -67,7 +67,7 @@ public class FilesToVFSLoaderVaadinDialog extends
 	}
 
 	@Override
-	public void setConfiguration(FilesToVFSLoaderConfig conf)
+	public void setConfiguration(FilesToVFSConfig conf)
 			throws DPUConfigException {
 		destination.setValue(conf.getDestination());
         username.setValue(conf.getUsername());
@@ -78,9 +78,9 @@ public class FilesToVFSLoaderVaadinDialog extends
 	}
 
 	@Override
-	public FilesToVFSLoaderConfig getConfiguration()
+	public FilesToVFSConfig getConfiguration()
 			throws DPUConfigException {
-		FilesToVFSLoaderConfig conf = new FilesToVFSLoaderConfig();
+		FilesToVFSConfig conf = new FilesToVFSConfig();
 		conf.setDestination(destination.getValue());
         conf.setUsername(username.getValue());
         conf.setPassword(password.getValue());

@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.filestovfs</dpu.package>
-		<dpu.mainClass>FilesToVFSLoader</dpu.mainClass>
+		<dpu.mainClass>FilesToVFS</dpu.mainClass>
 	</properties>
 
 	<dependencies>
