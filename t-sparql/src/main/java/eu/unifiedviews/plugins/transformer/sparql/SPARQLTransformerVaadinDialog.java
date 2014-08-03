@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * 
  * @authod Petr Škoda
  */
-public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerConfig> {
+public class SPARQLTransformerVaadinDialog extends BaseConfigDialog<SPARQLTransformerConfig> {
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
@@ -43,7 +43,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      */
     private final HashMap<TextArea, QueryType> queryTypes = new HashMap<>();
 
-    public SPARQLTransformerDialog() {
+    public SPARQLTransformerVaadinDialog() {
         super(SPARQLTransformerConfig.class);
         init();
     }

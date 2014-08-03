@@ -328,7 +328,7 @@ public class SPARQLTransformer
      */
     @Override
     public AbstractConfigDialog<SPARQLTransformerConfig> getConfigurationDialog() {
-        return new SPARQLTransformerDialog();
+        return new SPARQLTransformerVaadinDialog();
     }
 
     /**
