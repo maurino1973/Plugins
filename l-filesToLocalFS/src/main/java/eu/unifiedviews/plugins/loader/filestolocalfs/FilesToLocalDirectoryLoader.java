@@ -124,7 +124,7 @@ public class FilesToLocalDirectoryLoader extends
 
     @Override
     public AbstractConfigDialog<FilesToLocalDirectoryLoaderConfig> getConfigurationDialog() {
-        return new FilesToLocalDirectoryLoaderConfigDialog();
+        return new FilesToLocalDirectoryLoaderVaadinDialog();
     }
 
     public static String appendNumber(long number) {

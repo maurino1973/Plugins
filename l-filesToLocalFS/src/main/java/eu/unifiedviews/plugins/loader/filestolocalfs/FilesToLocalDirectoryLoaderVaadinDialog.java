@@ -12,7 +12,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToLocalDirectoryLoaderConfigDialog extends
+public class FilesToLocalDirectoryLoaderVaadinDialog extends
 		BaseConfigDialog<FilesToLocalDirectoryLoaderConfig> {
 	/**
      * 
@@ -38,7 +38,7 @@ public class FilesToLocalDirectoryLoaderConfigDialog extends
     private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(
             false);
 
-    public FilesToLocalDirectoryLoaderConfigDialog() {
+    public FilesToLocalDirectoryLoaderVaadinDialog() {
 		super(FilesToLocalDirectoryLoaderConfig.class);
 		initialize();
 	}
