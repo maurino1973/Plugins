@@ -5,7 +5,7 @@ import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
 
-public class FilesToScpDialog extends BaseConfigDialog<FilesToScpConfiguration> {
+public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfiguration> {
 
 	private VerticalLayout mainLayout;
 
@@ -21,7 +21,7 @@ public class FilesToScpDialog extends BaseConfigDialog<FilesToScpConfiguration> 
 
 	private CheckBox chbSoftFail;
 
-	public FilesToScpDialog() {
+	public FilesToScpVaadinDialog() {
 		super(FilesToScpConfiguration.class);
 		buildLayout();
 	}

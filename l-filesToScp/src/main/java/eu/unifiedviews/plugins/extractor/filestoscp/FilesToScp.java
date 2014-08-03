@@ -133,7 +133,7 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfiguration>
 
     @Override
     public AbstractConfigDialog<FilesToScpConfiguration> getConfigurationDialog() {
-        return new FilesToScpDialog();
+        return new FilesToScpVaadinDialog();
     }
 
 }
