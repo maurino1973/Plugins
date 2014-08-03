@@ -3,7 +3,7 @@ package eu.unifiedviews.plugins.loader.filestosparql;
 import java.util.Collections;
 import java.util.Set;
 
-public class FilesToSPARQLLoaderConfig {
+public class FilesToSparqlEndpointConfig {
     /**
      * 
      */
@@ -20,7 +20,7 @@ public class FilesToSPARQLLoaderConfig {
     private boolean skipOnError = false;
 
     // DPUTemplateConfig must provide public non-parametric constructor
-    public FilesToSPARQLLoaderConfig() {
+    public FilesToSparqlEndpointConfig() {
     }
 
     public String getQueryEndpointUrl() {

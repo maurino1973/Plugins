@@ -19,7 +19,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToSPARQLLoaderVaadinDialog extends BaseConfigDialog<FilesToSPARQLLoaderConfig> {
+public class FilesToSparqlEndpointVaadinDialog extends BaseConfigDialog<FilesToSparqlEndpointConfig> {
     /**
      * 
      */
@@ -46,8 +46,8 @@ public class FilesToSPARQLLoaderVaadinDialog extends BaseConfigDialog<FilesToSPA
 
     private ObjectProperty<String> targetContexts = new ObjectProperty<String>("");
 
-    public FilesToSPARQLLoaderVaadinDialog() {
-        super(FilesToSPARQLLoaderConfig.class);
+    public FilesToSparqlEndpointVaadinDialog() {
+        super(FilesToSparqlEndpointConfig.class);
         initialize();
     }
 
@@ -70,7 +70,7 @@ public class FilesToSPARQLLoaderVaadinDialog extends BaseConfigDialog<FilesToSPA
     }
 
     @Override
-    public void setConfiguration(FilesToSPARQLLoaderConfig conf) throws DPUConfigException {
+    public void setConfiguration(FilesToSparqlEndpointConfig conf) throws DPUConfigException {
         queryEndpointUrl.setValue(conf.getQueryEndpointUrl());
         updateEndpointUrl.setValue(conf.getUpdateEndpointUrl());
         commitSize.setValue(conf.getCommitSize());
@@ -85,7 +85,7 @@ public class FilesToSPARQLLoaderVaadinDialog extends BaseConfigDialog<FilesToSPA
     }
 
     @Override
-    public FilesToSPARQLLoaderConfig getConfiguration() throws DPUConfigException {
+    public FilesToSparqlEndpointConfig getConfiguration() throws DPUConfigException {
         BufferedReader br = new BufferedReader(new StringReader(targetContexts.getValue()));
 
         String line;
@@ -98,7 +98,7 @@ public class FilesToSPARQLLoaderVaadinDialog extends BaseConfigDialog<FilesToSPA
             throw new DPUConfigException(ex);
         }
 
-        FilesToSPARQLLoaderConfig conf = new FilesToSPARQLLoaderConfig();
+        FilesToSparqlEndpointConfig conf = new FilesToSparqlEndpointConfig();
         conf.setQueryEndpointUrl(queryEndpointUrl.getValue());
         conf.setUpdateEndpointUrl(updateEndpointUrl.getValue());
         conf.setCommitSize(commitSize.getValue());

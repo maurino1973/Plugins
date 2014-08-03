@@ -28,14 +28,14 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class FilesToSPARQLLoader extends ConfigurableBase<FilesToSPARQLLoaderConfig> implements ConfigDialogProvider<FilesToSPARQLLoaderConfig> {
-    private static final Logger LOG = LoggerFactory.getLogger(FilesToSPARQLLoader.class);
+public class FilesToSparqlEndpoint extends ConfigurableBase<FilesToSparqlEndpointConfig> implements ConfigDialogProvider<FilesToSparqlEndpointConfig> {
+    private static final Logger LOG = LoggerFactory.getLogger(FilesToSparqlEndpoint.class);
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
 
-    public FilesToSPARQLLoader() {
-        super(FilesToSPARQLLoaderConfig.class);
+    public FilesToSparqlEndpoint() {
+        super(FilesToSparqlEndpointConfig.class);
     }
 
     @Override
@@ -140,8 +140,8 @@ public class FilesToSPARQLLoader extends ConfigurableBase<FilesToSPARQLLoaderCon
     }
 
     @Override
-    public AbstractConfigDialog<FilesToSPARQLLoaderConfig> getConfigurationDialog() {
-        return new FilesToSPARQLLoaderVaadinDialog();
+    public AbstractConfigDialog<FilesToSparqlEndpointConfig> getConfigurationDialog() {
+        return new FilesToSparqlEndpointVaadinDialog();
     }
 
     public static String appendNumber(long number) {
