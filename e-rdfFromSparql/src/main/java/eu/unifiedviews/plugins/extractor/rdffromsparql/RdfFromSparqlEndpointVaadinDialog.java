@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class RDFExtractorVaadinDialog extends BaseConfigDialog<RDFExtractorConfig> {
+public class RdfFromSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfFromSparqlEndpointConfig> {
 
     private static final long serialVersionUID = 1L;
     
@@ -162,8 +162,8 @@ public class RDFExtractorVaadinDialog extends BaseConfigDialog<RDFExtractorConfi
     /**
      * Basic constructor.
      */
-    public RDFExtractorVaadinDialog() {
-        super(RDFExtractorConfig.class);
+    public RdfFromSparqlEndpointVaadinDialog() {
+        super(RdfFromSparqlEndpointConfig.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -1344,7 +1344,7 @@ public class RDFExtractorVaadinDialog extends BaseConfigDialog<RDFExtractorConfi
      *         configuration dialog.
      */
     @Override
-    public RDFExtractorConfig getConfiguration() throws DPUConfigException {
+    public RdfFromSparqlEndpointConfig getConfiguration() throws DPUConfigException {
 
         if (!allComponentAreValid()) {
 //			throw new ConfigException(ex.getMessage(), ex);
@@ -1395,7 +1395,7 @@ public class RDFExtractorVaadinDialog extends BaseConfigDialog<RDFExtractorConfi
             int splitConstructSize = Integer.parseInt(splitQuerySizeField
                     .getValue());
 
-            RDFExtractorConfig config = new RDFExtractorConfig(SPARQLEndpoint,
+            RdfFromSparqlEndpointConfig config = new RdfFromSparqlEndpointConfig(SPARQLEndpoint,
                     hostName, password, SPARQLQuery,
                     extractFailed, useStatisticalHandler, failWhenErrors,
                     retrySize, retryTime, endpointParams, useSplitConstruct,
@@ -1435,7 +1435,7 @@ public class RDFExtractorVaadinDialog extends BaseConfigDialog<RDFExtractorConfi
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(RDFExtractorConfig conf) throws DPUConfigException {
+    public void setConfiguration(RdfFromSparqlEndpointConfig conf) throws DPUConfigException {
         try {
             String endp = conf.getSPARQLEndpoint().trim();
 

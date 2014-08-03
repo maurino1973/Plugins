@@ -1,7 +1,7 @@
 package eu.unifiedviews.plugins.extractor.spartqltordf.test;
 
 import eu.unifiedviews.plugins.extractor.rdffromsparql.ExtractorEndpointParams;
-import eu.unifiedviews.plugins.extractor.rdffromsparql.RDFExtractorConfig;
+import eu.unifiedviews.plugins.extractor.rdffromsparql.RdfFromSparqlEndpointConfig;
 import eu.unifiedviews.plugins.extractor.rdffromsparql.SPARQLExtractor;
 import eu.unifiedviews.plugins.extractor.rdffromsparql.ExtractorRequestType;
 import static org.junit.Assert.assertEquals;
@@ -67,7 +67,7 @@ public class SPARQLExtractorRequestSysTest {
 
         RepositoryConnection connection = null;
         try {
-            RDFExtractorConfig c = new RDFExtractorConfig();
+            RdfFromSparqlEndpointConfig c = new RdfFromSparqlEndpointConfig();
             c.setOutputGraphSymbolicName("dfsfds");
             SPARQLExtractor extractor = new SPARQLExtractor(repository,
                     getTestContext(), params, c);

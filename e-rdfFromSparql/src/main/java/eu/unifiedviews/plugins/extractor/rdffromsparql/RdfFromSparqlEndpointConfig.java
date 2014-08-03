@@ -8,7 +8,7 @@ import java.util.List;
  * @author Petyr
  * @author Jiri Tomes
  */
-public class RDFExtractorConfig {
+public class RdfFromSparqlEndpointConfig {
 
     private String SPARQL_endpoint;
 
@@ -38,7 +38,7 @@ public class RDFExtractorConfig {
     
     private String outputGraphSymbolicName = "E-RDFFromSPARQL/output" + String.valueOf(new java.util.Random().nextInt(100));
 
-    public RDFExtractorConfig() {
+    public RdfFromSparqlEndpointConfig() {
         this.SPARQL_endpoint = "";
         this.Host_name = "";
         this.Password = "";
@@ -53,7 +53,7 @@ public class RDFExtractorConfig {
         this.splitConstructSize = 50000;
     }
 
-    public RDFExtractorConfig(String SPARQL_endpoint, String Host_name,
+    public RdfFromSparqlEndpointConfig(String SPARQL_endpoint, String Host_name,
             String Password, String SPARQL_query, boolean ExtractFail,
             boolean UseStatisticalHandler, boolean failWhenErrors, int retrySize,
             long retryTime, ExtractorEndpointParams endpointParams,

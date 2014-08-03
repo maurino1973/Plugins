@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.extractor.rdffromsparql</dpu.package>
-		<dpu.mainClass>RDFExtractor</dpu.mainClass>
+		<dpu.mainClass>RdfFromSparqlEndpoint</dpu.mainClass>
 	</properties>
 
 	<dependencies>
