@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.transformer.xslt;
 
-public class FilesToFilesXSLT2TransformerConfig {
+public class XSLTConfig {
 
     private String xslTemplate = "";
 
@@ -10,7 +10,7 @@ public class FilesToFilesXSLT2TransformerConfig {
 
     private String xlstParametersMapName = "xlstParameters";
 
-    public FilesToFilesXSLT2TransformerConfig() {
+    public XSLTConfig() {
     }
 
     public String getXslTemplate() {

@@ -20,8 +20,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToFilesXSLT2TransformerVaadinDialog extends
-        BaseConfigDialog<FilesToFilesXSLT2TransformerConfig> {
+public class XSLTVaadinDialog extends
+        BaseConfigDialog<XSLTConfig> {
 
     /**
      * 
@@ -29,7 +29,7 @@ public class FilesToFilesXSLT2TransformerVaadinDialog extends
     private static final long serialVersionUID = 63148374398039L;
 
     private static final Logger log = LoggerFactory
-            .getLogger(FilesToFilesXSLT2TransformerVaadinDialog.class);
+            .getLogger(XSLTVaadinDialog.class);
 
     private static final String SKIP_ON_ERROR_LABEL = "Skip file on error";
 
@@ -47,8 +47,8 @@ public class FilesToFilesXSLT2TransformerVaadinDialog extends
     // TODO refactor
     static int fl = 0;
 
-    public FilesToFilesXSLT2TransformerVaadinDialog() {
-        super(FilesToFilesXSLT2TransformerConfig.class);
+    public XSLTVaadinDialog() {
+        super(XSLTConfig.class);
         buildMainLayout();
         Panel panel = new Panel();
         panel.setSizeFull();
@@ -187,7 +187,7 @@ public class FilesToFilesXSLT2TransformerVaadinDialog extends
     }
 
     @Override
-    public void setConfiguration(FilesToFilesXSLT2TransformerConfig conf)
+    public void setConfiguration(XSLTConfig conf)
             throws DPUConfigException {
         // get configuration from the CONFIG object to dialog
 
@@ -199,7 +199,7 @@ public class FilesToFilesXSLT2TransformerVaadinDialog extends
     }
 
     @Override
-    public FilesToFilesXSLT2TransformerConfig getConfiguration()
+    public XSLTConfig getConfiguration()
             throws DPUConfigException {
         // get the conf from the dialog
 
@@ -213,7 +213,7 @@ public class FilesToFilesXSLT2TransformerVaadinDialog extends
         // prepare output type:
         // TODO storing the textarea content not needed - not readed when the
         // configuration is shown
-        FilesToFilesXSLT2TransformerConfig conf = new FilesToFilesXSLT2TransformerConfig();
+        XSLTConfig conf = new XSLTConfig();
         conf.setXslTemplate(taXSLTemplate.getValue());
         conf.setXslTemplateFileNameShownInDialog(lFileName.getValue().trim());
         conf.setSkipOnError(skipOnError.getValue());
@@ -325,7 +325,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 upload.interruptUpload();
-                FilesToFilesXSLT2TransformerVaadinDialog.fl = 1;
+                XSLTVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);

@@ -34,8 +34,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsTransformer
-public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesXSLT2TransformerConfig> implements ConfigDialogProvider<FilesToFilesXSLT2TransformerConfig> {
-    private static final Logger LOG = LoggerFactory.getLogger(FilesToFilesXSLT2Transformer.class);
+public class XSLT extends ConfigurableBase<XSLTConfig> implements ConfigDialogProvider<XSLTConfig> {
+    private static final Logger LOG = LoggerFactory.getLogger(XSLT.class);
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
@@ -43,13 +43,13 @@ public class FilesToFilesXSLT2Transformer extends ConfigurableBase<FilesToFilesX
     @DataUnit.AsOutput(name = "filesOutput")
     public WritableFilesDataUnit filesOutput;
 
-    public FilesToFilesXSLT2Transformer() {
-        super(FilesToFilesXSLT2TransformerConfig.class);
+    public XSLT() {
+        super(XSLTConfig.class);
     }
 
     @Override
-    public AbstractConfigDialog<FilesToFilesXSLT2TransformerConfig> getConfigurationDialog() {
-        return new FilesToFilesXSLT2TransformerVaadinDialog();
+    public AbstractConfigDialog<XSLTConfig> getConfigurationDialog() {
+        return new XSLTVaadinDialog();
     }
 
     @Override
