@@ -12,7 +12,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class VirtuosoLoaderConfigDialog extends BaseConfigDialog<VirtuosoLoaderConfig> {
+public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderConfig> {
     /**
      * 
      */
@@ -67,7 +67,7 @@ public class VirtuosoLoaderConfigDialog extends BaseConfigDialog<VirtuosoLoaderC
     private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(
             false);
 
-    public VirtuosoLoaderConfigDialog() {
+    public VirtuosoLoaderVaadinDialog() {
         super(VirtuosoLoaderConfig.class);
         initialize();
     }

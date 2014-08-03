@@ -260,7 +260,7 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig> imple
 
     @Override
     public AbstractConfigDialog<VirtuosoLoaderConfig> getConfigurationDialog() {
-        return new VirtuosoLoaderConfigDialog();
+        return new VirtuosoLoaderVaadinDialog();
     }
 
     public static String appendNumber(long number) {
