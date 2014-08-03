@@ -7,7 +7,7 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class FilesFilterVaadinDialog extends BaseConfigDialog<Configuration> {
 
     private static final int OPTION_SYMBOLIC_NAME = 1;
 
@@ -21,7 +21,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 
     private CheckBox checkUseRegExp;
 
-    public Dialog() {
+    public FilesFilterVaadinDialog() {
         super(Configuration.class);
         buildMainLayout();
     }

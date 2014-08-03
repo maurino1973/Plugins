@@ -19,9 +19,9 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsTransformer
-public class Main extends ConfigurableBase<Configuration> implements ConfigDialogProvider<Configuration> {
+public class FilesFilter extends ConfigurableBase<Configuration> implements ConfigDialogProvider<Configuration> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FilesFilter.class);
 
     @DataUnit.AsInput(name = "input")
     public FilesDataUnit inFilesData;
@@ -29,13 +29,13 @@ public class Main extends ConfigurableBase<Configuration> implements ConfigDialo
     @DataUnit.AsOutput(name = "output")
     public WritableFilesDataUnit outFilesData;
 
-    public Main() {
+    public FilesFilter() {
         super(Configuration.class);
     }
 
     @Override
     public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-        return new Dialog();
+        return new FilesFilterVaadinDialog();
     }
 
     @Override
