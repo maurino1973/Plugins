@@ -24,7 +24,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria
  * @author Jiri Tomes
  */
-public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
+public class FileLoaderVaadinDialog extends BaseConfigDialog<FileLoaderConfig> {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,7 +69,7 @@ public class FileLoaderDialog extends BaseConfigDialog<FileLoaderConfig> {
     /**
      * Basic constructor.
      */
-    public FileLoaderDialog() {
+    public FileLoaderVaadinDialog() {
         super(FileLoaderConfig.class);
         initialize();
         buildMainLayout();

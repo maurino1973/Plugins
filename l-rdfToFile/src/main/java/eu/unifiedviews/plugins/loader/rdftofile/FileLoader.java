@@ -123,6 +123,6 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
      */
     @Override
     public AbstractConfigDialog<FileLoaderConfig> getConfigurationDialog() {
-        return new FileLoaderDialog();
+        return new FileLoaderVaadinDialog();
     }
 }
