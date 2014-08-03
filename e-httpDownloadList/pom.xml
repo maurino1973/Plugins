@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.extractor.httpdownloadlist</dpu.package>
-		<dpu.mainClass>HTTPToFilesExtractor</dpu.mainClass>
+		<dpu.mainClass>HTTPToFiles</dpu.mainClass>
 	</properties>
 
 	<dependencies>

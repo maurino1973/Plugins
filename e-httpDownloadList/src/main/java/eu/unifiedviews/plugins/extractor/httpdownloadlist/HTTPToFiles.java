@@ -23,15 +23,15 @@ import java.net.URL;
 import java.util.Map;
 
 @DPU.AsExtractor
-public class HTTPToFilesExtractor extends ConfigurableBase<HTTPToFilesExtractorConfig> implements ConfigDialogProvider<HTTPToFilesExtractorConfig> {
+public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig> implements ConfigDialogProvider<HTTPToFilesConfig> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HTTPToFilesExtractor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HTTPToFiles.class);
 
     @DataUnit.AsOutput(name = "filesOutput")
     public WritableFilesDataUnit filesOutput;
 
-    public HTTPToFilesExtractor() {
-        super(HTTPToFilesExtractorConfig.class);
+    public HTTPToFiles() {
+        super(HTTPToFilesConfig.class);
     }
 
     @Override
@@ -88,8 +88,8 @@ public class HTTPToFilesExtractor extends ConfigurableBase<HTTPToFilesExtractorC
     }
 
     @Override
-    public AbstractConfigDialog<HTTPToFilesExtractorConfig> getConfigurationDialog() {
-        return new HTTPToFilesExtractoVaadinDialog();
+    public AbstractConfigDialog<HTTPToFilesConfig> getConfigurationDialog() {
+        return new HTTPToFilesVaadinDialog();
     }
 
 }

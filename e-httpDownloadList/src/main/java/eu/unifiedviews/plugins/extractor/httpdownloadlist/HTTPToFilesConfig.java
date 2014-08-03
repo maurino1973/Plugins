@@ -3,7 +3,7 @@ package eu.unifiedviews.plugins.extractor.httpdownloadlist;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class HTTPToFilesExtractorConfig {
+public class HTTPToFilesConfig {
 
     private int connectionTimeout = 2000;
 
@@ -14,7 +14,7 @@ public class HTTPToFilesExtractorConfig {
     private Map<String, String> symbolicNameToVirtualPathMap;
     
     // DPUTemplateConfig must provide public non-parametric constructor
-    public HTTPToFilesExtractorConfig() {
+    public HTTPToFilesConfig() {
         this.symbolicNameToURIMap = new LinkedHashMap<>();
     }
 
