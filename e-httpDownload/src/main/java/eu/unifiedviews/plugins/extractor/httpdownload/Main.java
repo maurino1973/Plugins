@@ -19,6 +19,11 @@ import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
+/**
+ * This DPU will be removed shortly
+ * 
+ * @author Škoda Petr
+ */
 @DPU.AsExtractor
 public class Main extends ConfigurableBase<Configuration>
         implements ConfigDialogProvider<Configuration> {
