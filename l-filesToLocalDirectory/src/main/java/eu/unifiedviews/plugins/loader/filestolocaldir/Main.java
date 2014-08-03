@@ -20,102 +20,104 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This DPU will be removed shortly
+ * 
+ * @author Škoda Petr
+ */
 @DPU.AsLoader
 public class Main extends ConfigurableBase<Configuration> implements
-		ConfigDialogProvider<Configuration> {
+        ConfigDialogProvider<Configuration> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-	@DataUnit.AsInput(name = "input")
-	public FilesDataUnit inFilesData;
+    @DataUnit.AsInput(name = "input")
+    public FilesDataUnit inFilesData;
 
-	public Main() {
-		super(Configuration.class);
-	}
+    public Main() {
+        super(Configuration.class);
+    }
 
-	@Override
-	public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-		return new Dialog();
-	}
+    @Override
+    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
+        return new Dialog();
+    }
 
-	@Override
-	public void execute(DPUContext context) throws DPUException {
+    @Override
+    public void execute(DPUContext context) throws DPUException {
 
-		FilesDataUnit.Iteration filesIteration;
-		try {
-			filesIteration = inFilesData.getIteration();
-		} catch (DataUnitException ex) {
-			context.sendMessage(DPUContext.MessageType.ERROR,
-					"DPU Failed", "Can't get file iterator.", ex);
-			return;
-		}
+        FilesDataUnit.Iteration filesIteration;
+        try {
+            filesIteration = inFilesData.getIteration();
+        } catch (DataUnitException ex) {
+            context.sendMessage(DPUContext.MessageType.ERROR,
+                    "DPU Failed", "Can't get file iterator.", ex);
+            return;
+        }
 
-		// prepare output directory
-		final File destinationDirFile = new File(config.getDestination());
-		destinationDirFile.mkdirs();
+        // prepare output directory
+        final File destinationDirFile = new File(config.getDestination());
+        destinationDirFile.mkdirs();
 
-		// prepare copy options
-		final ArrayList<CopyOption> copyOptions = new ArrayList<>(1);
-		if (config.isReplaceExisting()) {
-			copyOptions.add(StandardCopyOption.REPLACE_EXISTING);
-		}
-		final CopyOption[] copyOptionsArray
-				= copyOptions.toArray(new CopyOption[0]);
+        // prepare copy options
+        final ArrayList<CopyOption> copyOptions = new ArrayList<>(1);
+        if (config.isReplaceExisting()) {
+            copyOptions.add(StandardCopyOption.REPLACE_EXISTING);
+        }
+        final CopyOption[] copyOptionsArray = copyOptions.toArray(new CopyOption[0]);
 
-		try {
+        try {
 
-// TODO Remove
-MetadataHelpers.dump(inFilesData);
+            // TODO Remove
+            MetadataHelpers.dump(inFilesData);
 
-			while (!context.canceled() && filesIteration.hasNext()) {
-				final FilesDataUnit.Entry entry = filesIteration.next();
-				LOG.debug("Found entry '{}' with path '{}'",
-						entry.getSymbolicName(), entry.getFileURIString());
+            while (!context.canceled() && filesIteration.hasNext()) {
+                final FilesDataUnit.Entry entry = filesIteration.next();
+                LOG.debug("Found entry '{}' with path '{}'",
+                        entry.getSymbolicName(), entry.getFileURIString());
                 //
-				// We need source file and target file paths
-				//
-				final File inputFile
-						= new File(URI.create(entry.getFileURIString()));
-                
-				final String relativePath = VirtualPathHelpers.getVirtualPath(inFilesData,
-						entry.getSymbolicName());
+                // We need source file and target file paths
+                //
+                final File inputFile = new File(URI.create(entry.getFileURIString()));
 
-				// TODO We can try to use symbolicName here
-				if (relativePath == null) {
-					context.sendMessage(DPUContext.MessageType.WARNING,
-							"No virtual path set for: " + entry.getSymbolicName()
-							+ ". File is ignored.");
-					continue;
-				}
+                final String relativePath = VirtualPathHelpers.getVirtualPath(inFilesData,
+                        entry.getSymbolicName());
+
+                // TODO We can try to use symbolicName here
+                if (relativePath == null) {
+                    context.sendMessage(DPUContext.MessageType.WARNING,
+                            "No virtual path set for: " + entry.getSymbolicName()
+                                    + ". File is ignored.");
+                    continue;
+                }
 
                 //
-				// prepare output file and copy
-				//
-				final File outputFile
-						= new File(destinationDirFile, relativePath);
-				// create parent directory
-				outputFile.getParentFile().mkdirs();
-				try {
-					// copy
-					java.nio.file.Files.copy(inputFile.toPath(),
-							outputFile.toPath(), copyOptionsArray);
-				} catch (IOException ex) {
-					context.sendMessage(DPUContext.MessageType.ERROR,
-							"Failed to copy file.",
-							"Failed to copy, file ignored.", ex);
-				}
-			}
-		} catch (DataUnitException ex) {
-			context.sendMessage(DPUContext.MessageType.ERROR, "DPU failed",
-					"Problem with DataUnit.", ex);
-		} finally {
-			try {
-				filesIteration.close();
-			} catch (DataUnitException ex) {
-				LOG.warn("Error in close.", ex);
-			}
-		}
+                // prepare output file and copy
+                //
+                final File outputFile = new File(destinationDirFile, relativePath);
+                // create parent directory
+                outputFile.getParentFile().mkdirs();
+                try {
+                    // copy
+                    java.nio.file.Files.copy(inputFile.toPath(),
+                            outputFile.toPath(), copyOptionsArray);
+                } catch (IOException ex) {
+                    context.sendMessage(DPUContext.MessageType.ERROR,
+                            "Failed to copy file.",
+                            "Failed to copy, file ignored.", ex);
+                }
+            }
+        } catch (DataUnitException ex) {
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU failed",
+                    "Problem with DataUnit.", ex);
+        } finally {
+            try {
+                filesIteration.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close.", ex);
+            }
+        }
 
-	}
+    }
 
 }
