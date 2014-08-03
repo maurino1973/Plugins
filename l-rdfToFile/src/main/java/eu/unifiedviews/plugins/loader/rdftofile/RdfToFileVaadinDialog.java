@@ -24,7 +24,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria
  * @author Jiri Tomes
  */
-public class FileLoaderVaadinDialog extends BaseConfigDialog<FileLoaderConfig> {
+public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig> {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,8 +69,8 @@ public class FileLoaderVaadinDialog extends BaseConfigDialog<FileLoaderConfig> {
     /**
      * Basic constructor.
      */
-    public FileLoaderVaadinDialog() {
-        super(FileLoaderConfig.class);
+    public RdfToFileVaadinDialog() {
+        super(RdfToFileConfig.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -245,7 +245,7 @@ public class FileLoaderVaadinDialog extends BaseConfigDialog<FileLoaderConfig> {
      *         configuration dialog.
      */
     @Override
-    public FileLoaderConfig getConfiguration() throws DPUConfigException {
+    public RdfToFileConfig getConfiguration() throws DPUConfigException {
         if (!textFieldFilePath.isValid()) {
             throw new DPUConfigException(ex.getMessage(), ex);
         } else {
@@ -258,7 +258,7 @@ public class FileLoaderVaadinDialog extends BaseConfigDialog<FileLoaderConfig> {
 
             boolean validDataBefore = validateDataBefore.getValue();
 
-            FileLoaderConfig config = new FileLoaderConfig(filePath,
+            RdfToFileConfig config = new RdfToFileConfig(filePath,
                     RDFFileFormat, diffName, validDataBefore);
 
             return config;
@@ -279,7 +279,7 @@ public class FileLoaderVaadinDialog extends BaseConfigDialog<FileLoaderConfig> {
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(FileLoaderConfig conf) throws DPUConfigException {
+    public void setConfiguration(RdfToFileConfig conf) throws DPUConfigException {
         try {
             checkBoxDiffName.setValue(conf.isDiffName());
             textFieldFilePath.setValue(conf.getFilePath().trim());

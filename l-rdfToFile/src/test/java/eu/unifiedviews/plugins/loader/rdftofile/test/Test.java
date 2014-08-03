@@ -1,7 +1,7 @@
 package eu.unifiedviews.plugins.loader.rdftofile.test;
 
-import eu.unifiedviews.plugins.loader.rdftofile.FileLoaderConfig;
-import eu.unifiedviews.plugins.loader.rdftofile.FileLoader;
+import eu.unifiedviews.plugins.loader.rdftofile.RdfToFileConfig;
+import eu.unifiedviews.plugins.loader.rdftofile.RdfToFile;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
@@ -30,8 +30,8 @@ public class Test {
 
     @org.junit.Test
     public void test() throws Exception {
-        FileLoader fileLoader = new FileLoader();
-        FileLoaderConfig config = new FileLoaderConfig();
+        RdfToFile fileLoader = new RdfToFile();
+        RdfToFileConfig config = new RdfToFileConfig();
         config.setValidDataBefore(true);
         fileLoader.configureDirectly(config);
         File tempFile = File.createTempFile("temp", ".rdf");

@@ -36,10 +36,10 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Petyr
  */
 @DPU.AsLoader
-public class FileLoader extends ConfigurableBase<FileLoaderConfig>
-        implements ConfigDialogProvider<FileLoaderConfig> {
+public class RdfToFile extends ConfigurableBase<RdfToFileConfig>
+        implements ConfigDialogProvider<RdfToFileConfig> {
 
-    private final Logger logger = LoggerFactory.getLogger(FileLoader.class);
+    private final Logger logger = LoggerFactory.getLogger(RdfToFile.class);
 
     final String encode = "UTF-8";
 
@@ -52,8 +52,8 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
     @DataUnit.AsOutput(name = "validationDataUnit", description = "Never connect any data to this unit please!")
     public WritableRDFDataUnit validationDataUnit;
 
-    public FileLoader() {
-        super(FileLoaderConfig.class);
+    public RdfToFile() {
+        super(RdfToFileConfig.class);
     }
 
     /**
@@ -122,7 +122,7 @@ public class FileLoader extends ConfigurableBase<FileLoaderConfig>
      * @return the configuration dialogue for file loader.
      */
     @Override
-    public AbstractConfigDialog<FileLoaderConfig> getConfigurationDialog() {
-        return new FileLoaderVaadinDialog();
+    public AbstractConfigDialog<RdfToFileConfig> getConfigurationDialog() {
+        return new RdfToFileVaadinDialog();
     }
 }

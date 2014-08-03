@@ -18,7 +18,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.rdftofile</dpu.package>
-		<dpu.mainClass>FileLoader</dpu.mainClass>
+		<dpu.mainClass>RdfToFile</dpu.mainClass>
 	</properties>
 
 	<dependencies>

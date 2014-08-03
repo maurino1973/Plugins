@@ -7,7 +7,7 @@ package eu.unifiedviews.plugins.loader.rdftofile;
  * @author Petyr
  * @author Jiri Tomes
  */
-public class FileLoaderConfig {
+public class RdfToFileConfig {
 
     private String FilePath;
 
@@ -17,14 +17,14 @@ public class FileLoaderConfig {
 
     private boolean validDataBefore;
 
-    public FileLoaderConfig() {
+    public RdfToFileConfig() {
         this.FilePath = "";
         this.RDFFileFormat = RDFFormatType.AUTO;
         this.DiffName = false;
         this.validDataBefore = false;
     }
 
-    public FileLoaderConfig(String FilePath, RDFFormatType RDFFileFormat,
+    public RdfToFileConfig(String FilePath, RDFFormatType RDFFileFormat,
             boolean DiffName, boolean validDataBefore) {
         this.FilePath = FilePath;
         this.RDFFileFormat = RDFFileFormat;
