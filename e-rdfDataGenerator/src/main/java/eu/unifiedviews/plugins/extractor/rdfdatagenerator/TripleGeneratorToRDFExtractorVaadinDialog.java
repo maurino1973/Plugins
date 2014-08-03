@@ -11,7 +11,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class TripleGeneratorToRDFExtractorConfigDialog extends BaseConfigDialog<TripleGeneratorToRDFExtractorConfig> {
+public class TripleGeneratorToRDFExtractorVaadinDialog extends BaseConfigDialog<TripleGeneratorToRDFExtractorConfig> {
     /**
      * 
      */
@@ -29,7 +29,7 @@ public class TripleGeneratorToRDFExtractorConfigDialog extends BaseConfigDialog<
     
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
-    public TripleGeneratorToRDFExtractorConfigDialog() {
+    public TripleGeneratorToRDFExtractorVaadinDialog() {
         super(TripleGeneratorToRDFExtractorConfig.class);
         initialize();
     }

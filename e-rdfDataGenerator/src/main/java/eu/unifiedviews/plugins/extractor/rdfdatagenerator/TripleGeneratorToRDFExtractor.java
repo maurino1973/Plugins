@@ -77,6 +77,6 @@ public class TripleGeneratorToRDFExtractor extends ConfigurableBase<TripleGenera
 
     @Override
     public AbstractConfigDialog<TripleGeneratorToRDFExtractorConfig> getConfigurationDialog() {
-        return new TripleGeneratorToRDFExtractorConfigDialog();
+        return new TripleGeneratorToRDFExtractorVaadinDialog();
     }
 }
