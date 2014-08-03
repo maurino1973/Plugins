@@ -52,7 +52,7 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration> implements Con
 
     @Override
     public AbstractConfigDialog<ZipperConfiguration> getConfigurationDialog() {
-        return new ZipperDialog();
+        return new ZipperVaadinDialog();
     }
 
     @Override

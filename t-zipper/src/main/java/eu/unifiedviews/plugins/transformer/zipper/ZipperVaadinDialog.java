@@ -5,13 +5,13 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class ZipperDialog extends BaseConfigDialog<ZipperConfiguration> {
+public class ZipperVaadinDialog extends BaseConfigDialog<ZipperConfiguration> {
 
     private VerticalLayout mainLayout;
 
     private TextField txtZipFile;
 
-    public ZipperDialog() {
+    public ZipperVaadinDialog() {
         super(ZipperConfiguration.class);
         buildMainLayout();
     }
