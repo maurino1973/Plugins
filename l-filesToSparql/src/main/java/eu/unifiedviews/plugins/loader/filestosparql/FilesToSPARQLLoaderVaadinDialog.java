@@ -19,7 +19,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToSPARQLLoaderConfigDialog extends BaseConfigDialog<FilesToSPARQLLoaderConfig> {
+public class FilesToSPARQLLoaderVaadinDialog extends BaseConfigDialog<FilesToSPARQLLoaderConfig> {
     /**
      * 
      */
@@ -46,7 +46,7 @@ public class FilesToSPARQLLoaderConfigDialog extends BaseConfigDialog<FilesToSPA
 
     private ObjectProperty<String> targetContexts = new ObjectProperty<String>("");
 
-    public FilesToSPARQLLoaderConfigDialog() {
+    public FilesToSPARQLLoaderVaadinDialog() {
         super(FilesToSPARQLLoaderConfig.class);
         initialize();
     }

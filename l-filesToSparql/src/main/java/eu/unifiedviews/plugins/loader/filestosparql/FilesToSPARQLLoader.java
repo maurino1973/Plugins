@@ -141,7 +141,7 @@ public class FilesToSPARQLLoader extends ConfigurableBase<FilesToSPARQLLoaderCon
 
     @Override
     public AbstractConfigDialog<FilesToSPARQLLoaderConfig> getConfigurationDialog() {
-        return new FilesToSPARQLLoaderConfigDialog();
+        return new FilesToSPARQLLoaderVaadinDialog();
     }
 
     public static String appendNumber(long number) {
