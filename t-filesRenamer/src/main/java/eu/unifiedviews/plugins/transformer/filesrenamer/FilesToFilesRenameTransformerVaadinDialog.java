@@ -31,7 +31,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToFilesRenameTransformerConfigDialog extends
+public class FilesToFilesRenameTransformerVaadinDialog extends
         BaseConfigDialog<FilesToFilesRenameTransformerConfig> {
 
     /**
@@ -40,7 +40,7 @@ public class FilesToFilesRenameTransformerConfigDialog extends
     private static final long serialVersionUID = 63148374398039L;
 
     private static final Logger log = LoggerFactory
-            .getLogger(FilesToFilesRenameTransformerConfigDialog.class);
+            .getLogger(FilesToFilesRenameTransformerVaadinDialog.class);
 
     private static final String SKIP_ON_ERROR_LABEL = "Skip file on error";
 
@@ -58,7 +58,7 @@ public class FilesToFilesRenameTransformerConfigDialog extends
     // TODO refactor
     static int fl = 0;
 
-    public FilesToFilesRenameTransformerConfigDialog() {
+    public FilesToFilesRenameTransformerVaadinDialog() {
         super(FilesToFilesRenameTransformerConfig.class);
         buildMainLayout();
         Panel panel = new Panel();
@@ -336,7 +336,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 upload.interruptUpload();
-                FilesToFilesRenameTransformerConfigDialog.fl = 1;
+                FilesToFilesRenameTransformerVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);
