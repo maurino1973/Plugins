@@ -15,9 +15,9 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.NonConfigurableBase;
 
 @DPU.AsTransformer
-public class FilesToFilesRenameTransformer extends NonConfigurableBase {
+public class Renamer extends NonConfigurableBase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FilesToFilesRenameTransformer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Renamer.class);
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
@@ -25,7 +25,7 @@ public class FilesToFilesRenameTransformer extends NonConfigurableBase {
     @DataUnit.AsOutput(name = "filesOutput")
     public WritableFilesDataUnit filesOutput;
 
-    public FilesToFilesRenameTransformer() {
+    public Renamer() {
 //        super(FilesToFilesRenameTransformerConfig.class);
     }
 

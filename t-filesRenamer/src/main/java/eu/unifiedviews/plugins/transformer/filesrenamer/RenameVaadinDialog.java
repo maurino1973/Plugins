@@ -31,8 +31,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToFilesRenameTransformerVaadinDialog extends
-        BaseConfigDialog<FilesToFilesRenameTransformerConfig> {
+public class RenameVaadinDialog extends
+        BaseConfigDialog<RenameConfig> {
 
     /**
      * 
@@ -40,7 +40,7 @@ public class FilesToFilesRenameTransformerVaadinDialog extends
     private static final long serialVersionUID = 63148374398039L;
 
     private static final Logger log = LoggerFactory
-            .getLogger(FilesToFilesRenameTransformerVaadinDialog.class);
+            .getLogger(RenameVaadinDialog.class);
 
     private static final String SKIP_ON_ERROR_LABEL = "Skip file on error";
 
@@ -58,8 +58,8 @@ public class FilesToFilesRenameTransformerVaadinDialog extends
     // TODO refactor
     static int fl = 0;
 
-    public FilesToFilesRenameTransformerVaadinDialog() {
-        super(FilesToFilesRenameTransformerConfig.class);
+    public RenameVaadinDialog() {
+        super(RenameConfig.class);
         buildMainLayout();
         Panel panel = new Panel();
         panel.setSizeFull();
@@ -198,7 +198,7 @@ public class FilesToFilesRenameTransformerVaadinDialog extends
     }
 
     @Override
-    public void setConfiguration(FilesToFilesRenameTransformerConfig conf)
+    public void setConfiguration(RenameConfig conf)
             throws DPUConfigException {
         // get configuration from the CONFIG object to dialog
 
@@ -210,7 +210,7 @@ public class FilesToFilesRenameTransformerVaadinDialog extends
     }
 
     @Override
-    public FilesToFilesRenameTransformerConfig getConfiguration()
+    public RenameConfig getConfiguration()
             throws DPUConfigException {
         // get the conf from the dialog
 
@@ -224,7 +224,7 @@ public class FilesToFilesRenameTransformerVaadinDialog extends
         // prepare output type:
         // TODO storing the textarea content not needed - not readed when the
         // configuration is shown
-        FilesToFilesRenameTransformerConfig conf = new FilesToFilesRenameTransformerConfig();
+        RenameConfig conf = new RenameConfig();
         conf.setXslTemplate(taXSLTemplate.getValue());
         conf.setXslTemplateFileNameShownInDialog(lFileName.getValue().trim());
         conf.setSkipOnError(skipOnError.getValue());
@@ -336,7 +336,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final Button.ClickEvent event) {
                 upload.interruptUpload();
-                FilesToFilesRenameTransformerVaadinDialog.fl = 1;
+                RenameVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);

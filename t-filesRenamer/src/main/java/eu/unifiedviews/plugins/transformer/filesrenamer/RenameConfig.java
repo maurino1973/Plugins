@@ -1,7 +1,7 @@
 package eu.unifiedviews.plugins.transformer.filesrenamer;
 
 
-public class FilesToFilesRenameTransformerConfig {
+public class RenameConfig {
 
     private String xslTemplate = "";
 
@@ -9,7 +9,7 @@ public class FilesToFilesRenameTransformerConfig {
 
     private boolean skipOnError = false;
 
-    public FilesToFilesRenameTransformerConfig() {
+    public RenameConfig() {
     }
 
     public String getXslTemplate() {
