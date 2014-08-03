@@ -103,6 +103,6 @@ public class FilesToRDFTransformer extends ConfigurableBase<FilesToRDFTransforme
 
     @Override
     public AbstractConfigDialog<FilesToRDFTransformerConfig> getConfigurationDialog() {
-        return new FilesToRDFTransformerConfigDialog();
+        return new FilesToRDFTransformerVaadinDialog();
     }
 }

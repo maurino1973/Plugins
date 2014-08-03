@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToRDFTransformerConfigDialog extends BaseConfigDialog<FilesToRDFTransformerConfig> {
+public class FilesToRDFTransformerVaadinDialog extends BaseConfigDialog<FilesToRDFTransformerConfig> {
     /**
      * 
      */
@@ -36,7 +36,7 @@ public class FilesToRDFTransformerConfigDialog extends BaseConfigDialog<FilesToR
 
     private ObjectProperty<Integer> commitSize = new ObjectProperty<Integer>(0);
 
-    public FilesToRDFTransformerConfigDialog() {
+    public FilesToRDFTransformerVaadinDialog() {
         super(FilesToRDFTransformerConfig.class);
         initialize();
     }
