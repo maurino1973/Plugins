@@ -40,12 +40,12 @@ import org.openrdf.repository.RepositoryException;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class Main extends ConfigurableBase<Configuration>
+public class Tabular extends ConfigurableBase<Configuration>
         implements ConfigDialogProvider<Configuration> {
 
     private static final int COMMIT_SIZE = 50000;
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(Tabular.class);
 
     private final String baseODCSPropertyURI = "http://linked.opendata.cz/ontology/odcs/tabular/";
 
@@ -63,7 +63,7 @@ public class Main extends ConfigurableBase<Configuration>
 
     private ValueFactory valueFactory;
 
-    public Main() {
+    public Tabular() {
         super(Configuration.class);
     }
 
@@ -85,7 +85,7 @@ public class Main extends ConfigurableBase<Configuration>
 
     @Override
     public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-        return new Dialog();
+        return new TabularVaadinDialog();
     }
 
     @Override

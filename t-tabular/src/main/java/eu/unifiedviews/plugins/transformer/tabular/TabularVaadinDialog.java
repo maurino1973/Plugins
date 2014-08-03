@@ -8,7 +8,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
 import java.util.Map;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class TabularVaadinDialog extends BaseConfigDialog<Configuration> {
 
     private VerticalLayout mainLayout;
 
@@ -32,7 +32,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 
     private TextField tfRowLimit;
 
-    public Dialog() {
+    public TabularVaadinDialog() {
         super(Configuration.class);
 
         buildMainLayout();
