@@ -207,6 +207,6 @@ public class RDFExtractor extends ConfigurableBase<RDFExtractorConfig>
      */
     @Override
     public AbstractConfigDialog<RDFExtractorConfig> getConfigurationDialog() {
-        return new RDFExtractorDialog();
+        return new RDFExtractorVaadinDialog();
     }
 }

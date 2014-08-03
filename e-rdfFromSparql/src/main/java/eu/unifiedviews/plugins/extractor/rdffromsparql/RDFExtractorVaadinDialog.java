@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class RDFExtractorDialog extends BaseConfigDialog<RDFExtractorConfig> {
+public class RDFExtractorVaadinDialog extends BaseConfigDialog<RDFExtractorConfig> {
 
     private static final long serialVersionUID = 1L;
     
@@ -162,7 +162,7 @@ public class RDFExtractorDialog extends BaseConfigDialog<RDFExtractorConfig> {
     /**
      * Basic constructor.
      */
-    public RDFExtractorDialog() {
+    public RDFExtractorVaadinDialog() {
         super(RDFExtractorConfig.class);
         initialize();
         buildMainLayout();
