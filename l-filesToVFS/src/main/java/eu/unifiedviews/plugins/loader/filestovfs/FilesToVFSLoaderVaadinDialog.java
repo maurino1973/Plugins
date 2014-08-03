@@ -12,7 +12,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToVFSLoaderConfigDialog extends
+public class FilesToVFSLoaderVaadinDialog extends
 		BaseConfigDialog<FilesToVFSLoaderConfig> {
 	/**
      * 
@@ -45,7 +45,7 @@ public class FilesToVFSLoaderConfigDialog extends
     private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(
             false);
 
-    public FilesToVFSLoaderConfigDialog() {
+    public FilesToVFSLoaderVaadinDialog() {
 		super(FilesToVFSLoaderConfig.class);
 		initialize();
 	}

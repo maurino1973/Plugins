@@ -159,7 +159,7 @@ public class FilesToVFSLoader extends
 
     @Override
     public AbstractConfigDialog<FilesToVFSLoaderConfig> getConfigurationDialog() {
-        return new FilesToVFSLoaderConfigDialog();
+        return new FilesToVFSLoaderVaadinDialog();
     }
 
     public static String appendNumber(long number) {
