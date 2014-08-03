@@ -144,6 +144,6 @@ public class RDFLoader extends ConfigurableBase<RDFLoaderConfig>
      */
     @Override
     public AbstractConfigDialog<RDFLoaderConfig> getConfigurationDialog() {
-        return new RDFLoaderDialog();
+        return new RDFLoaderVaadinDialog();
     }
 }

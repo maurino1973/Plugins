@@ -17,7 +17,7 @@ import java.util.List;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
+public class RDFLoaderVaadinDialog extends BaseConfigDialog<RDFLoaderConfig> {
 
     private static final long serialVersionUID = 1L;
 
@@ -126,7 +126,7 @@ public class RDFLoaderDialog extends BaseConfigDialog<RDFLoaderConfig> {
     /**
      * Basic constructor.
      */
-    public RDFLoaderDialog() {
+    public RDFLoaderVaadinDialog() {
         super(RDFLoaderConfig.class);
         initialize();
         buildMainLayout();
