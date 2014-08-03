@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformerConfig;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQL;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLConfig;
 
 public class SPARQLTest {
     private static final Logger LOG = LoggerFactory.getLogger(SPARQLTest.class);
@@ -23,12 +23,12 @@ public class SPARQLTest {
     @Test
     public void constructAllTest() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
         String SPARQL_Update_Query = "CONSTRUCT {?s ?p ?o} where {?s ?p ?o }";
         boolean isConstructType = true;
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig(
+        SPARQLConfig config = new SPARQLConfig(
                 SPARQL_Update_Query, isConstructType);
 
         trans.configureDirectly(config);

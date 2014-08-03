@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * 
  * @authod Petr Škoda
  */
-public class SPARQLTransformerVaadinDialog extends BaseConfigDialog<SPARQLTransformerConfig> {
+public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig> {
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
@@ -43,8 +43,8 @@ public class SPARQLTransformerVaadinDialog extends BaseConfigDialog<SPARQLTransf
      */
     private final HashMap<TextArea, QueryType> queryTypes = new HashMap<>();
 
-    public SPARQLTransformerVaadinDialog() {
-        super(SPARQLTransformerConfig.class);
+    public SPARQLVaadinDialog() {
+        super(SPARQLConfig.class);
         init();
     }
 
@@ -181,7 +181,7 @@ public class SPARQLTransformerVaadinDialog extends BaseConfigDialog<SPARQLTransf
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(SPARQLTransformerConfig conf) throws DPUConfigException {
+    public void setConfiguration(SPARQLConfig conf) throws DPUConfigException {
         queries.clear();
         queryTypes.clear();
         accordion.removeAllComponents();
@@ -206,9 +206,9 @@ public class SPARQLTransformerVaadinDialog extends BaseConfigDialog<SPARQLTransf
      *         configuration dialog.
      */
     @Override
-    public SPARQLTransformerConfig getConfiguration() throws DPUConfigException {
+    public SPARQLConfig getConfiguration() throws DPUConfigException {
 
-        SPARQLTransformerConfig conf = new SPARQLTransformerConfig();
+        SPARQLConfig conf = new SPARQLConfig();
         List<SPARQLQueryPair> queryPairs = conf.getQueryPairs();
 
         for (int i = 0; i < queries.size(); i++) {

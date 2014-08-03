@@ -18,7 +18,7 @@ import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLTransformer;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQL;
 
 public class AddQueryGraphsTest {
 
@@ -26,7 +26,7 @@ public class AddQueryGraphsTest {
 
     private static TestEnvironment testEnvironment;
 
-    private static SPARQLTransformer trans;
+    private static SPARQL trans;
 
     private static String GRAPH_NAME;
 
@@ -38,7 +38,7 @@ public class AddQueryGraphsTest {
         testEnvironment = new TestEnvironment();
         writeRepository = testEnvironment.createRdfInput("LocalRepository", false);
         GRAPH_NAME = writeRepository.addNewDataGraph("test").stringValue();
-        trans = new SPARQLTransformer();
+        trans = new SPARQL();
     }
 
     @AfterClass
