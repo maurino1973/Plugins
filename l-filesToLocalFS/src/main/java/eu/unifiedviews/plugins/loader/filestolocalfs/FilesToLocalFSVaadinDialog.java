@@ -12,8 +12,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToLocalDirectoryLoaderVaadinDialog extends
-		BaseConfigDialog<FilesToLocalDirectoryLoaderConfig> {
+public class FilesToLocalFSVaadinDialog extends
+		BaseConfigDialog<FilesToLocalFSConfig> {
 	/**
      * 
      */
@@ -38,8 +38,8 @@ public class FilesToLocalDirectoryLoaderVaadinDialog extends
     private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(
             false);
 
-    public FilesToLocalDirectoryLoaderVaadinDialog() {
-		super(FilesToLocalDirectoryLoaderConfig.class);
+    public FilesToLocalFSVaadinDialog() {
+		super(FilesToLocalFSConfig.class);
 		initialize();
 	}
 
@@ -58,7 +58,7 @@ public class FilesToLocalDirectoryLoaderVaadinDialog extends
 	}
 
 	@Override
-	public void setConfiguration(FilesToLocalDirectoryLoaderConfig conf)
+	public void setConfiguration(FilesToLocalFSConfig conf)
 			throws DPUConfigException {
 		destination.setValue(conf.getDestination());
 		moveFiles.setValue(conf.isMoveFiles());
@@ -67,9 +67,9 @@ public class FilesToLocalDirectoryLoaderVaadinDialog extends
 	}
 
 	@Override
-	public FilesToLocalDirectoryLoaderConfig getConfiguration()
+	public FilesToLocalFSConfig getConfiguration()
 			throws DPUConfigException {
-		FilesToLocalDirectoryLoaderConfig conf = new FilesToLocalDirectoryLoaderConfig();
+		FilesToLocalFSConfig conf = new FilesToLocalFSConfig();
 		conf.setDestination(destination.getValue());
 		conf.setMoveFiles(moveFiles.getValue());
 		conf.setReplaceExisting(replaceExisting.getValue());

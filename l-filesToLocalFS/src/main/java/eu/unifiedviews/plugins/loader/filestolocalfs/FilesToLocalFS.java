@@ -25,17 +25,17 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class FilesToLocalDirectoryLoader extends
-        ConfigurableBase<FilesToLocalDirectoryLoaderConfig> implements
-        ConfigDialogProvider<FilesToLocalDirectoryLoaderConfig> {
+public class FilesToLocalFS extends
+        ConfigurableBase<FilesToLocalFSConfig> implements
+        ConfigDialogProvider<FilesToLocalFSConfig> {
     private static final Logger LOG = LoggerFactory
-            .getLogger(FilesToLocalDirectoryLoader.class);
+            .getLogger(FilesToLocalFS.class);
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
 
-    public FilesToLocalDirectoryLoader() {
-        super(FilesToLocalDirectoryLoaderConfig.class);
+    public FilesToLocalFS() {
+        super(FilesToLocalFSConfig.class);
     }
 
     @Override
@@ -123,8 +123,8 @@ public class FilesToLocalDirectoryLoader extends
     }
 
     @Override
-    public AbstractConfigDialog<FilesToLocalDirectoryLoaderConfig> getConfigurationDialog() {
-        return new FilesToLocalDirectoryLoaderVaadinDialog();
+    public AbstractConfigDialog<FilesToLocalFSConfig> getConfigurationDialog() {
+        return new FilesToLocalFSVaadinDialog();
     }
 
     public static String appendNumber(long number) {
