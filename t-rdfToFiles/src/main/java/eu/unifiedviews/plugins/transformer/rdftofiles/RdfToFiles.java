@@ -37,8 +37,8 @@ import java.util.Map;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implements
-        ConfigDialogProvider<RdfToFilesConfiguration> {
+public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig> implements
+        ConfigDialogProvider<RdfToFilesConfig> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RdfToFiles.class);
 
@@ -55,11 +55,11 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
     private RDFFormat rdfFormat;
 
     public RdfToFiles() {
-        super(RdfToFilesConfiguration.class);
+        super(RdfToFilesConfig.class);
     }
 
     @Override
-    public AbstractConfigDialog<RdfToFilesConfiguration> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfToFilesConfig> getConfigurationDialog() {
         return new RdfToFilesVaadinDialog();
     }
 
@@ -114,7 +114,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
      * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
     private void exportSingle(Map<String, URI> graphUris) throws DataUnitException, ExportFailedException {
-        final RdfToFilesConfiguration.GraphToFileInfo info = config.getGraphToFileInfo().get(0);
+        final RdfToFilesConfig.GraphToFileInfo info = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
         final String outputSymbolicName = exportGraph(toExport, info.getOutFileName());
@@ -137,7 +137,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfiguration> implem
      * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
     private void exportMultiple(Map<String, URI> graphUris) throws DataUnitException, ExportFailedException {
-        for (RdfToFilesConfiguration.GraphToFileInfo info : config.getGraphToFileInfo()) {
+        for (RdfToFilesConfig.GraphToFileInfo info : config.getGraphToFileInfo()) {
             //
             // get URIs (graphs) to export and transfer metadata
             //
