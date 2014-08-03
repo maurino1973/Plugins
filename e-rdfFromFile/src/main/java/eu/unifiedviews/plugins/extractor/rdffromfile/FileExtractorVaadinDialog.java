@@ -30,7 +30,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class FileExtractorDialog extends BaseConfigDialog<FileExtractorConfig> {
+public class FileExtractorVaadinDialog extends BaseConfigDialog<FileExtractorConfig> {
 
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
@@ -101,7 +101,7 @@ public class FileExtractorDialog extends BaseConfigDialog<FileExtractorConfig> {
     /**
      * Basic constructor.
      */
-    public FileExtractorDialog() {
+    public FileExtractorVaadinDialog() {
         super(FileExtractorConfig.class);
         initialize();
         buildMainLayout();
@@ -741,7 +741,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
             @Override
             public void buttonClick(final ClickEvent event) {
                 upload.interruptUpload();
-                FileExtractorDialog.fl = 1;
+                FileExtractorVaadinDialog.fl = 1;
             }
         });
         cancelButton.setVisible(false);

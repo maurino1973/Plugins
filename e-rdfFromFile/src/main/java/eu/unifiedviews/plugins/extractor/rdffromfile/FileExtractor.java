@@ -178,7 +178,7 @@ public class FileExtractor extends ConfigurableBase<FileExtractorConfig>
      */
     @Override
     public AbstractConfigDialog<FileExtractorConfig> getConfigurationDialog() {
-        return new FileExtractorDialog();
+        return new FileExtractorVaadinDialog();
     }
 
     private void parseFileUsingHandler(TripleCountHandler handler,
