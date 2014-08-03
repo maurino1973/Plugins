@@ -18,8 +18,8 @@
 	<packaging>bundle</packaging>
 
 	<properties>
-		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.filestordftransformer</dpu.package>
-		<dpu.mainClass>FilesToRDFTransformer</dpu.mainClass>
+		<dpu.package>cz.cuni.mff.xrg.odcs.dpu.filestordf</dpu.package>
+		<dpu.mainClass>FilesToRDF</dpu.mainClass>
 	</properties>
 
 	<dependencies>

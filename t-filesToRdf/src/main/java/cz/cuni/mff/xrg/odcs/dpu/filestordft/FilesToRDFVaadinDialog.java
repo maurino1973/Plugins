@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestordftransformer;
+package cz.cuni.mff.xrg.odcs.dpu.filestordft;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToRDFTransformerVaadinDialog extends BaseConfigDialog<FilesToRDFTransformerConfig> {
+public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig> {
     /**
      * 
      */
@@ -36,8 +36,8 @@ public class FilesToRDFTransformerVaadinDialog extends BaseConfigDialog<FilesToR
 
     private ObjectProperty<Integer> commitSize = new ObjectProperty<Integer>(0);
 
-    public FilesToRDFTransformerVaadinDialog() {
-        super(FilesToRDFTransformerConfig.class);
+    public FilesToRDFVaadinDialog() {
+        super(FilesToRDFConfig.class);
         initialize();
     }
 
@@ -57,7 +57,7 @@ public class FilesToRDFTransformerVaadinDialog extends BaseConfigDialog<FilesToR
     }
 
     @Override
-    public void setConfiguration(FilesToRDFTransformerConfig conf) throws DPUConfigException {
+    public void setConfiguration(FilesToRDFConfig conf) throws DPUConfigException {
         commitSize.setValue(conf.getCommitSize());
         
         StringBuilder sb = new StringBuilder();
@@ -75,7 +75,7 @@ public class FilesToRDFTransformerVaadinDialog extends BaseConfigDialog<FilesToR
     }
 
     @Override
-    public FilesToRDFTransformerConfig getConfiguration() throws DPUConfigException {
+    public FilesToRDFConfig getConfiguration() throws DPUConfigException {
         Map<String, String> symbolicNameToBaseURIMap = new LinkedHashMap<>();
         Map<String, String> symbolicNameToFormatMap = new LinkedHashMap<>();
         BufferedReader br = new BufferedReader(new StringReader(mapText.getValue()));
@@ -117,7 +117,7 @@ public class FilesToRDFTransformerVaadinDialog extends BaseConfigDialog<FilesToR
             throw new DPUConfigException(ex);
         }
 
-        FilesToRDFTransformerConfig conf = new FilesToRDFTransformerConfig();
+        FilesToRDFConfig conf = new FilesToRDFConfig();
         conf.setSymbolicNameToBaseURIMap(symbolicNameToBaseURIMap);
         conf.setSymbolicNameToFormatMap(symbolicNameToFormatMap);
         conf.setCommitSize(commitSize.getValue());

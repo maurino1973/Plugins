@@ -1,9 +1,9 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestordftransformer;
+package cz.cuni.mff.xrg.odcs.dpu.filestordft;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FilesToRDFTransformerConfig {
+public class FilesToRDFConfig {
     public static final String STOP_EXTRACTION_ERROR_HANDLING = "STOP_EXTRACTION";
     public static final String SKIP_CONTINUE_THIS_FILE_ERROR_HANDLING = "SKIP_CONTINUE_THIS_FILE";
     public static final String SKIP_CONTINUE_NEXT_FILE_ERROR_HANDLING = "SKIP_CONTINUE_NEXT_FILE";
@@ -21,7 +21,7 @@ public class FilesToRDFTransformerConfig {
     private String warningHandling = SKIP_CONTINUE_THIS_FILE_ERROR_HANDLING;
 
     // DPUTemplateConfig must provide public non-parametric constructor
-    public FilesToRDFTransformerConfig() {
+    public FilesToRDFConfig() {
         this.symbolicNameToBaseURIMap = new LinkedHashMap<>();
         this.symbolicNameToFormatMap = new LinkedHashMap<>();
     }
