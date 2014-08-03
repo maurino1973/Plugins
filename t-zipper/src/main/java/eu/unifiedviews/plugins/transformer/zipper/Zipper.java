@@ -27,7 +27,7 @@ import java.util.zip.ZipOutputStream;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class Zipper extends ConfigurableBase<ZipperConfiguration> implements ConfigDialogProvider<ZipperConfiguration> {
+public class Zipper extends ConfigurableBase<ZipperConfig> implements ConfigDialogProvider<ZipperConfig> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Zipper.class);
 
@@ -47,11 +47,11 @@ public class Zipper extends ConfigurableBase<ZipperConfiguration> implements Con
     private boolean symbolicNameUsed = false;
 
     public Zipper() {
-        super(ZipperConfiguration.class);
+        super(ZipperConfig.class);
     }
 
     @Override
-    public AbstractConfigDialog<ZipperConfiguration> getConfigurationDialog() {
+    public AbstractConfigDialog<ZipperConfig> getConfigurationDialog() {
         return new ZipperVaadinDialog();
     }
 
