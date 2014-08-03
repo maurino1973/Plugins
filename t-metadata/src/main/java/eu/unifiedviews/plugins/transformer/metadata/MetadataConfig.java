@@ -3,7 +3,7 @@ package eu.unifiedviews.plugins.transformer.metadata;
 import java.util.Date;
 import java.util.LinkedList;
 
-public class MetadataConfiguration {
+public class MetadataConfig {
 
     private String outputGraphName = "http://localhost/metadata";
 
@@ -67,7 +67,7 @@ public class MetadataConfiguration {
 
     private Date modified = new Date();
 
-    public MetadataConfiguration() {
+    public MetadataConfig() {
         datasetURI = "http://linked.opendata.cz/resource/dataset/";
         distroURI = "http://linked.opendata.cz/resource/dataset//distribution";
         licenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
