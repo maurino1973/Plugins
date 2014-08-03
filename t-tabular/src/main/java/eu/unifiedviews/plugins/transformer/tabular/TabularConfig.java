@@ -3,7 +3,7 @@ package eu.unifiedviews.plugins.transformer.tabular;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Configuration {
+public class TabularConfig {
 
     private Map<String, String> columnPropertyMap = new LinkedHashMap<>();
 
@@ -26,7 +26,7 @@ public class Configuration {
      */
     private String tableType = TableType.CSV;
 
-    public Configuration() {
+    public TabularConfig() {
     }
 
     public Map<String, String> getColumnPropertyMap() {
