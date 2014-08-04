@@ -44,8 +44,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  */
 @DPU.AsTransformer
 public class SPARQL
-        extends ConfigurableBase<SPARQLConfig>
-        implements ConfigDialogProvider<SPARQLConfig> {
+        extends ConfigurableBase<SPARQLConfig_V1>
+        implements ConfigDialogProvider<SPARQLConfig_V1> {
 
     private final Logger LOG = LoggerFactory.getLogger(SPARQL.class);
 
@@ -83,7 +83,7 @@ public class SPARQL
     public WritableRDFDataUnit outputDataUnit;
 
     public SPARQL() {
-        super(SPARQLConfig.class);
+        super(SPARQLConfig_V1.class);
     }
 
     private Dataset createGraphDataSet(List<RDFDataUnit> inputs) throws DataUnitException {
@@ -329,7 +329,7 @@ public class SPARQL
      * @return the configuration dialogue for SPARQL transformer.
      */
     @Override
-    public AbstractConfigDialog<SPARQLConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<SPARQLConfig_V1> getConfigurationDialog() {
         return new SPARQLVaadinDialog();
     }
 

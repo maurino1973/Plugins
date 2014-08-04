@@ -9,7 +9,7 @@ import java.util.List;
  * @author Jiri Tomes
  * @author tknap
  */
-public class SPARQLConfig {
+public class SPARQLConfig_V1 {
 
     private List<SPARQLQueryPair> queryPairs;
 
@@ -19,16 +19,16 @@ public class SPARQLConfig {
 
     private String outputGraphSymbolicName = "T-SPARQL/output" + String.valueOf(new java.util.Random().nextInt(100));
 
-    public SPARQLConfig() {
+    public SPARQLConfig_V1() {
         this.queryPairs = new LinkedList<>();
     }
 
-    public SPARQLConfig(String query, boolean isContructType) {
+    public SPARQLConfig_V1(String query, boolean isContructType) {
         this.queryPairs = new LinkedList<>();
         this.queryPairs.add(new SPARQLQueryPair(query, isContructType));
     }
 
-    public SPARQLConfig(List<SPARQLQueryPair> queryPairs) {
+    public SPARQLConfig_V1(List<SPARQLQueryPair> queryPairs) {
         this.queryPairs = queryPairs;
     }
 

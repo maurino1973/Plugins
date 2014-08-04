@@ -15,7 +15,7 @@ import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.plugins.transformer.sparql.SPARQL;
-import eu.unifiedviews.plugins.transformer.sparql.SPARQLConfig;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLConfig_V1;
 
 public class SPARQLTest {
     private static final Logger LOG = LoggerFactory.getLogger(SPARQLTest.class);
@@ -28,7 +28,7 @@ public class SPARQLTest {
         String SPARQL_Update_Query = "CONSTRUCT {?s ?p ?o} where {?s ?p ?o }";
         boolean isConstructType = true;
 
-        SPARQLConfig config = new SPARQLConfig(
+        SPARQLConfig_V1 config = new SPARQLConfig_V1(
                 SPARQL_Update_Query, isConstructType);
 
         trans.configureDirectly(config);

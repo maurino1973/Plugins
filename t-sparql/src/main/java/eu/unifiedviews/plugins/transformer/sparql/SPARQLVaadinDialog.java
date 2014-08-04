@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * 
  * @authod Petr Škoda
  */
-public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig> {
+public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
@@ -44,7 +44,7 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig> {
     private final HashMap<TextArea, QueryType> queryTypes = new HashMap<>();
 
     public SPARQLVaadinDialog() {
-        super(SPARQLConfig.class);
+        super(SPARQLConfig_V1.class);
         init();
     }
 
@@ -181,7 +181,7 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig> {
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(SPARQLConfig conf) throws DPUConfigException {
+    public void setConfiguration(SPARQLConfig_V1 conf) throws DPUConfigException {
         queries.clear();
         queryTypes.clear();
         accordion.removeAllComponents();
@@ -206,9 +206,9 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig> {
      *         configuration dialog.
      */
     @Override
-    public SPARQLConfig getConfiguration() throws DPUConfigException {
+    public SPARQLConfig_V1 getConfiguration() throws DPUConfigException {
 
-        SPARQLConfig conf = new SPARQLConfig();
+        SPARQLConfig_V1 conf = new SPARQLConfig_V1();
         List<SPARQLQueryPair> queryPairs = conf.getQueryPairs();
 
         for (int i = 0; i < queries.size(); i++) {
