@@ -17,7 +17,7 @@ import java.util.List;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparqlEndpointConfig> {
+public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparqlEndpointConfig_V1> {
 
     private static final long serialVersionUID = 1L;
 
@@ -127,7 +127,7 @@ public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparq
      * Basic constructor.
      */
     public RdfToSparqlEndpointVaadinDialog() {
-        super(RdfToSparqlEndpointConfig.class);
+        super(RdfToSparqlEndpointConfig_V1.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -983,7 +983,7 @@ public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparq
      *         configuration dialog.
      */
     @Override
-    public RdfToSparqlEndpointConfig getConfiguration() throws DPUConfigException {
+    public RdfToSparqlEndpointConfig_V1 getConfiguration() throws DPUConfigException {
         if (!allComponentAreValid()) {
             String message = validationMessage();
 
@@ -1016,7 +1016,7 @@ public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparq
 
 //            Boolean useSparqlGraphProtocol = useGraphProtocol.getValue();
 
-            RdfToSparqlEndpointConfig config = new RdfToSparqlEndpointConfig(SPARQLEndpoint,
+            RdfToSparqlEndpointConfig_V1 config = new RdfToSparqlEndpointConfig_V1(SPARQLEndpoint,
                     hostName, password, getDefaultGraphs(), graphType,
                     insertType,
                     1, validDataBefore, retryTime, retrySize,
@@ -1039,7 +1039,7 @@ public class RdfToSparqlEndpointVaadinDialog extends BaseConfigDialog<RdfToSparq
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(RdfToSparqlEndpointConfig conf) throws DPUConfigException {
+    public void setConfiguration(RdfToSparqlEndpointConfig_V1 conf) throws DPUConfigException {
         try {
             String endp = conf.getSPARQLEndpoint().trim();
 

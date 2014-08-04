@@ -9,7 +9,7 @@ import java.util.List;
  * @author Petyr
  * @author Jiri Tomes
  */
-public class RdfToSparqlEndpointConfig {
+public class RdfToSparqlEndpointConfig_V1 {
 
     private String SPARQL_endpoint;
 
@@ -35,7 +35,7 @@ public class RdfToSparqlEndpointConfig {
 
     private boolean useSparqlGraphProtocol = true;
 
-    public RdfToSparqlEndpointConfig() {
+    public RdfToSparqlEndpointConfig_V1() {
         this.SPARQL_endpoint = "";
         this.Host_name = "";
         this.Password = "";
@@ -48,7 +48,7 @@ public class RdfToSparqlEndpointConfig {
         this.useSparqlGraphProtocol = true;
     }
 
-    public RdfToSparqlEndpointConfig(String SPARQL_endpoint, String Host_name,
+    public RdfToSparqlEndpointConfig_V1(String SPARQL_endpoint, String Host_name,
             String Password,
             List<String> GraphsUri, WriteGraphType graphOption,
             InsertType insertOption, long chunkSize, boolean validDataBefore,

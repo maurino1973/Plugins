@@ -29,8 +29,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Petyr
  */
 @DPU.AsLoader
-public class RdfToSparqlEndpoint extends ConfigurableBase<RdfToSparqlEndpointConfig>
-        implements ConfigDialogProvider<RdfToSparqlEndpointConfig> {
+public class RdfToSparqlEndpoint extends ConfigurableBase<RdfToSparqlEndpointConfig_V1>
+        implements ConfigDialogProvider<RdfToSparqlEndpointConfig_V1> {
 
     private final Logger LOG = LoggerFactory.getLogger(RdfToSparqlEndpoint.class);
 
@@ -44,7 +44,7 @@ public class RdfToSparqlEndpoint extends ConfigurableBase<RdfToSparqlEndpointCon
     public WritableRDFDataUnit validationDataUnit;
 
     public RdfToSparqlEndpoint() {
-        super(RdfToSparqlEndpointConfig.class);
+        super(RdfToSparqlEndpointConfig_V1.class);
     }
 
     /**
@@ -143,7 +143,7 @@ public class RdfToSparqlEndpoint extends ConfigurableBase<RdfToSparqlEndpointCon
      * @return the configuration dialogue for SPARQL loader.
      */
     @Override
-    public AbstractConfigDialog<RdfToSparqlEndpointConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfToSparqlEndpointConfig_V1> getConfigurationDialog() {
         return new RdfToSparqlEndpointVaadinDialog();
     }
 }
