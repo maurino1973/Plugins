@@ -32,7 +32,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * configuration.
  */
 public class RenameVaadinDialog extends
-        BaseConfigDialog<RenameConfig> {
+        BaseConfigDialog<RenameConfig_V1> {
 
     /**
      * 
@@ -59,7 +59,7 @@ public class RenameVaadinDialog extends
     static int fl = 0;
 
     public RenameVaadinDialog() {
-        super(RenameConfig.class);
+        super(RenameConfig_V1.class);
         buildMainLayout();
         Panel panel = new Panel();
         panel.setSizeFull();
@@ -198,7 +198,7 @@ public class RenameVaadinDialog extends
     }
 
     @Override
-    public void setConfiguration(RenameConfig conf)
+    public void setConfiguration(RenameConfig_V1 conf)
             throws DPUConfigException {
         // get configuration from the CONFIG object to dialog
 
@@ -210,7 +210,7 @@ public class RenameVaadinDialog extends
     }
 
     @Override
-    public RenameConfig getConfiguration()
+    public RenameConfig_V1 getConfiguration()
             throws DPUConfigException {
         // get the conf from the dialog
 
@@ -224,7 +224,7 @@ public class RenameVaadinDialog extends
         // prepare output type:
         // TODO storing the textarea content not needed - not readed when the
         // configuration is shown
-        RenameConfig conf = new RenameConfig();
+        RenameConfig_V1 conf = new RenameConfig_V1();
         conf.setXslTemplate(taXSLTemplate.getValue());
         conf.setXslTemplateFileNameShownInDialog(lFileName.getValue().trim());
         conf.setSkipOnError(skipOnError.getValue());
