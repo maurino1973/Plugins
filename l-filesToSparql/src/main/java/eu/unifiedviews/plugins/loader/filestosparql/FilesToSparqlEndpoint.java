@@ -28,14 +28,14 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class FilesToSparqlEndpoint extends ConfigurableBase<FilesToSparqlEndpointConfig> implements ConfigDialogProvider<FilesToSparqlEndpointConfig> {
+public class FilesToSparqlEndpoint extends ConfigurableBase<FilesToSparqlEndpointConfig_V1> implements ConfigDialogProvider<FilesToSparqlEndpointConfig_V1> {
     private static final Logger LOG = LoggerFactory.getLogger(FilesToSparqlEndpoint.class);
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
 
     public FilesToSparqlEndpoint() {
-        super(FilesToSparqlEndpointConfig.class);
+        super(FilesToSparqlEndpointConfig_V1.class);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class FilesToSparqlEndpoint extends ConfigurableBase<FilesToSparqlEndpoin
     }
 
     @Override
-    public AbstractConfigDialog<FilesToSparqlEndpointConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesToSparqlEndpointConfig_V1> getConfigurationDialog() {
         return new FilesToSparqlEndpointVaadinDialog();
     }
 
