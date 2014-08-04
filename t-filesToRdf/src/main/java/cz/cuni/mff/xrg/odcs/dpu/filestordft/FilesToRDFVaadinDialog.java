@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig> {
+public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig_V1> {
     /**
      * 
      */
@@ -37,7 +37,7 @@ public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig> {
     private ObjectProperty<Integer> commitSize = new ObjectProperty<Integer>(0);
 
     public FilesToRDFVaadinDialog() {
-        super(FilesToRDFConfig.class);
+        super(FilesToRDFConfig_V1.class);
         initialize();
     }
 
@@ -57,7 +57,7 @@ public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig> {
     }
 
     @Override
-    public void setConfiguration(FilesToRDFConfig conf) throws DPUConfigException {
+    public void setConfiguration(FilesToRDFConfig_V1 conf) throws DPUConfigException {
         commitSize.setValue(conf.getCommitSize());
         
         StringBuilder sb = new StringBuilder();
@@ -75,7 +75,7 @@ public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig> {
     }
 
     @Override
-    public FilesToRDFConfig getConfiguration() throws DPUConfigException {
+    public FilesToRDFConfig_V1 getConfiguration() throws DPUConfigException {
         Map<String, String> symbolicNameToBaseURIMap = new LinkedHashMap<>();
         Map<String, String> symbolicNameToFormatMap = new LinkedHashMap<>();
         BufferedReader br = new BufferedReader(new StringReader(mapText.getValue()));
@@ -117,7 +117,7 @@ public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig> {
             throw new DPUConfigException(ex);
         }
 
-        FilesToRDFConfig conf = new FilesToRDFConfig();
+        FilesToRDFConfig_V1 conf = new FilesToRDFConfig_V1();
         conf.setSymbolicNameToBaseURIMap(symbolicNameToBaseURIMap);
         conf.setSymbolicNameToFormatMap(symbolicNameToFormatMap);
         conf.setCommitSize(commitSize.getValue());

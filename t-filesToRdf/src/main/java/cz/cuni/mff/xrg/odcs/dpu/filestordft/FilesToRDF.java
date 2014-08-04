@@ -26,7 +26,7 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsTransformer
-public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig> implements ConfigDialogProvider<FilesToRDFConfig> {
+public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements ConfigDialogProvider<FilesToRDFConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(FilesToRDF.class);
 
@@ -37,7 +37,7 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig> implements Co
     public WritableRDFDataUnit rdfOutput;
 
     public FilesToRDF() {
-        super(FilesToRDFConfig.class);
+        super(FilesToRDFConfig_V1.class);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig> implements Co
     }
 
     @Override
-    public AbstractConfigDialog<FilesToRDFConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesToRDFConfig_V1> getConfigurationDialog() {
         return new FilesToRDFVaadinDialog();
     }
 }
