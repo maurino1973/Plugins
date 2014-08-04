@@ -5,14 +5,14 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class ZipperVaadinDialog extends BaseConfigDialog<ZipperConfig> {
+public class ZipperVaadinDialog extends BaseConfigDialog<ZipperConfig_V1> {
 
     private VerticalLayout mainLayout;
 
     private TextField txtZipFile;
 
     public ZipperVaadinDialog() {
-        super(ZipperConfig.class);
+        super(ZipperConfig_V1.class);
         buildMainLayout();
     }
 
@@ -34,16 +34,16 @@ public class ZipperVaadinDialog extends BaseConfigDialog<ZipperConfig> {
     }
 
     @Override
-    protected void setConfiguration(ZipperConfig c) throws DPUConfigException {
+    protected void setConfiguration(ZipperConfig_V1 c) throws DPUConfigException {
         txtZipFile.setValue(c.getZipFile());
     }
 
     @Override
-    protected ZipperConfig getConfiguration() throws DPUConfigException {
+    protected ZipperConfig_V1 getConfiguration() throws DPUConfigException {
         if (!txtZipFile.isValid()) {
             throw new DPUConfigException("Destination must be filled.");
         }
-        ZipperConfig cnf = new ZipperConfig();
+        ZipperConfig_V1 cnf = new ZipperConfig_V1();
         cnf.setZipFile(txtZipFile.getValue());
         return cnf;
     }

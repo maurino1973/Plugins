@@ -1,10 +1,10 @@
 package eu.unifiedviews.plugins.transformer.zipper;
 
-public class ZipperConfig {
+public class ZipperConfig_V1 {
 
     private String zipFile = "data.zip";
 
-    public ZipperConfig() {
+    public ZipperConfig_V1() {
     }
 
     public String getZipFile() {
