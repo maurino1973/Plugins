@@ -1,7 +1,7 @@
 package eu.unifiedviews.plugins.extractor.spartqltordf.test;
 
 import eu.unifiedviews.plugins.extractor.rdffromsparql.ExtractorEndpointParams;
-import eu.unifiedviews.plugins.extractor.rdffromsparql.RdfFromSparqlEndpointConfig;
+import eu.unifiedviews.plugins.extractor.rdffromsparql.RdfFromSparqlEndpointConfig_V1;
 import eu.unifiedviews.plugins.extractor.rdffromsparql.SPARQLExtractor;
 import eu.unifiedviews.plugins.extractor.rdffromsparql.HandlerExtractType;
 import static org.junit.Assert.assertTrue;
@@ -66,7 +66,7 @@ public class SPARQLExtractorVirtuosoSysTest {
 
             ExtractorEndpointParams virtuoso = getVirtuosoEndpoint();
             virtuoso.addDefaultGraph(defaultGraphUri);
-            RdfFromSparqlEndpointConfig c = new RdfFromSparqlEndpointConfig();
+            RdfFromSparqlEndpointConfig_V1 c = new RdfFromSparqlEndpointConfig_V1();
             c.setOutputGraphSymbolicName("dfsfds");
             SPARQLExtractor extractor = new SPARQLExtractor(repository,
                     testEnvironment.getContext(), virtuoso, c);

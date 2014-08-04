@@ -27,8 +27,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Petyr
  */
 @DPU.AsExtractor
-public class RdfFromSparqlEndpoint extends ConfigurableBase<RdfFromSparqlEndpointConfig>
-        implements ConfigDialogProvider<RdfFromSparqlEndpointConfig> {
+public class RdfFromSparqlEndpoint extends ConfigurableBase<RdfFromSparqlEndpointConfig_V1>
+        implements ConfigDialogProvider<RdfFromSparqlEndpointConfig_V1> {
 
     private final Logger LOG = LoggerFactory.getLogger(RdfFromSparqlEndpoint.class);
 
@@ -39,7 +39,7 @@ public class RdfFromSparqlEndpoint extends ConfigurableBase<RdfFromSparqlEndpoin
     public WritableRDFDataUnit outputRdfDataUnit;
 
     public RdfFromSparqlEndpoint() {
-        super(RdfFromSparqlEndpointConfig.class);
+        super(RdfFromSparqlEndpointConfig_V1.class);
     }
 
     /**
@@ -206,7 +206,7 @@ public class RdfFromSparqlEndpoint extends ConfigurableBase<RdfFromSparqlEndpoin
      * @return the configuration dialogue for SPARQL extractor.
      */
     @Override
-    public AbstractConfigDialog<RdfFromSparqlEndpointConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfFromSparqlEndpointConfig_V1> getConfigurationDialog() {
         return new RdfFromSparqlEndpointVaadinDialog();
     }
 }

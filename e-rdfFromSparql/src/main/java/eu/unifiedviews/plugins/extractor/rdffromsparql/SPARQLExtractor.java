@@ -103,7 +103,7 @@ public class SPARQLExtractor {
     private String username;
 
     private String password;
-    private RdfFromSparqlEndpointConfig config;
+    private RdfFromSparqlEndpointConfig_V1 config;
     /**
      * Create new instance of SPARQLExtractor with given parameters.
      *
@@ -118,7 +118,7 @@ public class SPARQLExtractor {
      */
     public SPARQLExtractor(WritableRDFDataUnit dataUnit, DPUContext context,
             int retrySize, long retryTime,
-            ExtractorEndpointParams endpointParams, RdfFromSparqlEndpointConfig config) {
+            ExtractorEndpointParams endpointParams, RdfFromSparqlEndpointConfig_V1 config) {
 
         this.outputDataUnit = dataUnit;
         this.context = context;
@@ -139,7 +139,7 @@ public class SPARQLExtractor {
      * endpoint.
      */
     public SPARQLExtractor(WritableRDFDataUnit dataUnit, DPUContext context,
-            ExtractorEndpointParams endpointParams,RdfFromSparqlEndpointConfig config) {
+            ExtractorEndpointParams endpointParams,RdfFromSparqlEndpointConfig_V1 config) {
         this.outputDataUnit = dataUnit;
         this.context = context;
         this.endpointParams = endpointParams;
