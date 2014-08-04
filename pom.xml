@@ -13,7 +13,6 @@
 		<module>e-rdfFromSparql</module>
 		<module>e-rdfDataGenerator</module>
 		<module>e-silkLinker</module>
-		<module>e-httpDownload</module>
 		<module>e-httpDownloadList</module>
 		<module>t-sparql</module>
 		<module>t-xslt</module>
