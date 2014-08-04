@@ -21,7 +21,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * configuration.
  */
 public class XSLTVaadinDialog extends
-        BaseConfigDialog<XSLTConfig> {
+        BaseConfigDialog<XSLTConfig_V1> {
 
     /**
      * 
@@ -48,7 +48,7 @@ public class XSLTVaadinDialog extends
     static int fl = 0;
 
     public XSLTVaadinDialog() {
-        super(XSLTConfig.class);
+        super(XSLTConfig_V1.class);
         buildMainLayout();
         Panel panel = new Panel();
         panel.setSizeFull();
@@ -187,7 +187,7 @@ public class XSLTVaadinDialog extends
     }
 
     @Override
-    public void setConfiguration(XSLTConfig conf)
+    public void setConfiguration(XSLTConfig_V1 conf)
             throws DPUConfigException {
         // get configuration from the CONFIG object to dialog
 
@@ -199,7 +199,7 @@ public class XSLTVaadinDialog extends
     }
 
     @Override
-    public XSLTConfig getConfiguration()
+    public XSLTConfig_V1 getConfiguration()
             throws DPUConfigException {
         // get the conf from the dialog
 
@@ -213,7 +213,7 @@ public class XSLTVaadinDialog extends
         // prepare output type:
         // TODO storing the textarea content not needed - not readed when the
         // configuration is shown
-        XSLTConfig conf = new XSLTConfig();
+        XSLTConfig_V1 conf = new XSLTConfig_V1();
         conf.setXslTemplate(taXSLTemplate.getValue());
         conf.setXslTemplateFileNameShownInDialog(lFileName.getValue().trim());
         conf.setSkipOnError(skipOnError.getValue());
