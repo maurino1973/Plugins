@@ -30,8 +30,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
 public class FilesToVFS extends
-        ConfigurableBase<FilesToVFSConfig> implements
-        ConfigDialogProvider<FilesToVFSConfig> {
+        ConfigurableBase<FilesToVFSConfig_V1> implements
+        ConfigDialogProvider<FilesToVFSConfig_V1> {
     private static final Logger LOG = LoggerFactory
             .getLogger(FilesToVFS.class);
 
@@ -39,7 +39,7 @@ public class FilesToVFS extends
     public FilesDataUnit filesInput;
 
     public FilesToVFS() {
-        super(FilesToVFSConfig.class);
+        super(FilesToVFSConfig_V1.class);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class FilesToVFS extends
     }
 
     @Override
-    public AbstractConfigDialog<FilesToVFSConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesToVFSConfig_V1> getConfigurationDialog() {
         return new FilesToVFSVaadinDialog();
     }
 

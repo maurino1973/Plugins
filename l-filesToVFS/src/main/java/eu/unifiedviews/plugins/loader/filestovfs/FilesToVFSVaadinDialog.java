@@ -13,7 +13,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * configuration.
  */
 public class FilesToVFSVaadinDialog extends
-		BaseConfigDialog<FilesToVFSConfig> {
+		BaseConfigDialog<FilesToVFSConfig_V1> {
 	/**
      * 
      */
@@ -46,7 +46,7 @@ public class FilesToVFSVaadinDialog extends
             false);
 
     public FilesToVFSVaadinDialog() {
-		super(FilesToVFSConfig.class);
+		super(FilesToVFSConfig_V1.class);
 		initialize();
 	}
 
@@ -67,7 +67,7 @@ public class FilesToVFSVaadinDialog extends
 	}
 
 	@Override
-	public void setConfiguration(FilesToVFSConfig conf)
+	public void setConfiguration(FilesToVFSConfig_V1 conf)
 			throws DPUConfigException {
 		destination.setValue(conf.getDestination());
         username.setValue(conf.getUsername());
@@ -78,9 +78,9 @@ public class FilesToVFSVaadinDialog extends
 	}
 
 	@Override
-	public FilesToVFSConfig getConfiguration()
+	public FilesToVFSConfig_V1 getConfiguration()
 			throws DPUConfigException {
-		FilesToVFSConfig conf = new FilesToVFSConfig();
+		FilesToVFSConfig_V1 conf = new FilesToVFSConfig_V1();
 		conf.setDestination(destination.getValue());
         conf.setUsername(username.getValue());
         conf.setPassword(password.getValue());
