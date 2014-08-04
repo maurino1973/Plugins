@@ -6,7 +6,7 @@ package eu.unifiedviews.plugins.extractor.silklinker;
  * 
  * @author tomasknap
  */
-public class SilkLinkerConfig {
+public class SilkLinkerConfig_V1 {
 
     /**
      * Path to the config file driving the execution of Silk.
@@ -22,7 +22,7 @@ public class SilkLinkerConfig {
     /**
      * Constructor
      */
-    public SilkLinkerConfig() {
+    public SilkLinkerConfig_V1() {
         confFile = null;
     }
 
@@ -41,7 +41,7 @@ public class SilkLinkerConfig {
      *            Minimum score for the links to be considered as
      *            "to be verified"
      */
-    public SilkLinkerConfig(String confFile, String confFileLabel,
+    public SilkLinkerConfig_V1(String confFile, String confFileLabel,
             String minConfirmed, String minToBeVerified) {
         this.confFile = confFile;
         this.confFileLabel = confFileLabel;
@@ -55,7 +55,7 @@ public class SilkLinkerConfig {
      * @param confFile
      *            Configuration file for Silk
      */
-    public SilkLinkerConfig(String confFile) {
+    public SilkLinkerConfig_V1(String confFile) {
         this.confFile = confFile;
 
     }

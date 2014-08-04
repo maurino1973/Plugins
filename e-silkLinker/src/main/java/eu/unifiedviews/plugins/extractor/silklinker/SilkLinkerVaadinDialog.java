@@ -21,7 +21,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig> {
+public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig_V1> {
 
     private GridLayout mainLayout;
 
@@ -41,7 +41,7 @@ public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig> {
 
     public SilkLinkerVaadinDialog() {
 
-        super(SilkLinkerConfig.class);
+        super(SilkLinkerConfig_V1.class);
 
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -189,7 +189,7 @@ public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig> {
      * @throws DPUConfigException
      */
     @Override
-    public void setConfiguration(SilkLinkerConfig conf) throws DPUConfigException {
+    public void setConfiguration(SilkLinkerConfig_V1 conf) throws DPUConfigException {
 
         if (conf.getSilkConf() != null && !conf.getSilkConf().isEmpty()) {
             silkConfigTextArea.setValue(conf.getSilkConf());
@@ -211,7 +211,7 @@ public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig> {
      * @throws ConfigException
      */
     @Override
-    public SilkLinkerConfig getConfiguration() throws DPUConfigException {
+    public SilkLinkerConfig_V1 getConfiguration() throws DPUConfigException {
         //get the conf from textArea
 
         if (!tfMinConfidenceConfirmed.isValid()) {
@@ -224,7 +224,7 @@ public class SilkLinkerVaadinDialog extends BaseConfigDialog<SilkLinkerConfig> {
             throw new DPUConfigException("Configuration cannot be saved, because no Silk config file was specified");
         }
         else {
-            SilkLinkerConfig conf = new SilkLinkerConfig(silkConfigTextArea.getValue(), lFileName.getValue(), tfMinConfidenceConfirmed.getValue().trim(), tfMinConfidenceToBeVerified.getValue().trim());
+            SilkLinkerConfig_V1 conf = new SilkLinkerConfig_V1(silkConfigTextArea.getValue(), lFileName.getValue(), tfMinConfidenceConfirmed.getValue().trim(), tfMinConfidenceToBeVerified.getValue().trim());
             return conf;
         }
 

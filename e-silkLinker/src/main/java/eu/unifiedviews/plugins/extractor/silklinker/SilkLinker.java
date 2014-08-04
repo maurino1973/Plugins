@@ -45,8 +45,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author tomasknap
  */
 @DPU.AsExtractor
-public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
-        implements DPU, ConfigDialogProvider<SilkLinkerConfig> {
+public class SilkLinker extends ConfigurableBase<SilkLinkerConfig_V1>
+        implements DPU, ConfigDialogProvider<SilkLinkerConfig_V1> {
 
     private static final Logger log = LoggerFactory.getLogger(
             SilkLinker.class);
@@ -61,11 +61,11 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
      * Constructor
      */
     public SilkLinker() {
-        super(SilkLinkerConfig.class);
+        super(SilkLinkerConfig_V1.class);
     }
 
     @Override
-    public AbstractConfigDialog<SilkLinkerConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<SilkLinkerConfig_V1> getConfigurationDialog() {
         return new SilkLinkerVaadinDialog();
     }
 
