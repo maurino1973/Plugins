@@ -36,8 +36,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Petyr
  */
 @DPU.AsLoader
-public class RdfToFile extends ConfigurableBase<RdfToFileConfig>
-        implements ConfigDialogProvider<RdfToFileConfig> {
+public class RdfToFile extends ConfigurableBase<RdfToFileConfig_V1>
+        implements ConfigDialogProvider<RdfToFileConfig_V1> {
 
     private final Logger logger = LoggerFactory.getLogger(RdfToFile.class);
 
@@ -53,7 +53,7 @@ public class RdfToFile extends ConfigurableBase<RdfToFileConfig>
     public WritableRDFDataUnit validationDataUnit;
 
     public RdfToFile() {
-        super(RdfToFileConfig.class);
+        super(RdfToFileConfig_V1.class);
     }
 
     /**
@@ -122,7 +122,7 @@ public class RdfToFile extends ConfigurableBase<RdfToFileConfig>
      * @return the configuration dialogue for file loader.
      */
     @Override
-    public AbstractConfigDialog<RdfToFileConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfToFileConfig_V1> getConfigurationDialog() {
         return new RdfToFileVaadinDialog();
     }
 }

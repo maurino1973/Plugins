@@ -24,7 +24,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria
  * @author Jiri Tomes
  */
-public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig> {
+public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig_V1> {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,7 +70,7 @@ public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig> {
      * Basic constructor.
      */
     public RdfToFileVaadinDialog() {
-        super(RdfToFileConfig.class);
+        super(RdfToFileConfig_V1.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -245,7 +245,7 @@ public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig> {
      *         configuration dialog.
      */
     @Override
-    public RdfToFileConfig getConfiguration() throws DPUConfigException {
+    public RdfToFileConfig_V1 getConfiguration() throws DPUConfigException {
         if (!textFieldFilePath.isValid()) {
             throw new DPUConfigException(ex.getMessage(), ex);
         } else {
@@ -258,7 +258,7 @@ public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig> {
 
             boolean validDataBefore = validateDataBefore.getValue();
 
-            RdfToFileConfig config = new RdfToFileConfig(filePath,
+            RdfToFileConfig_V1 config = new RdfToFileConfig_V1(filePath,
                     RDFFileFormat, diffName, validDataBefore);
 
             return config;
@@ -279,7 +279,7 @@ public class RdfToFileVaadinDialog extends BaseConfigDialog<RdfToFileConfig> {
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(RdfToFileConfig conf) throws DPUConfigException {
+    public void setConfiguration(RdfToFileConfig_V1 conf) throws DPUConfigException {
         try {
             checkBoxDiffName.setValue(conf.isDiffName());
             textFieldFilePath.setValue(conf.getFilePath().trim());
