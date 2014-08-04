@@ -26,8 +26,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
 public class FilesToLocalFS extends
-        ConfigurableBase<FilesToLocalFSConfig> implements
-        ConfigDialogProvider<FilesToLocalFSConfig> {
+        ConfigurableBase<FilesToLocalFSConfig_V1> implements
+        ConfigDialogProvider<FilesToLocalFSConfig_V1> {
     private static final Logger LOG = LoggerFactory
             .getLogger(FilesToLocalFS.class);
 
@@ -35,7 +35,7 @@ public class FilesToLocalFS extends
     public FilesDataUnit filesInput;
 
     public FilesToLocalFS() {
-        super(FilesToLocalFSConfig.class);
+        super(FilesToLocalFSConfig_V1.class);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class FilesToLocalFS extends
     }
 
     @Override
-    public AbstractConfigDialog<FilesToLocalFSConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesToLocalFSConfig_V1> getConfigurationDialog() {
         return new FilesToLocalFSVaadinDialog();
     }
 

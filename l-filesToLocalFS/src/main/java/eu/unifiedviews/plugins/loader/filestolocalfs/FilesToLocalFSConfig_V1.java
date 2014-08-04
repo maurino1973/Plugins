@@ -3,7 +3,7 @@ package eu.unifiedviews.plugins.loader.filestolocalfs;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-public class FilesToLocalFSConfig {
+public class FilesToLocalFSConfig_V1 {
     /**
      * 
      */
@@ -18,7 +18,7 @@ public class FilesToLocalFSConfig {
     private boolean skipOnError = false;
 
     // DPUTemplateConfig must provide public non-parametric constructor
-    public FilesToLocalFSConfig() {
+    public FilesToLocalFSConfig_V1() {
     }
 
     public String getDestination() {

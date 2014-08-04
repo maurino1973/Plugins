@@ -13,7 +13,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * configuration.
  */
 public class FilesToLocalFSVaadinDialog extends
-		BaseConfigDialog<FilesToLocalFSConfig> {
+		BaseConfigDialog<FilesToLocalFSConfig_V1> {
 	/**
      * 
      */
@@ -39,7 +39,7 @@ public class FilesToLocalFSVaadinDialog extends
             false);
 
     public FilesToLocalFSVaadinDialog() {
-		super(FilesToLocalFSConfig.class);
+		super(FilesToLocalFSConfig_V1.class);
 		initialize();
 	}
 
@@ -58,7 +58,7 @@ public class FilesToLocalFSVaadinDialog extends
 	}
 
 	@Override
-	public void setConfiguration(FilesToLocalFSConfig conf)
+	public void setConfiguration(FilesToLocalFSConfig_V1 conf)
 			throws DPUConfigException {
 		destination.setValue(conf.getDestination());
 		moveFiles.setValue(conf.isMoveFiles());
@@ -67,9 +67,9 @@ public class FilesToLocalFSVaadinDialog extends
 	}
 
 	@Override
-	public FilesToLocalFSConfig getConfiguration()
+	public FilesToLocalFSConfig_V1 getConfiguration()
 			throws DPUConfigException {
-		FilesToLocalFSConfig conf = new FilesToLocalFSConfig();
+		FilesToLocalFSConfig_V1 conf = new FilesToLocalFSConfig_V1();
 		conf.setDestination(destination.getValue());
 		conf.setMoveFiles(moveFiles.getValue());
 		conf.setReplaceExisting(replaceExisting.getValue());
