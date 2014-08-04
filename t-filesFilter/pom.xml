@@ -16,7 +16,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.transformer.filesfilter</dpu.package>
-		<dpu.mainClass>Main</dpu.mainClass>
+		<dpu.mainClass>FilesFilter</dpu.mainClass>
 	</properties>
 
 	<dependencies>

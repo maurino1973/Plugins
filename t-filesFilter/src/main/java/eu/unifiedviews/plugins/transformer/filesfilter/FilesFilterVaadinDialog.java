@@ -7,7 +7,7 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class FilesFilterVaadinDialog extends BaseConfigDialog<Configuration> {
+public class FilesFilterVaadinDialog extends BaseConfigDialog<FilesFilterConfig_V1> {
 
     private static final int OPTION_SYMBOLIC_NAME = 1;
 
@@ -22,7 +22,7 @@ public class FilesFilterVaadinDialog extends BaseConfigDialog<Configuration> {
     private CheckBox checkUseRegExp;
 
     public FilesFilterVaadinDialog() {
-        super(Configuration.class);
+        super(FilesFilterConfig_V1.class);
         buildMainLayout();
     }
 
@@ -57,9 +57,9 @@ public class FilesFilterVaadinDialog extends BaseConfigDialog<Configuration> {
     }
 
     @Override
-    protected void setConfiguration(Configuration c) throws DPUConfigException {
+    protected void setConfiguration(FilesFilterConfig_V1 c) throws DPUConfigException {
 
-        if (c.getPredicate().compareTo(Configuration.SYMBOLIC_NAME) == 0) {
+        if (c.getPredicate().compareTo(FilesFilterConfig_V1.SYMBOLIC_NAME) == 0) {
             optType.setValue(OPTION_SYMBOLIC_NAME);
         } else {
             // TODO We can be more save here ..
@@ -71,19 +71,19 @@ public class FilesFilterVaadinDialog extends BaseConfigDialog<Configuration> {
     }
 
     @Override
-    protected Configuration getConfiguration() throws DPUConfigException {
+    protected FilesFilterConfig_V1 getConfiguration() throws DPUConfigException {
         if (!txtObject.isValid()) {
             throw new DPUConfigException("All fields must be filled.");
         }
 
-        final Configuration cnf = new Configuration();
+        final FilesFilterConfig_V1 cnf = new FilesFilterConfig_V1();
         final Integer selected = (Integer) optType.getValue();
         switch (selected) {
             case OPTION_SYMBOLIC_NAME:
-                cnf.setPredicate(Configuration.SYMBOLIC_NAME);
+                cnf.setPredicate(FilesFilterConfig_V1.SYMBOLIC_NAME);
                 break;
             case OPTION_VIRTUAL_PATH:
-                cnf.setPredicate(Configuration.VIRTUAL_PATH);
+                cnf.setPredicate(FilesFilterConfig_V1.VIRTUAL_PATH);
                 break;
             default:
                 throw new DPUConfigException("The dialog is broken - unknown selection.");

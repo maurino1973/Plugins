@@ -19,7 +19,7 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsTransformer
-public class FilesFilter extends ConfigurableBase<Configuration> implements ConfigDialogProvider<Configuration> {
+public class FilesFilter extends ConfigurableBase<FilesFilterConfig_V1> implements ConfigDialogProvider<FilesFilterConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(FilesFilter.class);
 
@@ -30,11 +30,11 @@ public class FilesFilter extends ConfigurableBase<Configuration> implements Conf
     public WritableFilesDataUnit outFilesData;
 
     public FilesFilter() {
-        super(Configuration.class);
+        super(FilesFilterConfig_V1.class);
     }
 
     @Override
-    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesFilterConfig_V1> getConfigurationDialog() {
         return new FilesFilterVaadinDialog();
     }
 
@@ -62,7 +62,7 @@ public class FilesFilter extends ConfigurableBase<Configuration> implements Conf
         //
         // filter data here
         //
-        boolean useSymbolicName = config.getPredicate().equals(Configuration.SYMBOLIC_NAME);
+        boolean useSymbolicName = config.getPredicate().equals(FilesFilterConfig_V1.SYMBOLIC_NAME);
 
         try {
             while (filesIteration.hasNext()) {

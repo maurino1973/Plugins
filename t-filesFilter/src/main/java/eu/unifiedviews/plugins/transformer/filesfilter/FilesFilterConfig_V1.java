@@ -1,7 +1,7 @@
 package eu.unifiedviews.plugins.transformer.filesfilter;
 
 
-public class Configuration {
+public class FilesFilterConfig_V1 {
 
      public static final String SYMBOLIC_NAME = "FIXED_SYMBOLIC_NAME";
 
@@ -13,7 +13,7 @@ public class Configuration {
 
     private boolean useRegExp = true;
 
-    public Configuration() {
+    public FilesFilterConfig_V1() {
     }
 
     public String getPredicate() {
