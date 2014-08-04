@@ -1,7 +1,7 @@
 package eu.unifiedviews.plugins.loader.filestovirtuoso;
 
 
-public class VirtuosoLoaderConfig {
+public class VirtuosoLoaderConfig_V1 {
 
     private String virtuosoUrl = "";
 
@@ -27,7 +27,7 @@ public class VirtuosoLoaderConfig {
 
     private boolean skipOnError = false;
     
-    public VirtuosoLoaderConfig() {
+    public VirtuosoLoaderConfig_V1() {
     }
 
     public String getVirtuosoUrl() {

@@ -29,7 +29,7 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig> implements ConfigDialogProvider<VirtuosoLoaderConfig> {
+public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig_V1> implements ConfigDialogProvider<VirtuosoLoaderConfig_V1> {
     private static final Logger LOG = LoggerFactory.getLogger(VirtuosoLoader.class);
 
     private static final String LD_DIR = "ld_dir (?, ?, ?)";
@@ -57,7 +57,7 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig> imple
     private static final String RUN = "rdf_loader_run()";
 
     public VirtuosoLoader() {
-        super(VirtuosoLoaderConfig.class);
+        super(VirtuosoLoaderConfig_V1.class);
     }
 
     @Override
@@ -259,7 +259,7 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig> imple
     }
 
     @Override
-    public AbstractConfigDialog<VirtuosoLoaderConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<VirtuosoLoaderConfig_V1> getConfigurationDialog() {
         return new VirtuosoLoaderVaadinDialog();
     }
 

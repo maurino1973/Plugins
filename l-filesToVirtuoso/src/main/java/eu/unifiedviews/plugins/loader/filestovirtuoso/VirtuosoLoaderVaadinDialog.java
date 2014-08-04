@@ -12,7 +12,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderConfig> {
+public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderConfig_V1> {
     /**
      * 
      */
@@ -68,7 +68,7 @@ public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderC
             false);
 
     public VirtuosoLoaderVaadinDialog() {
-        super(VirtuosoLoaderConfig.class);
+        super(VirtuosoLoaderConfig_V1.class);
         initialize();
     }
 
@@ -96,7 +96,7 @@ public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderC
     }
 
     @Override
-    public void setConfiguration(VirtuosoLoaderConfig conf) throws DPUConfigException {
+    public void setConfiguration(VirtuosoLoaderConfig_V1 conf) throws DPUConfigException {
         virtuosoUrl.setValue(conf.getVirtuosoUrl());
         username.setValue(conf.getUsername());
         password.setValue(conf.getPassword());
@@ -112,8 +112,8 @@ public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderC
     }
 
     @Override
-    public VirtuosoLoaderConfig getConfiguration() throws DPUConfigException {
-        VirtuosoLoaderConfig conf = new VirtuosoLoaderConfig();
+    public VirtuosoLoaderConfig_V1 getConfiguration() throws DPUConfigException {
+        VirtuosoLoaderConfig_V1 conf = new VirtuosoLoaderConfig_V1();
         conf.setVirtuosoUrl(virtuosoUrl.getValue());
         conf.setUsername(username.getValue());
         conf.setPassword(password.getValue());
