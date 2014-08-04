@@ -17,7 +17,7 @@
 	
     <properties>    
         <dpu.package>eu.unifiedviews.plugins.transformer.tabular</dpu.package>
-        <dpu.mainClass>Main</dpu.mainClass>
+        <dpu.mainClass>Tabular</dpu.mainClass>
     </properties>
 	
     <dependencies>

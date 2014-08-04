@@ -40,8 +40,8 @@ import org.openrdf.repository.RepositoryException;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class Tabular extends ConfigurableBase<TabularConfig>
-        implements ConfigDialogProvider<TabularConfig> {
+public class Tabular extends ConfigurableBase<TabularConfig_V1>
+        implements ConfigDialogProvider<TabularConfig_V1> {
 
     private static final int COMMIT_SIZE = 50000;
 
@@ -64,7 +64,7 @@ public class Tabular extends ConfigurableBase<TabularConfig>
     private ValueFactory valueFactory;
 
     public Tabular() {
-        super(TabularConfig.class);
+        super(TabularConfig_V1.class);
     }
 
     private void add(Resource rsrc, URI uri, Value value) throws RepositoryException {
@@ -84,7 +84,7 @@ public class Tabular extends ConfigurableBase<TabularConfig>
     }
 
     @Override
-    public AbstractConfigDialog<TabularConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<TabularConfig_V1> getConfigurationDialog() {
         return new TabularVaadinDialog();
     }
 

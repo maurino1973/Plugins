@@ -8,7 +8,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
 import java.util.Map;
 
-public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig> {
+public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
 
     private VerticalLayout mainLayout;
 
@@ -33,7 +33,7 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig> {
     private TextField tfRowLimit;
 
     public TabularVaadinDialog() {
-        super(TabularConfig.class);
+        super(TabularConfig_V1.class);
 
         buildMainLayout();
         Panel panel = new Panel();
@@ -155,7 +155,7 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig> {
     }
 
     @Override
-    protected void setConfiguration(TabularConfig c) throws DPUConfigException {
+    protected void setConfiguration(TabularConfig_V1 c) throws DPUConfigException {
 
         if (c.getBaseURI() == null) {
             this.tfBaseURI.setValue("");
@@ -228,8 +228,8 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig> {
     }
 
     @Override
-    protected TabularConfig getConfiguration() throws DPUConfigException {
-        TabularConfig cnf = new TabularConfig();
+    protected TabularConfig_V1 getConfiguration() throws DPUConfigException {
+        TabularConfig_V1 cnf = new TabularConfig_V1();
 
         Map<String, String> columnPropertiesMap = cnf.getColumnPropertyMap();
 
