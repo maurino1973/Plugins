@@ -37,8 +37,8 @@ import java.util.Date;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class Metadata extends ConfigurableBase<MetadataConfig>
-        implements ConfigDialogProvider<MetadataConfig> {
+public class Metadata extends ConfigurableBase<MetadataConfig_V1>
+        implements ConfigDialogProvider<MetadataConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Metadata.class);
 
@@ -57,11 +57,11 @@ public class Metadata extends ConfigurableBase<MetadataConfig>
     private URI outGraphURI;
 
     public Metadata() {
-        super(MetadataConfig.class);
+        super(MetadataConfig_V1.class);
     }
 
     @Override
-    public AbstractConfigDialog<MetadataConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<MetadataConfig_V1> getConfigurationDialog() {
         return new MetadataVaadinDialog();
     }
 

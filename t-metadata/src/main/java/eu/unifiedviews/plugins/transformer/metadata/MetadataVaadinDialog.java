@@ -22,7 +22,7 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig> {
+public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(MetadataVaadinDialog.class);
 
@@ -93,7 +93,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig> {
     private final String[] mimes = { "application/zip", "text/csv", "application/rdf+xml", "text/plain", "application/x-turtle" };
 
     public MetadataVaadinDialog() {
-        super(MetadataConfig.class);
+        super(MetadataConfig_V1.class);
         try {
             periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-A"), "Annual"));
             periodicities.add(new URLandCaption(new URL("http://purl.org/linked-data/sdmx/2009/code#freq-B"), "Daily - business week"));
@@ -275,7 +275,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig> {
     }
 
     @Override
-    public void setConfiguration(MetadataConfig conf) throws DPUConfigException {
+    public void setConfiguration(MetadataConfig_V1 conf) throws DPUConfigException {
         txtOutSymbolicName.setValue(conf.getOutputGraphName());
         tfDatasetUri.setValue(conf.getDatasetURI().toString());
         tfDistributionUri.setValue(conf.getDistroURI().toString());
@@ -355,8 +355,8 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig> {
     }
 
     @Override
-    public MetadataConfig getConfiguration() throws DPUConfigException {
-        MetadataConfig conf = new MetadataConfig();
+    public MetadataConfig_V1 getConfiguration() throws DPUConfigException {
+        MetadataConfig_V1 conf = new MetadataConfig_V1();
 
         conf.setTitle_cs(tfTitleCs.getValue());
         conf.setTitle_en(tfTitleEn.getValue());
