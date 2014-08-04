@@ -23,8 +23,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Jiri Tomes
  */
 @DPU.AsTransformer
-public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig>
-        implements ConfigDialogProvider<RDFDataValidatorConfig> {
+public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig_V1>
+        implements ConfigDialogProvider<RDFDataValidatorConfig_V1> {
 
     private static final Logger LOG = LoggerFactory
             .getLogger(RDFDataValidator.class);
@@ -48,7 +48,7 @@ public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig>
     public WritableRDFDataUnit reportOutput;
 
     public RDFDataValidator() {
-        super(RDFDataValidatorConfig.class);
+        super(RDFDataValidatorConfig_V1.class);
     }
 
     /**
@@ -57,7 +57,7 @@ public class RDFDataValidator extends ConfigurableBase<RDFDataValidatorConfig>
      * @return the configuration dialogue for RDF Data validator.
      */
     @Override
-    public AbstractConfigDialog<RDFDataValidatorConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RDFDataValidatorConfig_V1> getConfigurationDialog() {
         return new RDFDataValidatorVaadinDialog();
     }
 

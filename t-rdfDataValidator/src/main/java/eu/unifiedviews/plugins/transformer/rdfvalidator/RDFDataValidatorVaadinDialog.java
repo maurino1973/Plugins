@@ -13,7 +13,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Petyr
  * @author Jiri Tomes
  */
-public class RDFDataValidatorVaadinDialog extends BaseConfigDialog<RDFDataValidatorConfig> {
+public class RDFDataValidatorVaadinDialog extends BaseConfigDialog<RDFDataValidatorConfig_V1> {
 
     private VerticalLayout verticalLayoutCore;
 
@@ -26,7 +26,7 @@ public class RDFDataValidatorVaadinDialog extends BaseConfigDialog<RDFDataValida
     private CheckBox createOutput;
 
     public RDFDataValidatorVaadinDialog() {
-        super(RDFDataValidatorConfig.class);
+        super(RDFDataValidatorConfig_V1.class);
         buildMainLayout();
     }
 
@@ -91,7 +91,7 @@ public class RDFDataValidatorVaadinDialog extends BaseConfigDialog<RDFDataValida
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(RDFDataValidatorConfig conf) throws DPUConfigException {
+    public void setConfiguration(RDFDataValidatorConfig_V1 conf) throws DPUConfigException {
         failExecution.setValue(conf.canStopExecution());
         createOutput.setValue(conf.hasSometimesOutput());
     }
@@ -108,11 +108,11 @@ public class RDFDataValidatorVaadinDialog extends BaseConfigDialog<RDFDataValida
      *         configuration dialog.
      */
     @Override
-    public RDFDataValidatorConfig getConfiguration() throws DPUConfigException {
+    public RDFDataValidatorConfig_V1 getConfiguration() throws DPUConfigException {
         boolean stopExecution = failExecution.getValue();
         boolean sometimesOutput = createOutput.getValue();
 
-        RDFDataValidatorConfig conf = new RDFDataValidatorConfig(stopExecution,
+        RDFDataValidatorConfig_V1 conf = new RDFDataValidatorConfig_V1(stopExecution,
                 sometimesOutput);
         return conf;
 

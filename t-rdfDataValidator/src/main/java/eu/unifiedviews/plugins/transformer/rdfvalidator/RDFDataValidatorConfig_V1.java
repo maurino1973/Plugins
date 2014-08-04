@@ -6,18 +6,18 @@ package eu.unifiedviews.plugins.transformer.rdfvalidator;
  * 
  * @author Jiri Tomes
  */
-public class RDFDataValidatorConfig {
+public class RDFDataValidatorConfig_V1 {
 
     private boolean stopExecution;
 
     private boolean sometimesOutput;
 
-    public RDFDataValidatorConfig() {
+    public RDFDataValidatorConfig_V1() {
         this.stopExecution = false;
         this.sometimesOutput = true;
     }
 
-    public RDFDataValidatorConfig(boolean stopExecution, boolean sometimesOutput) {
+    public RDFDataValidatorConfig_V1(boolean stopExecution, boolean sometimesOutput) {
         this.stopExecution = stopExecution;
         this.sometimesOutput = sometimesOutput;
     }
