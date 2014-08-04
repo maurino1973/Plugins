@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.extractor.filestoscp;
 
-public class FilesToScpConfiguration {
+public class FilesToScpConfig_V1 {
 
     private String hostname = "";
 

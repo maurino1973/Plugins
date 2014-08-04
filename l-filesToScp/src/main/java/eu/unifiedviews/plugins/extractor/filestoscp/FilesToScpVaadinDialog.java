@@ -5,7 +5,7 @@ import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
 
-public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfiguration> {
+public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1> {
 
 	private VerticalLayout mainLayout;
 
@@ -22,7 +22,7 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfigura
 	private CheckBox chbSoftFail;
 
 	public FilesToScpVaadinDialog() {
-		super(FilesToScpConfiguration.class);
+		super(FilesToScpConfig_V1.class);
 		buildLayout();
 	}
 
@@ -87,7 +87,7 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfigura
 	}
 
 	@Override
-	protected void setConfiguration(FilesToScpConfiguration c) throws DPUConfigException {
+	protected void setConfiguration(FilesToScpConfig_V1 c) throws DPUConfigException {
 		txtHost.setValue(c.getHostname());
 		txtPort.setValue(c.getPort().toString());
 		txtUser.setValue(c.getUsername());
@@ -97,12 +97,12 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfigura
 	}
 
 	@Override
-	protected FilesToScpConfiguration getConfiguration() throws DPUConfigException {
+	protected FilesToScpConfig_V1 getConfiguration() throws DPUConfigException {
 		if (!txtHost.isValid()) {
 			throw new DPUConfigException("Output file name must be specified!");
 		}
 
-		FilesToScpConfiguration cnf = new FilesToScpConfiguration();
+		FilesToScpConfig_V1 cnf = new FilesToScpConfig_V1();
 		cnf.setHostname(txtHost.getValue());
 		try {
 			cnf.setPort(Integer.parseInt(txtPort.getValue()));

@@ -23,8 +23,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
-public class FilesToScp extends ConfigurableBase<FilesToScpConfiguration>
-        implements ConfigDialogProvider<FilesToScpConfiguration> {
+public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
+        implements ConfigDialogProvider<FilesToScpConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(FilesToScp.class);
 
@@ -34,7 +34,7 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfiguration>
     private DPUContext context;
 
     public FilesToScp() {
-        super(FilesToScpConfiguration.class);
+        super(FilesToScpConfig_V1.class);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfiguration>
     }
 
     @Override
-    public AbstractConfigDialog<FilesToScpConfiguration> getConfigurationDialog() {
+    public AbstractConfigDialog<FilesToScpConfig_V1> getConfigurationDialog() {
         return new FilesToScpVaadinDialog();
     }
 
