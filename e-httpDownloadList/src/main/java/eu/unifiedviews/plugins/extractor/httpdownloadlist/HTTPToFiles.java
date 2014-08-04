@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.Map;
 
 @DPU.AsExtractor
-public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig> implements ConfigDialogProvider<HTTPToFilesConfig> {
+public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig_V1> implements ConfigDialogProvider<HTTPToFilesConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HTTPToFiles.class);
 
@@ -31,7 +31,7 @@ public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig> implements 
     public WritableFilesDataUnit filesOutput;
 
     public HTTPToFiles() {
-        super(HTTPToFilesConfig.class);
+        super(HTTPToFilesConfig_V1.class);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig> implements 
     }
 
     @Override
-    public AbstractConfigDialog<HTTPToFilesConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<HTTPToFilesConfig_V1> getConfigurationDialog() {
         return new HTTPToFilesVaadinDialog();
     }
 

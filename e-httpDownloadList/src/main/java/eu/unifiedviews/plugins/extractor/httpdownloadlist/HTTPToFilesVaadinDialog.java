@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig> {
+public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_V1> {
     /**
      * 
      */
@@ -41,7 +41,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig>
     private ObjectProperty<String> mapText = new ObjectProperty<String>("");
 
     public HTTPToFilesVaadinDialog() {
-        super(HTTPToFilesConfig.class);
+        super(HTTPToFilesConfig_V1.class);
         initialize();
     }
 
@@ -64,7 +64,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig>
     }
 
     @Override
-    public void setConfiguration(HTTPToFilesConfig conf) throws DPUConfigException {
+    public void setConfiguration(HTTPToFilesConfig_V1 conf) throws DPUConfigException {
         connectionTimeout.setValue(conf.getConnectionTimeout());
         readTimeout.setValue(conf.getReadTimeout());
         StringBuilder sb = new StringBuilder();
@@ -82,7 +82,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig>
     }
 
     @Override
-    public HTTPToFilesConfig getConfiguration() throws DPUConfigException {
+    public HTTPToFilesConfig_V1 getConfiguration() throws DPUConfigException {
         Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
         Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
         BufferedReader br = new BufferedReader(new StringReader(mapText.getValue()));
@@ -115,7 +115,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig>
             throw new DPUConfigException(ex);
         }
 
-        HTTPToFilesConfig conf = new HTTPToFilesConfig();
+        HTTPToFilesConfig_V1 conf = new HTTPToFilesConfig_V1();
         conf.setSymbolicNameToURIMap(symbolicNameToURIMap);
         conf.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
         conf.setConnectionTimeout(connectionTimeout.getValue());
