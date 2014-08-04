@@ -9,7 +9,7 @@ import org.openrdf.rio.RDFFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig> {
+public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RdfToFilesVaadinDialog.class);
 
@@ -30,7 +30,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig> {
     private Panel panelMultipleGraphs;
 
     public RdfToFilesVaadinDialog() {
-        super(RdfToFilesConfig.class);
+        super(RdfToFilesConfig_V1.class);
         buildMainLayout();
     }
 
@@ -98,7 +98,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig> {
     }
 
     @Override
-    protected void setConfiguration(RdfToFilesConfig c) throws DPUConfigException {
+    protected void setConfiguration(RdfToFilesConfig_V1 c) throws DPUConfigException {
         selectRdfFormat.setValue(c.getRdfFileFormat());
         checkMergeGraphs.setValue(c.isMergeGraphs());
         if (c.isMergeGraphs()) {
@@ -109,7 +109,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig> {
             }
 
             if (!c.getGraphToFileInfo().isEmpty()) {
-                final RdfToFilesConfig.GraphToFileInfo info = c.getGraphToFileInfo().get(0);
+                final RdfToFilesConfig_V1.GraphToFileInfo info = c.getGraphToFileInfo().get(0);
                 txtSingleFileSymbolicName.setValue(info.getOutFileName());
                 if (c.getGraphToFileInfo().size() > 1) {
                     LOG.warn("GraphToFileInfo.size() > 1, but were expected equal to 1.");
@@ -123,8 +123,8 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig> {
     }
 
     @Override
-    protected RdfToFilesConfig getConfiguration() throws DPUConfigException {
-        RdfToFilesConfig cnf = new RdfToFilesConfig();
+    protected RdfToFilesConfig_V1 getConfiguration() throws DPUConfigException {
+        RdfToFilesConfig_V1 cnf = new RdfToFilesConfig_V1();
 
         cnf.setRdfFileFormat((String) selectRdfFormat.getValue());
         cnf.setMergeGraphs(checkMergeGraphs.getValue());
@@ -135,7 +135,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig> {
             if (cnf.isGenGraphFile()) {
                 cnf.setOutGraphName(txtOutGraphName.getValue());
             }
-            final RdfToFilesConfig.GraphToFileInfo info = cnf.new GraphToFileInfo();
+            final RdfToFilesConfig_V1.GraphToFileInfo info = cnf.new GraphToFileInfo();
             info.setInSymbolicName("");
             info.setOutFileName(txtSingleFileSymbolicName.getValue());
             cnf.setGraphToFileInfo(Arrays.asList(info));

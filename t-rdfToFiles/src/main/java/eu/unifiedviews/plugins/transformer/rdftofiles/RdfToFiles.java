@@ -37,8 +37,8 @@ import java.util.Map;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig> implements
-        ConfigDialogProvider<RdfToFilesConfig> {
+public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
+        ConfigDialogProvider<RdfToFilesConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(RdfToFiles.class);
 
@@ -55,11 +55,11 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig> implements
     private RDFFormat rdfFormat;
 
     public RdfToFiles() {
-        super(RdfToFilesConfig.class);
+        super(RdfToFilesConfig_V1.class);
     }
 
     @Override
-    public AbstractConfigDialog<RdfToFilesConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfToFilesConfig_V1> getConfigurationDialog() {
         return new RdfToFilesVaadinDialog();
     }
 
@@ -114,7 +114,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig> implements
      * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
     private void exportSingle(Map<String, URI> graphUris) throws DataUnitException, ExportFailedException {
-        final RdfToFilesConfig.GraphToFileInfo info = config.getGraphToFileInfo().get(0);
+        final RdfToFilesConfig_V1.GraphToFileInfo info = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
         final String outputSymbolicName = exportGraph(toExport, info.getOutFileName());
@@ -137,7 +137,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig> implements
      * @throws eu.unifiedviews.plugins.extractor.sparql.ExportFailedException
      */
     private void exportMultiple(Map<String, URI> graphUris) throws DataUnitException, ExportFailedException {
-        for (RdfToFilesConfig.GraphToFileInfo info : config.getGraphToFileInfo()) {
+        for (RdfToFilesConfig_V1.GraphToFileInfo info : config.getGraphToFileInfo()) {
             //
             // get URIs (graphs) to export and transfer metadata
             //
