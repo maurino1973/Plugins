@@ -42,8 +42,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Petyr
  */
 @DPU.AsExtractor
-public class RdfFromFile extends ConfigurableBase<RdfFromFileConfig>
-        implements ConfigDialogProvider<RdfFromFileConfig> {
+public class RdfFromFile extends ConfigurableBase<RdfFromFileConfig_V1>
+        implements ConfigDialogProvider<RdfFromFileConfig_V1> {
 
     private final Logger LOG = LoggerFactory.getLogger(RdfFromFile.class);
 
@@ -56,7 +56,7 @@ public class RdfFromFile extends ConfigurableBase<RdfFromFileConfig>
     public WritableRDFDataUnit writableRdfDataUnit;
 
     public RdfFromFile() {
-        super(RdfFromFileConfig.class);
+        super(RdfFromFileConfig_V1.class);
     }
 
     /**
@@ -179,7 +179,7 @@ public class RdfFromFile extends ConfigurableBase<RdfFromFileConfig>
      * @return the configuration dialogue for File extractor.
      */
     @Override
-    public AbstractConfigDialog<RdfFromFileConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfFromFileConfig_V1> getConfigurationDialog() {
         return new RdfFromFileVaadinDialog();
     }
 

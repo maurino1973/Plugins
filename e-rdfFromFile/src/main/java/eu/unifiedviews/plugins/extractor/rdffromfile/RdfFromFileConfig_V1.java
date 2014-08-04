@@ -6,7 +6,7 @@ package eu.unifiedviews.plugins.extractor.rdffromfile;
  * @author Petyr
  * @author Jiri Tomes
  */
-public class RdfFromFileConfig {
+public class RdfFromFileConfig_V1 {
 
     public void setPath(String path) {
         Path = path;
@@ -44,7 +44,7 @@ public class RdfFromFileConfig {
         this.failWhenErrors = failWhenErrors;
     }
 
-    public RdfFromFileConfig() {
+    public RdfFromFileConfig_V1() {
         this.Path = "";
         this.FileSuffix = "";
         this.RDFFormatValue = RDFFormatType.AUTO;
@@ -54,7 +54,7 @@ public class RdfFromFileConfig {
         this.failWhenErrors = false;
     }
 
-    public RdfFromFileConfig(String Path, String FileSuffix,
+    public RdfFromFileConfig_V1(String Path, String FileSuffix,
             RDFFormatType RDFFormatValue, FileExtractType fileExtractType,
             boolean OnlyThisSuffix, boolean UseStatisticalHandler,
             boolean failWhenErrors) {

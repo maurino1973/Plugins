@@ -30,7 +30,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @author Maria Kukhar
  * @author Jiri Tomes
  */
-public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig> {
+public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig_V1> {
 
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
@@ -102,7 +102,7 @@ public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig>
      * Basic constructor.
      */
     public RdfFromFileVaadinDialog() {
-        super(RdfFromFileConfig.class);
+        super(RdfFromFileConfig_V1.class);
         initialize();
         buildMainLayout();
         setCompositionRoot(mainLayout);
@@ -154,7 +154,7 @@ public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig>
      *         configuration dialog.
      */
     @Override
-    public RdfFromFileConfig getConfiguration() throws DPUConfigException {
+    public RdfFromFileConfig_V1 getConfiguration() throws DPUConfigException {
 
         if (getContext().isTemplate()) {
         }
@@ -208,7 +208,7 @@ public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig>
                         "No value for case using statistical and error handler");
             }
 
-            RdfFromFileConfig config = new RdfFromFileConfig(path,
+            RdfFromFileConfig_V1 config = new RdfFromFileConfig_V1(path,
                     fileSuffix,
                     RDFFormatValue, extractType, onlyThisSuffix,
                     useStatisticalHandler, failWhenErrors);
@@ -226,7 +226,7 @@ public class RdfFromFileVaadinDialog extends BaseConfigDialog<RdfFromFileConfig>
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(RdfFromFileConfig conf) {
+    public void setConfiguration(RdfFromFileConfig_V1 conf) {
 
         extractType = conf.getFileExtractType();
         pathType.setValue(FileExtractType.getDescriptionByType(
