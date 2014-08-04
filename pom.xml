@@ -28,7 +28,6 @@
 		<module>l-rdfToFile</module>
 		<module>l-rdfToSparql</module>
 		<module>l-filesToLocalFS</module>
-		<module>l-filesToLocalDirectory</module>
 		<module>l-filesToVFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
