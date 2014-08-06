@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.dpu.filestordft;
+package eu.unifiedviews.plugins.transformer.filestordft;
 
 import java.io.File;
 import java.io.IOException;
