@@ -19,11 +19,11 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsExtractor
-public class TripleGeneratorToRDFExtractor extends ConfigurableBase<TripleGeneratorToRDFExtractorConfig> implements ConfigDialogProvider<TripleGeneratorToRDFExtractorConfig> {
-	private static final Logger LOG = LoggerFactory.getLogger(TripleGeneratorToRDFExtractor.class);
+public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig> implements ConfigDialogProvider<RdfDataGeneratorConfig> {
+	private static final Logger LOG = LoggerFactory.getLogger(RdfDataGenerator.class);
 	
-    public TripleGeneratorToRDFExtractor() {
-        super(TripleGeneratorToRDFExtractorConfig.class);
+    public RdfDataGenerator() {
+        super(RdfDataGeneratorConfig.class);
     }
 
     @DataUnit.AsOutput(name = "output")
@@ -76,7 +76,7 @@ public class TripleGeneratorToRDFExtractor extends ConfigurableBase<TripleGenera
     }
 
     @Override
-    public AbstractConfigDialog<TripleGeneratorToRDFExtractorConfig> getConfigurationDialog() {
-        return new TripleGeneratorToRDFExtractorVaadinDialog();
+    public AbstractConfigDialog<RdfDataGeneratorConfig> getConfigurationDialog() {
+        return new RdfDataGeneratorVaadinDialog();
     }
 }

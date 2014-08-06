@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.extractor.rdfdatagenerator</dpu.package>
-		<dpu.mainClass>TripleGeneratorToRDFExtractor</dpu.mainClass>
+		<dpu.mainClass>RdfDataGenerator</dpu.mainClass>
 	</properties>
 	
 	<dependencies>
