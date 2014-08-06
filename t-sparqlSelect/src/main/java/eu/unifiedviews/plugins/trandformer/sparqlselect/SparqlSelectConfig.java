@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.trandformer.sparqlselect;
 
-public class Configuration {
+public class SparqlSelectConfig {
 
     private String targetPath = "/out.csv";
 

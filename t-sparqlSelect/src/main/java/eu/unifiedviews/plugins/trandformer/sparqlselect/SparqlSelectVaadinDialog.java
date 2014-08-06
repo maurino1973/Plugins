@@ -6,7 +6,7 @@ import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class SparqlSelectVaadinDialog extends BaseConfigDialog<SparqlSelectConfig> {
 	
 	private VerticalLayout mainLayout;
 
@@ -14,8 +14,8 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 
 	private TextArea txtQuery;
 
-	public Dialog() {
-		super(Configuration.class);
+	public SparqlSelectVaadinDialog() {
+		super(SparqlSelectConfig.class);
 		buildMainLayout();
 	}
 
@@ -49,13 +49,13 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 	}
 
 	@Override
-	protected void setConfiguration(Configuration conf) throws DPUConfigException {
+	protected void setConfiguration(SparqlSelectConfig conf) throws DPUConfigException {
 		txtTarget.setValue(conf.getTargetPath());
 		txtQuery.setValue(conf.getQuery());
 	}
 
 	@Override
-	protected Configuration getConfiguration() throws DPUConfigException {
+	protected SparqlSelectConfig getConfiguration() throws DPUConfigException {
 		if (!txtTarget.isValid()) {
 			throw new DPUConfigException("Target path must be filled.");
 		}
@@ -63,7 +63,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 			throw new DPUConfigException("SPARQL query must be filled.");
 		}
 
-		Configuration conf = new Configuration();
+		SparqlSelectConfig conf = new SparqlSelectConfig();
 		conf.setTargetPath(txtTarget.getValue());
 		conf.setQuery(txtQuery.getValue());
 		return conf;
