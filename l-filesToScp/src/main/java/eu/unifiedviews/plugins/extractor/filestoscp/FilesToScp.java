@@ -21,6 +21,9 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+import java.util.Iterator;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 
 @DPU.AsLoader
 public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
@@ -31,8 +34,6 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
     @DataUnit.AsInput(name = "input")
     public FilesDataUnit inFilesData;
 
-    private DPUContext context;
-
     public FilesToScp() {
         super(FilesToScpConfig_V1.class);
     }
@@ -40,7 +41,6 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
     @Override
     public void execute(DPUContext context)
             throws DPUException {
-        this.context = context;
         final FilesDataUnit.Iteration filesIteration;
         try {
             filesIteration = inFilesData.getIteration();
@@ -78,17 +78,16 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
             while (!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
 
-                final String relativePath = VirtualPathHelpers.getVirtualPath(inFilesData, 
+                final String relativePath = VirtualPathHelpers.getVirtualPath(inFilesData,
                         entry.getSymbolicName());
-                
+
                 // TODO We can try to use symbolicName here
                 if (relativePath == null) {
                     context.sendMessage(DPUContext.MessageType.WARNING,
-                            "No virtual path set for: " + entry.getSymbolicName() 
+                            "No virtual path set for: " + entry.getSymbolicName()
                                     + ". File is ignored.");
                     continue;
                 }
-
                 FileUtils.copyFile(
                         new File(java.net.URI.create(entry.getFileURIString())),
                         new File(toUploadDir, relativePath));
@@ -108,14 +107,17 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
                 LOG.warn("Error in close.", ex);
             }
         }
-
         //
         // upload
         //
+        final File[] files = toUploadDir.listFiles();
         try {
-            scp.setFromUri(toUploadDir.toString());
-            scp.setToUri(destinationBase);
-            scp.execute();
+            for (File toUpload : files) {
+                final String destination = destinationBase;
+                LOG.debug("Uploading '{}' to '{}'",
+                        toUpload.toString(), destination);
+                upload(scp, toUpload.toString(), destination);
+            }
         } catch (SCPPException ex) {
             if (config.isSoftFail()) {
                 context.sendMessage(DPUContext.MessageType.WARNING,
@@ -134,6 +136,12 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
     @Override
     public AbstractConfigDialog<FilesToScpConfig_V1> getConfigurationDialog() {
         return new FilesToScpVaadinDialog();
+    }
+
+    protected void upload(SCP scp, String uriFrom, String uriTo) throws SCPPException {
+        scp.setFromUri(uriFrom);
+        scp.setToUri(uriTo);
+        scp.execute();
     }
 
 }
