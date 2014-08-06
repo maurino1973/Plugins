@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.extractor.rdfdatagenerator;
 
-public class RdfDataGeneratorConfig {
+public class RdfDataGeneratorConfig_V1 {
 
     private int tripleCount = 1000000;
 
