@@ -11,7 +11,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class TripleGeneratorToRDFExtractorVaadinDialog extends BaseConfigDialog<TripleGeneratorToRDFExtractorConfig> {
+public class RdfDataGeneratorVaadinDialog extends BaseConfigDialog<RdfDataGeneratorConfig> {
     /**
      * 
      */
@@ -29,8 +29,8 @@ public class TripleGeneratorToRDFExtractorVaadinDialog extends BaseConfigDialog<
     
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
-    public TripleGeneratorToRDFExtractorVaadinDialog() {
-        super(TripleGeneratorToRDFExtractorConfig.class);
+    public RdfDataGeneratorVaadinDialog() {
+        super(RdfDataGeneratorConfig.class);
         initialize();
     }
 
@@ -49,15 +49,15 @@ public class TripleGeneratorToRDFExtractorVaadinDialog extends BaseConfigDialog<
     }
 
     @Override
-    public void setConfiguration(TripleGeneratorToRDFExtractorConfig conf) throws DPUConfigException {
+    public void setConfiguration(RdfDataGeneratorConfig conf) throws DPUConfigException {
         tripleCount.setValue(conf.getTripleCount());
         commitSize.setValue(conf.getCommitSize());
         outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
     }
 
     @Override
-    public TripleGeneratorToRDFExtractorConfig getConfiguration() throws DPUConfigException {
-        TripleGeneratorToRDFExtractorConfig config = new TripleGeneratorToRDFExtractorConfig();
+    public RdfDataGeneratorConfig getConfiguration() throws DPUConfigException {
+        RdfDataGeneratorConfig config = new RdfDataGeneratorConfig();
         config.setTripleCount(tripleCount.getValue());
         config.setCommitSize(commitSize.getValue());
         config.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
