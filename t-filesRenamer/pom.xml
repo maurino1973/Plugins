@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.transformer.filesrenamer</dpu.package>
-		<dpu.mainClass>FilesToFilesRenameTransformer</dpu.mainClass>
+		<dpu.mainClass>Renamer</dpu.mainClass>
 	</properties>
 
 	<dependencies>

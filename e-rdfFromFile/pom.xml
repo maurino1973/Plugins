@@ -12,13 +12,13 @@
 
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-e-rdfFromFile</artifactId>
-    <name>E-RDFFromFile</name>
+    <name>E-RdfFromFile</name>
 	<description>Extracts RDF data from a file.</description>
 	<version>1.3.0</version>
 	<packaging>bundle</packaging>
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.extractor.rdffromfile</dpu.package>
-		<dpu.mainClass>FileExtractor</dpu.mainClass>
+		<dpu.mainClass>RdfFromFile</dpu.mainClass>
 	</properties>
 </project>

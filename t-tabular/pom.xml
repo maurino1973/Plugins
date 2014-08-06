@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.unifiedviews.plugins</groupId>
+        <artifactId>dpu-base-pom</artifactId>
+        <version>1.0.0</version>
+        <relativePath>../dpu-base-pom.xml</relativePath>
+    </parent>    
+
+	<groupId>eu.unifiedviews.plugins</groupId>
+    <artifactId>uv-t-tabular</artifactId>
+    <name>T-Tabular</name>
+    <description>Based on https://github.com/mff-uk/DPUs/blob/master/dpu-domain-specific/tabular. Temporary solution.</description>
+    <version>1.0.0</version>
+    <packaging>bundle</packaging>
+	
+    <properties>    
+        <dpu.package>eu.unifiedviews.plugins.transformer.tabular</dpu.package>
+        <dpu.mainClass>Tabular</dpu.mainClass>
+    </properties>
+	
+    <dependencies>
+		<dependency>
+		    <groupId>org.jamel.dbf</groupId>
+		    <artifactId>dbf-reader</artifactId>
+		    <version>0.0.3</version>
+            <scope>compile</scope>
+		</dependency>
+		<dependency>
+		    <groupId>net.sf.supercsv</groupId>
+		    <artifactId>super-csv</artifactId>
+		    <version>2.1.0</version>
+            <scope>compile</scope>
+		</dependency>
+    </dependencies>
+	
+</project>

@@ -12,14 +12,14 @@
 
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-e-rdfFromSparql</artifactId>
-    <name>E-RDFFromSPARQL</name>
+    <name>E-RdfFromSparqlEndpoint</name>
 	<description>Extracts RDF data from SPARQL Endpoint.</description>
 	<version>1.3.0</version>
 	<packaging>bundle</packaging>
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.extractor.rdffromsparql</dpu.package>
-		<dpu.mainClass>RDFExtractor</dpu.mainClass>
+		<dpu.mainClass>RdfFromSparqlEndpoint</dpu.mainClass>
 	</properties>
 
 	<dependencies>

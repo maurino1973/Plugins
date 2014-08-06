@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.transformer.sparql</dpu.package>
-		<dpu.mainClass>SPARQLTransformer</dpu.mainClass>
+		<dpu.mainClass>SPARQL</dpu.mainClass>
 	</properties>
 
 	<dependencies>

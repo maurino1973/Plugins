@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.unifiedviews.plugins</groupId>
+		<artifactId>dpu-base-pom</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../dpu-base-pom.xml</relativePath>
+	</parent>    
+	
+	<groupId>eu.unifiedviews.plugins</groupId>
+	<artifactId>uv-t-unzipper</artifactId>
+	<name>T-UnZipper</name>
+	<description>UnZip input file into files based on zip content.</description>
+	<version>1.0.0</version>
+	<packaging>bundle</packaging>
+	
+	<properties>    
+		<dpu.package>eu.unifiedviews.plugins.transformer.unzipper</dpu.package>
+		<dpu.mainClass>UnZipper</dpu.mainClass>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.lingala.zip4j</groupId>
+			<artifactId>zip4j</artifactId>
+			<version>1.2.3</version>
+		</dependency>	
+	</dependencies>
+	
+</project>

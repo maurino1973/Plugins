@@ -11,14 +11,14 @@
 	</parent>
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-l-rdfToFile</artifactId>
-    <name>L-RDFToFile</name>
+    <name>L-RdfToFile</name>
 	<description>Loads RDF data into file.</description>
 	<version>1.3.0</version>
 	<packaging>bundle</packaging>
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.rdftofile</dpu.package>
-		<dpu.mainClass>FileLoader</dpu.mainClass>
+		<dpu.mainClass>RdfToFile</dpu.mainClass>
 	</properties>
 
 	<dependencies>

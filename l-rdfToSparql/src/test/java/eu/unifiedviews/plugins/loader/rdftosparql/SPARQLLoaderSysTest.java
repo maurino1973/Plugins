@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.loader.rdftosparql;
 
-import eu.unifiedviews.plugins.loader.rdftosparql.RDFLoaderConfig;
+import eu.unifiedviews.plugins.loader.rdftosparql.RdfToSparqlEndpointConfig_V1;
 import eu.unifiedviews.plugins.loader.rdftosparql.InsertType;
 import eu.unifiedviews.plugins.loader.rdftosparql.LoaderEndpointParams;
 import eu.unifiedviews.plugins.loader.rdftosparql.SPARQLoader;
@@ -104,7 +104,7 @@ public class SPARQLLoaderSysTest {
     public void loadDataToSPARQLEndpointTest() {
         RDFDataUnit repository = testEnvironment.createRdfFDataUnit("");
 
-        RDFLoaderConfig c = new RDFLoaderConfig();
+        RdfToSparqlEndpointConfig_V1 c = new RdfToSparqlEndpointConfig_V1();
         c.setEndpointParams(virtuosoParams);
         c.setHost_name(USER);
         c.setPassword(PASSWORD);
@@ -133,7 +133,7 @@ public class SPARQLLoaderSysTest {
         String goalGraphName = "http://tempGraph";
 
         boolean isLoaded = false;
-        RDFLoaderConfig c = new RDFLoaderConfig();
+        RdfToSparqlEndpointConfig_V1 c = new RdfToSparqlEndpointConfig_V1();
         c.setEndpointParams(virtuosoParams);
         c.setHost_name(USER);
         c.setPassword(PASSWORD);

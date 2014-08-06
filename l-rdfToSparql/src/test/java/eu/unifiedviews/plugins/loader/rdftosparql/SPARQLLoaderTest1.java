@@ -1,6 +1,6 @@
 package eu.unifiedviews.plugins.loader.rdftosparql;
 
-import eu.unifiedviews.plugins.loader.rdftosparql.RDFLoaderConfig;
+import eu.unifiedviews.plugins.loader.rdftosparql.RdfToSparqlEndpointConfig_V1;
 import eu.unifiedviews.plugins.loader.rdftosparql.InsertType;
 import eu.unifiedviews.plugins.loader.rdftosparql.LoaderEndpointParams;
 import eu.unifiedviews.plugins.loader.rdftosparql.SPARQLoader;
@@ -94,30 +94,12 @@ public class SPARQLLoaderTest1 {
         //((ManagableRdfDataUnit) repository).delete();
     }
 
-    //@Test
-    public void InsertingTripleToEndpointCRUD() throws RepositoryException, DataUnitException {
-        //repository.cleanAllData();
-
-        RepositoryConnection connection = repository.getConnection();
-        ValueFactory factory = connection.getValueFactory();
-        Resource subject = factory.createURI("http://my.subject");
-        URI predicate = factory.createURI("http://my.predicate");
-        Value object = factory.createLiteral("Mojefi resi ...");
-        Value object2 = factory.createLiteral("Y");
-        Value object3 = factory.createLiteral("ščřžýěéž");
-
-        connection.add(subject, predicate, object, repository.getBaseDataGraphURI());
-        connection.add(subject, predicate, object3, repository.getBaseDataGraphURI());
-        connection.close();
-        tryInsertToSPARQLEndpoint();
-    }
-
     private void tryInsertToSPARQLEndpoint() {
 
         String goalGraphName = OUTPUT_GRAPH;
 
         boolean isLoaded = false;
-        RDFLoaderConfig c = new RDFLoaderConfig();
+        RdfToSparqlEndpointConfig_V1 c = new RdfToSparqlEndpointConfig_V1();
         c.setEndpointParams(virtuosoParams);
         c.setHost_name(USER);
         c.setPassword(PASSWORD);
