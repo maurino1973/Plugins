@@ -9,11 +9,15 @@
 
 	<!-- list of core modules -->
 	<modules>
+		<!-- EXTRACTORS -->
+		<module>e-filesFromLocal</module>
 		<module>e-rdfFromFile</module>
 		<module>e-rdfFromSparql</module>
 		<module>e-rdfDataGenerator</module>
 		<module>e-silkLinker</module>
 		<module>e-httpDownloadList</module>
+
+		<!-- TRANSFORMERS -->
 		<module>t-sparql</module>
 		<module>t-sparqlSelect</module>
 		<module>t-xslt</module>
@@ -26,15 +30,14 @@
 		<module>t-unzipper</module>
 		<module>t-tabular</module>
 		<module>t-metadata</module>
+
+		<!-- LOADERS -->
 		<module>l-rdfToFile</module>
 		<module>l-rdfToSparql</module>
 		<module>l-filesToLocalFS</module>
 		<module>l-filesToVFS</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
-		<module>e-filesFromLocal</module>
-		<!-- New DPUs -->
-		<!-- Old DPUs -->
 	</modules>
 
 	<properties>
