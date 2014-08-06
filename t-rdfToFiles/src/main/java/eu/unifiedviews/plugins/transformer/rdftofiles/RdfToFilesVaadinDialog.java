@@ -46,6 +46,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
         selectRdfFormat = new NativeSelect("RDF format:");
         for (RDFFormat item : RDFFormat.values()) {
+            // TODO Remove formats for queads
             selectRdfFormat.addItem(item.getName());
             selectRdfFormat.setItemCaption(item, item.getName());
         }

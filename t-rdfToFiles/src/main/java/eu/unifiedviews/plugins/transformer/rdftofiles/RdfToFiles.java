@@ -177,7 +177,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
      * @return Symbolic name of output file.
      */
     private String exportGraph(URI[] uris, String fileName) throws DataUnitException, ExportFailedException {
-        final String outputSymbolicName = fileName + rdfFormat.getDefaultFileExtension();
+        final String outputSymbolicName = fileName + "." + rdfFormat.getDefaultFileExtension();
         final String outputFileUri = outFilesData.addNewFile(outputSymbolicName);
 
         final File outputFile = new File(java.net.URI.create(outputFileUri));
@@ -205,7 +205,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
         }
 
         // add metadata about virtual path
-        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, fileName);
+        VirtualPathHelpers.setVirtualPath(outFilesData, outputSymbolicName, outputSymbolicName);
         return outputSymbolicName;
     }
 
