@@ -19,11 +19,11 @@ import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsExtractor
-public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig> implements ConfigDialogProvider<RdfDataGeneratorConfig> {
+public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig_V1> implements ConfigDialogProvider<RdfDataGeneratorConfig_V1> {
 	private static final Logger LOG = LoggerFactory.getLogger(RdfDataGenerator.class);
 	
     public RdfDataGenerator() {
-        super(RdfDataGeneratorConfig.class);
+        super(RdfDataGeneratorConfig_V1.class);
     }
 
     @DataUnit.AsOutput(name = "output")
@@ -76,7 +76,7 @@ public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig> i
     }
 
     @Override
-    public AbstractConfigDialog<RdfDataGeneratorConfig> getConfigurationDialog() {
+    public AbstractConfigDialog<RdfDataGeneratorConfig_V1> getConfigurationDialog() {
         return new RdfDataGeneratorVaadinDialog();
     }
 }
