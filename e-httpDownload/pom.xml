@@ -16,7 +16,7 @@
 	
     <properties>    
         <dpu.package>eu.unifiedviews.plugins.extractor.httpdownload</dpu.package>
-        <dpu.mainClass>Main</dpu.mainClass>
+        <dpu.mainClass>HttpDownload</dpu.mainClass>
     </properties>
 	
     <dependencies>

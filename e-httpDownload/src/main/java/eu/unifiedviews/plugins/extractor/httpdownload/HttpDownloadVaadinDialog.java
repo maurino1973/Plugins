@@ -7,7 +7,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class Dialog extends BaseConfigDialog<Configuration> {
+public class HttpDownloadVaadinDialog extends BaseConfigDialog<HttpDownloadConfig_V1> {
 
 	private VerticalLayout mainLayout;
 
@@ -19,8 +19,8 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 
 	private TextField txtRetryDelay;
 
-	public Dialog() {
-		super(Configuration.class);
+	public HttpDownloadVaadinDialog() {
+		super(HttpDownloadConfig_V1.class);
 		buildMainLayout();
 	}
 
@@ -83,7 +83,7 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 	}
 
 	@Override
-	public void setConfiguration(Configuration conf) throws DPUConfigException {
+	public void setConfiguration(HttpDownloadConfig_V1 conf) throws DPUConfigException {
 		if (conf.getURL() != null) {
 			txtURL.setValue(conf.getURL().toString());
 		} else {
@@ -95,8 +95,8 @@ public class Dialog extends BaseConfigDialog<Configuration> {
 	}
 
 	@Override
-	public Configuration getConfiguration() throws DPUConfigException {
-		Configuration conf = new Configuration();
+	public HttpDownloadConfig_V1 getConfiguration() throws DPUConfigException {
+		HttpDownloadConfig_V1 conf = new HttpDownloadConfig_V1();
 
 		final boolean isValid = txtURL.isValid() && txtTarget.isValid() && 
 				txtRetryCount.isValid() && txtRetryDelay.isValid();

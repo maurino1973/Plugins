@@ -24,16 +24,16 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author Škoda Petr
  */
 @DPU.AsExtractor
-public class Main extends ConfigurableBase<Configuration>
-        implements ConfigDialogProvider<Configuration> {
+public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1>
+        implements ConfigDialogProvider<HttpDownloadConfig_V1> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HttpDownload.class);
 
     @DataUnit.AsOutput(name = "output")
     public WritableFilesDataUnit output;
 
-    public Main() {
-        super(Configuration.class);
+    public HttpDownload() {
+        super(HttpDownloadConfig_V1.class);
     }
 
     @Override
@@ -101,8 +101,8 @@ public class Main extends ConfigurableBase<Configuration>
     }
 
     @Override
-    public AbstractConfigDialog<Configuration> getConfigurationDialog() {
-        return new Dialog();
+    public AbstractConfigDialog<HttpDownloadConfig_V1> getConfigurationDialog() {
+        return new HttpDownloadVaadinDialog();
     }
 
 }

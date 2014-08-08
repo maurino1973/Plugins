@@ -2,7 +2,7 @@ package eu.unifiedviews.plugins.extractor.httpdownload;
 
 import java.net.URL;
 
-public class Configuration {
+public class HttpDownloadConfig_V1 {
 
     private URL URL = null;
 
