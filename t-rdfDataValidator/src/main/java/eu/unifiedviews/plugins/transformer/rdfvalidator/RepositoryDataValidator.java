@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
 /**
  * Find out, if data in RDF repository are valid or not.
@@ -85,7 +86,7 @@ public class RepositoryDataValidator implements DataValidator {
         RepositoryConnection connection = null;
         try {
             connection = input.getConnection();
-            tripleCount = connection.size(input.getDataGraphnames().toArray(new URI[0]));
+            tripleCount = connection.size(RDFHelper.getGraphsURIArray(input));
 
             if (tripleCount == 0) {
                 isValid = true;
@@ -99,7 +100,7 @@ public class RepositoryDataValidator implements DataValidator {
                     FileOutputStream out = new FileOutputStream(tempFile.getAbsolutePath());
                     OutputStreamWriter os = new OutputStreamWriter(out, Charset.forName(encode));
                     RDFWriter rdfWriter = Rio.createWriter(RDFFormat.N3, os);
-                    connection.export(rdfWriter, input.getDataGraphnames().toArray(new URI[0]));
+                    connection.export(rdfWriter, RDFHelper.getGraphsURIArray(input));
 
                     try (InputStreamReader fileStream = new InputStreamReader(
                             new FileInputStream(tempFile), Charset.forName("UTF-8"))) {
@@ -107,7 +108,7 @@ public class RepositoryDataValidator implements DataValidator {
                         final StatisticalHandler handler = new StatisticalHandler(
                                 goalConnection, true);
 
-                        handler.setGraphContext(goalRepo.getBaseDataGraphURI());
+                        handler.setGraphContext(goalRepo.addNewDataGraph("temporary"));
 
                         RDFParser parser = Rio.createParser(RDFFormat.N3);
                         parser.setRDFHandler(handler);

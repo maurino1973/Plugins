@@ -74,7 +74,12 @@ public class ReportCreator {
     private void addReports(WritableRDFDataUnit repository) throws DPUException {
 
         int count = 0;
-
+        URI graph;
+        try {
+            graph = repository.addNewDataGraph("report");
+        } catch (DataUnitException e1) {
+            throw new DPUException(e1);
+        }
         for (TripleProblem next : problems) {
 
             Statement st = next.getStatement();
@@ -93,17 +98,17 @@ public class ReportCreator {
             try {
                 connection = repository.getConnection();
                 connection.add(getSubject(count), new URIImpl("rdf:type"),
-                        new URIImpl(ODCS_VAL + conflictType.toString()), repository.getBaseDataGraphURI());
+                        new URIImpl(ODCS_VAL + conflictType.toString()), graph);
                 connection.add(getSubject(count), getPredicate("subject"),
-                        getObject(sub), repository.getBaseDataGraphURI());
+                        getObject(sub), graph);
                 connection.add(getSubject(count), getPredicate("predicate"),
-                        getObject(pred), repository.getBaseDataGraphURI());
+                        getObject(pred), graph);
                 connection.add(getSubject(count), getPredicate("object"),
-                        getObject(obj), repository.getBaseDataGraphURI());
+                        getObject(obj), graph);
                 connection.add(getSubject(count), getPredicate("reason"),
-                        getObject(message), repository.getBaseDataGraphURI());
+                        getObject(message), graph);
                 connection.add(getSubject(count), getPredicate("sourceLine"),
-                        getObject(line), repository.getBaseDataGraphURI());
+                        getObject(line), graph);
             } catch (RepositoryException e) {
                 LOG.error("Error", e);
             } catch (DataUnitException e) {

@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.filestolocalfs</dpu.package>
-		<dpu.mainClass>FilesToLocalDirectoryLoader</dpu.mainClass>
+		<dpu.mainClass>FilesToLocalFS</dpu.mainClass>
 	</properties>
 
 	<dependencies>

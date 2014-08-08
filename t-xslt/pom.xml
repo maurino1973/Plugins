@@ -19,7 +19,7 @@
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.transformer.xslt</dpu.package>
-		<dpu.mainClass>FilesToFilesXSLT2Transformer</dpu.mainClass>
+		<dpu.mainClass>XSLT</dpu.mainClass>
 	</properties>
 
 	<dependencies>

@@ -15,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.openrdf.model.URI;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.rio.RDFFormat;
@@ -44,8 +45,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author tomasknap
  */
 @DPU.AsExtractor
-public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
-        implements DPU, ConfigDialogProvider<SilkLinkerConfig> {
+public class SilkLinker extends ConfigurableBase<SilkLinkerConfig_V1>
+        implements DPU, ConfigDialogProvider<SilkLinkerConfig_V1> {
 
     private static final Logger log = LoggerFactory.getLogger(
             SilkLinker.class);
@@ -60,12 +61,12 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
      * Constructor
      */
     public SilkLinker() {
-        super(SilkLinkerConfig.class);
+        super(SilkLinkerConfig_V1.class);
     }
 
     @Override
-    public AbstractConfigDialog<SilkLinkerConfig> getConfigurationDialog() {
-        return new SilkLinkerDialog();
+    public AbstractConfigDialog<SilkLinkerConfig_V1> getConfigurationDialog() {
+        return new SilkLinkerVaadinDialog();
     }
 
     @Override
@@ -206,7 +207,7 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
         //File conf = new File(config.getSilkConf());
 
-        //((SilkLinkerDialog)getConfigurationDialog()).setContext(context);
+        //((SilkLinkerVaadinDialog)getConfigurationDialog()).setContext(context);
 
         //Execution of the Silk linker (xml conf is an important input!)
         //TODO Petr: solve the problem when loading XML conf
@@ -242,7 +243,8 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
             connection = outputConfirmed.getConnection();
             String baseURI = "";
-            connection.add(f, baseURI, RDFFormat.TURTLE, outputConfirmed.getBaseDataGraphURI());
+            URI graph = outputConfirmed.addNewDataGraph("confirmed");
+            connection.add(f, baseURI, RDFFormat.TURTLE, graph);
 
         } catch (IOException | RepositoryException | RDFParseException ex) {
             log.error(ex.getLocalizedMessage());
@@ -277,7 +279,8 @@ public class SilkLinker extends ConfigurableBase<SilkLinkerConfig>
 
             connection2 = outputToVerify.getConnection();
             String baseURI = "";
-            connection2.add(f, baseURI, RDFFormat.TURTLE, outputToVerify.getBaseDataGraphURI());
+            URI graph = outputToVerify.addNewDataGraph("toverify");
+            connection2.add(f, baseURI, RDFFormat.TURTLE, graph);
         } catch (IOException | RepositoryException | RDFParseException ex) {
             log.error(ex.getLocalizedMessage());
             context.sendMessage(DPUContext.MessageType.ERROR, "RDFException: "
