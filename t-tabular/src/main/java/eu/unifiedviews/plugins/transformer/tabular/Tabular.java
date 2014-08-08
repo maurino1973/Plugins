@@ -241,8 +241,6 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                         }
                     }
 
-                    //outConnection.begin();
-
                     String suffixURI;
                     if (columnWithURISupplementNumber >= 0) {
                         suffixURI = this.convertStringToURIPart(row.get(columnWithURISupplementNumber));
@@ -273,8 +271,6 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
 
                     rowno++;
                     row = listReader.read();
-
-                    //outConnection.commit();
 
                     if (context.canceled()) {
                         LOG.info("DPU cancelled");
@@ -354,8 +350,6 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
 
-                //outConnection.begin();
-
                 for (int i = 0; i < row.length; i++) {
                     String strValue = this.getCellValue(row[i], encoding);
                     if (strValue == null || "".equals(strValue)) {
@@ -369,8 +363,6 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
 
                 Value rowvalue = valueFactory.createLiteral(this.getCellValue(rowno, encoding));
                 add(subj, propertyRow, rowvalue);
-
-                //outConnection.commit();
 
                 if ((rowno % 1000) == 0) {
                     LOG.debug("Row number {} processed.", rowno);
