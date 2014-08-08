@@ -27,6 +27,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.metadata.MetadataHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -112,6 +113,16 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
             return;
         }
         valueFactory = outConnection.getValueFactory();
+        //
+        // Get connection
+        //
+        try {
+            outConnection = outRdfTriplifiedTable.getConnection();
+        } catch (DataUnitException ex) {
+            context.sendMessage(DPUContext.MessageType.ERROR,
+                    "DataUnit problem", "Can't get connection.", ex);
+            return;
+        }
         //
         // Iterate over files
         //
@@ -241,6 +252,8 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                         }
                     }
 
+                    outConnection.begin();
+
                     String suffixURI;
                     if (columnWithURISupplementNumber >= 0) {
                         suffixURI = this.convertStringToURIPart(row.get(columnWithURISupplementNumber));
@@ -271,6 +284,8 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
 
                     rowno++;
                     row = listReader.read();
+
+                    outConnection.commit();
 
                     if (context.canceled()) {
                         LOG.info("DPU cancelled");
@@ -349,6 +364,8 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                 }
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
+
+                outConnection.begin();
 
                 for (int i = 0; i < row.length; i++) {
                     String strValue = this.getCellValue(row[i], encoding);
