@@ -11,11 +11,10 @@
 	<modules>
 		<!-- EXTRACTORS -->
 		<module>e-filesFromLocal</module>
-		<module>e-rdfFromFile</module>
 		<module>e-rdfFromSparql</module>
 		<module>e-rdfDataGenerator</module>
 		<module>e-silkLinker</module>
-		<module>e-httpDownloadList</module>
+		<module>e-httpDownload</module>
 
 		<!-- TRANSFORMERS -->
 		<module>t-sparql</module>
@@ -32,10 +31,8 @@
 		<module>t-metadata</module>
 
 		<!-- LOADERS -->
-		<module>l-rdfToFile</module>
 		<module>l-rdfToSparql</module>
 		<module>l-filesToLocalFS</module>
-		<module>l-filesToVFS</module>
 		<module>l-filesToScp</module>
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
