@@ -15,6 +15,7 @@
 		<module>e-rdfFromSparql</module>
 		<module>e-rdfDataGenerator</module>
 		<module>e-silkLinker</module>
+		<module>e-httpDownload</module>
 		<module>e-httpDownloadList</module>
 
 		<!-- TRANSFORMERS -->
