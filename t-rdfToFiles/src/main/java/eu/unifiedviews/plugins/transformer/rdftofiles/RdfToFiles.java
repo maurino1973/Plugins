@@ -116,11 +116,12 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
         final RdfToFilesConfig_V1.GraphToFileInfo info = config.getGraphToFileInfo().get(0);
         // export
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
-        final String outputSymbolicName = exportGraph(toExport, info.getOutFileName());
+        final String outputFileName = info.getOutFileName() + "." + rdfFormat.getDefaultFileExtension();
+        final String outputSymbolicName = exportGraph(toExport, outputFileName);
         // create graph name if needed
         if (config.isGenGraphFile()) {
             try {
-                generateGraphFile(info.getOutFileName(), config.getOutGraphName());
+                generateGraphFile(outputFileName, config.getOutGraphName());
             } catch (IOException ex) {
                 context.sendMessage(DPUContext.MessageType.ERROR, "Failed to create .graph file", "", ex);
             }
@@ -153,7 +154,15 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
             //
             // export
             //
-            final String outputSymbolicName = exportGraph(sourceUri.toArray(new URI[0]), info.getOutFileName());
+            final String outputFileName = info.getOutFileName() + "." + rdfFormat.getDefaultFileExtension();
+            final String outputSymbolicName = exportGraph(sourceUri.toArray(new URI[0]), outputFileName);
+            if (config.isGenGraphFile()) {
+                try {
+                    generateGraphFile(outputFileName, config.getOutGraphName());
+                } catch (IOException ex) {
+                    context.sendMessage(DPUContext.MessageType.ERROR, "Failed to create .graph file", "", ex);
+                }
+            }
             //
             // TODO transfer metadata
             //
@@ -212,8 +221,8 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
      * 
      * @param graphName
      */
-    private void generateGraphFile(String filePrefix, String graphName) throws DataUnitException, IOException {
-        final String outputSymbolicName = filePrefix + ".graph";
+    private void generateGraphFile(String fileName, String graphName) throws DataUnitException, IOException {
+        final String outputSymbolicName = fileName + ".graph";
         final String fileLocation = outFilesData.addNewFile(outputSymbolicName);
         // write into file
         LOG.debug("Writing .graph file into: {}", fileLocation.toString());
