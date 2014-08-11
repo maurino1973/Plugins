@@ -95,7 +95,11 @@ public class UnZipper implements DPU {
                 //
                 // Copy metadata
                 //
-                CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData, outFilesData);
+
+                //CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData, outFilesData);
+                // TODO Above command copy whole file (is visible for next DPU)
+                // we should use something else and add triple to new file
+                // about source
             }
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR,
