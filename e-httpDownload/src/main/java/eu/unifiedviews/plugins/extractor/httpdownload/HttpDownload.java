@@ -54,7 +54,7 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1>
         final String outSymName;
         final String outUri;
         try {
-            outSymName = output.getBaseFileURIString() + config.getTarget();
+            outSymName = config.getTarget();
             outUri = output.addNewFile(outSymName);
 
             VirtualPathHelpers.setVirtualPath(output, outSymName, config.getTarget());

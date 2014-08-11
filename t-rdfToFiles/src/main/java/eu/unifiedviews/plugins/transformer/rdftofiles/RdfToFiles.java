@@ -96,7 +96,6 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
             } else {
                 exportMultiple(graphUris);
             }
-
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed.", "Problem with DataUnit.", ex);
         } catch (ExportFailedException ex) {
@@ -158,7 +157,6 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
             //
             // TODO transfer metadata
             //
-
             // check cancel
             if (context.canceled()) {
                 return;
