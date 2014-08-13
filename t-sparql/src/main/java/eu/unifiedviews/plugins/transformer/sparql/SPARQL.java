@@ -260,7 +260,8 @@ public class SPARQL
                     RepositoryConnection connection = null;
                     try {
                         connection = outputDataUnit.getConnection();
-                        executeSPARQLUpdateQuery(connection, replacedUpdateQuery, RDFHelper.getDatasetWithDefaultGraphs(outputDataUnit), outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName()));
+                        URI newGraphURI = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
+                        executeSPARQLUpdateQuery(connection, replacedUpdateQuery, RDFHelper.getDatasetWithDefaultGraphs(outputDataUnit), newGraphURI);
 
                     } catch (DataUnitException ex) {
                         LOG.error("Could not add triples from graph", ex);
