@@ -7,7 +7,7 @@
         <groupId>cz.cuni.mff.xrg.odcs</groupId>
         <artifactId>module-base</artifactId>
         <version>1.0.0</version>
-        <relativePath>../module-base/pom.xml</relativePath>
+        <relativePath/>
     </parent>
 
     <!-- TODO 1: fill the DPU name, without special characters, use '_' instead of whitespaces -->
