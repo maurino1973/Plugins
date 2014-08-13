@@ -46,7 +46,10 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
         selectRdfFormat = new NativeSelect("RDF format:");
         for (RDFFormat item : RDFFormat.values()) {
-            // TODO Remove formats for queads
+            if (item.supportsContexts()) {
+                // work with quads
+                continue;
+            }
             selectRdfFormat.addItem(item.getName());
             selectRdfFormat.setItemCaption(item, item.getName());
         }
@@ -55,6 +58,8 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
         checkMergeGraphs = new CheckBox("Merge graphs:");
         mainLayout.addComponent(checkMergeGraphs);
+        // TODO Remove
+        checkMergeGraphs.setEnabled(false);
 
         buildPanelSingleGraph();
         mainLayout.addComponent(panelSingleGraph);
@@ -156,7 +161,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
             desc.append("input->");
             desc.append(txtSingleFileSymbolicName);
             desc.append(".");
-            desc.append(((RDFFormat) selectRdfFormat.getValue()).getDefaultFileExtension());
+            desc.append(selectRdfFormat.getValue());
             if (checkGenGraphFile.getValue()) {
                 desc.append(" .graph is generated.");
             }
