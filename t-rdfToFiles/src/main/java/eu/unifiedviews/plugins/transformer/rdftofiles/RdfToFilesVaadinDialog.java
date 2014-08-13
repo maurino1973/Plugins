@@ -44,18 +44,6 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
         mainLayout.setHeight("-1px");
         mainLayout.setSpacing(true);
 
-        selectRdfFormat = new NativeSelect("RDF format:");
-        for (RDFFormat item : RDFFormat.values()) {
-            if (item.supportsContexts()) {
-                // work with quads
-                continue;
-            }
-            selectRdfFormat.addItem(item.getName());
-            selectRdfFormat.setItemCaption(item, item.getName());
-        }
-        selectRdfFormat.setNullSelectionAllowed(false);
-        mainLayout.addComponent(selectRdfFormat);
-
         checkMergeGraphs = new CheckBox("Merge graphs:");
         mainLayout.addComponent(checkMergeGraphs);
         // TODO Remove
@@ -80,6 +68,18 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
         mainLayout.setWidth("100%");
         mainLayout.setHeight("-1px");
         mainLayout.setSpacing(true);
+
+        selectRdfFormat = new NativeSelect("RDF format:");
+        for (RDFFormat item : RDFFormat.values()) {
+            if (item.supportsContexts()) {
+                // work with quads
+                continue;
+            }
+            selectRdfFormat.addItem(item.getName());
+            selectRdfFormat.setItemCaption(item, item.getName());
+        }
+        selectRdfFormat.setNullSelectionAllowed(false);
+        mainLayout.addComponent(selectRdfFormat);
 
         checkGenGraphFile = new CheckBox("Generate graph file:");
         mainLayout.addComponent(checkGenGraphFile);
