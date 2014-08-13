@@ -44,17 +44,10 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
         mainLayout.setHeight("-1px");
         mainLayout.setSpacing(true);
 
-        selectRdfFormat = new NativeSelect("RDF format:");
-        for (RDFFormat item : RDFFormat.values()) {
-            // TODO Remove formats for queads
-            selectRdfFormat.addItem(item.getName());
-            selectRdfFormat.setItemCaption(item, item.getName());
-        }
-        selectRdfFormat.setNullSelectionAllowed(false);
-        mainLayout.addComponent(selectRdfFormat);
-
         checkMergeGraphs = new CheckBox("Merge graphs:");
         mainLayout.addComponent(checkMergeGraphs);
+        // TODO Remove
+        checkMergeGraphs.setEnabled(false);
 
         buildPanelSingleGraph();
         mainLayout.addComponent(panelSingleGraph);
@@ -75,6 +68,18 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
         mainLayout.setWidth("100%");
         mainLayout.setHeight("-1px");
         mainLayout.setSpacing(true);
+
+        selectRdfFormat = new NativeSelect("RDF format:");
+        for (RDFFormat item : RDFFormat.values()) {
+            if (item.supportsContexts()) {
+                // work with quads
+                continue;
+            }
+            selectRdfFormat.addItem(item.getName());
+            selectRdfFormat.setItemCaption(item, item.getName());
+        }
+        selectRdfFormat.setNullSelectionAllowed(false);
+        mainLayout.addComponent(selectRdfFormat);
 
         checkGenGraphFile = new CheckBox("Generate graph file:");
         mainLayout.addComponent(checkGenGraphFile);
@@ -156,7 +161,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
             desc.append("input->");
             desc.append(txtSingleFileSymbolicName);
             desc.append(".");
-            desc.append(((RDFFormat) selectRdfFormat.getValue()).getDefaultFileExtension());
+            desc.append(selectRdfFormat.getValue());
             if (checkGenGraphFile.getValue()) {
                 desc.append(" .graph is generated.");
             }
