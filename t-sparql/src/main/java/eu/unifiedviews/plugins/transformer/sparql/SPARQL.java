@@ -175,21 +175,6 @@ public class SPARQL
 
                     //execute given construct query
                     Dataset dataSet = createGraphDataSet(inputs);
-                    //	TODO michal.klempa this should not be needed anymore
-                    //					if (placeHolders.needExecutableRepository()) {
-                    //						ManagableRdfDataUnit tempDataUnit = placeHolders
-                    //								.getExecutableTempRepository();
-                    //						Graph graph = tempDataUnit.executeConstructQuery(
-                    //								constructQuery, dataSet);
-                    //
-                    //						((ManagableRdfDataUnit) outputDataUnit)
-                    //								.addTriplesFromGraph(graph);
-                    //
-                    //						tempDataUnit.clear();
-                    //						tempDataUnit.release();
-                    //
-                    //					} else {
-
                     RepositoryConnection connectionInput = null;
                     Graph graph = null;
                     try {
@@ -237,26 +222,11 @@ public class SPARQL
                             updateQuery,
                             inputs);
 
-                    //					TODO michal.klempa this should not be needed anymore
-                    //					boolean needRepository = placeHolders
-                    //							.needExecutableRepository();
                     if (isFirstUpdateQuery) {
-
                         isFirstUpdateQuery = false;
-
-                        //						TODO michal.klempa this should not be needed anymore
-                        //						if (needRepository) {
                         prepareRepository(inputs);
-                        //						} else {
-                        //							((ManagableRdfDataUnit) outputDataUnit)
-                        //									.merge(intputDataUnit);
-                        //							TODO michal.klempa this should not be needed anymore
-                        //						}
-
                     }
 
-                    //					TODO michal.klempa this should not be needed anymore
-                    //					if (needRepository) {
                     RepositoryConnection connection = null;
                     try {
                         connection = outputDataUnit.getConnection();
@@ -276,21 +246,11 @@ public class SPARQL
                             }
                         }
                     }
-
-                    //					} else {
-                    //						outputDataUnit.executeSPARQLUpdateQuery(
-                    //								replacedUpdateQuery);
-                    //						TODO michal.klempa this should not be needed anymore
-                    //					}
                 }
 
             } catch (DataUnitException ex) {
                 context.sendMessage(DPUContext.MessageType.ERROR, ex.getMessage(), ex
                         .fillInStackTrace().toString());
-                //				TODO michal.klempa this should not be needed anymore
-                //			} catch (RepositoryException e) {
-                //                context.sendMessage(MessageType.ERROR, e.getMessage(), e
-                //                        .fillInStackTrace().toString());
             }
         }
         RepositoryConnection connection = null;
