@@ -7,7 +7,6 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -118,8 +117,7 @@ public class Zipper extends ConfigurableBase<ZipperConfig_V1> implements ConfigD
                     }
                     firstFailure = false;
                 } else {
-                    // add metadata
-                    CopyHelpers.copyMetadata(entry.getSymbolicName(), inFilesData, outFilesData);
+                    // TODO add metadata
                 }
             }
         } catch (IOException | DataUnitException ex) {
