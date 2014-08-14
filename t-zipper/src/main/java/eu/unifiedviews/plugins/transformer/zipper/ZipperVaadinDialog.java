@@ -1,5 +1,7 @@
 package eu.unifiedviews.plugins.transformer.zipper;
 
+import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import eu.unifiedviews.dpu.config.DPUConfigException;
@@ -29,6 +31,12 @@ public class ZipperVaadinDialog extends BaseConfigDialog<ZipperConfig_V1> {
         txtZipFile.setWidth("100%");
         txtZipFile.setRequired(true);
         mainLayout.addComponent(txtZipFile);
+
+        mainLayout.addComponent(new Label(
+                "Given path/name must be relative ie. /data.zip, /data/out.zip. "
+                        + "<br/> Absolute path like c:/ must not be used. "
+                        + "In case unix system /dir/data.zip is interpreted"
+                        + "as a relative path.", ContentMode.HTML));
 
         setCompositionRoot(mainLayout);
     }
