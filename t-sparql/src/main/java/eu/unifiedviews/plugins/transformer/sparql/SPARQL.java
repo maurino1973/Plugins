@@ -37,7 +37,7 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 /**
  * SPARQL Transformer.
- * 
+ *
  * @author Jiri Tomes
  * @author Petyr
  * @author tknap
@@ -61,19 +61,19 @@ public class SPARQL
     /**
      * The first repository optional input for SPARQL transformer.
      */
-    @DataUnit.AsInput(name = "optional1", optional = true)
+//    @DataUnit.AsInput(name = "optional1", optional = true)
     public RDFDataUnit intputOptional1;
 
     /**
      * The second repository optional input for SPARQL transformer.
      */
-    @DataUnit.AsInput(name = "optional2", optional = true)
+//    @DataUnit.AsInput(name = "optional2", optional = true)
     public RDFDataUnit intputOptional2;
 
     /**
      * The third repository optional input for SPARQL transformer.
      */
-    @DataUnit.AsInput(name = "optional3", optional = true)
+//    @DataUnit.AsInput(name = "optional3", optional = true)
     public RDFDataUnit intputOptional3;
 
     /**
@@ -117,7 +117,7 @@ public class SPARQL
 
     /**
      * Execute the SPARQL transformer.
-     * 
+     *
      * @param context
      *            SPARQL transformer context.
      * @throws DPUException
@@ -286,7 +286,7 @@ public class SPARQL
 
     /**
      * Returns the configuration dialogue for SPARQL transformer.
-     * 
+     *
      * @return the configuration dialogue for SPARQL transformer.
      */
     @Override
@@ -296,7 +296,7 @@ public class SPARQL
 
     /**
      * Transform RDF in repository by SPARQL updateQuery.
-     * 
+     *
      * @param updateQuery
      *            String value of update SPARQL query.
      * @param dataset
@@ -407,7 +407,7 @@ public class SPARQL
     /**
      * Make construct query over graph URIs in dataSet and return interface
      * Graph as result contains iterator for statements (triples).
-     * 
+     *
      * @param constructQuery
      *            String representation of SPARQL query.
      * @param dataSet
