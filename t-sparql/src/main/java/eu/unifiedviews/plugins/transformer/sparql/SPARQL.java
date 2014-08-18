@@ -165,54 +165,77 @@ public class SPARQL
 
             try {
                 if (isConstructQuery) {
-                    isFirstUpdateQuery = false;
-                    //creating newConstruct replaced query
-                    PlaceholdersHelper placeHolders = new PlaceholdersHelper(
-                            context);
-                    String constructQuery = placeHolders.getReplacedQuery(
-                            updateQuery,
-                            inputs);
-
-                    //execute given construct query
-                    Dataset dataSet = createGraphDataSet(inputs);
-                    RepositoryConnection connectionInput = null;
-                    Graph graph = null;
-                    try {
-                        connectionInput = intputDataUnit.getConnection();
-                        graph = executeConstructQuery(connectionInput, constructQuery, dataSet);
-                    } catch (DataUnitException ex) {
-                        LOG.error("Could not add triples from graph", ex);
-                    } finally {
-                        if (connectionInput != null) {
-                            try {
-                                connectionInput.close();
-                            } catch (RepositoryException ex) {
-                                context.sendMessage(DPUContext.MessageType.WARNING, ex.getMessage(), ex.fillInStackTrace().toString());
-                            }
-                        }
-                    }
-
-                    if (graph != null) {
+                    if (config.isRewriteConstructToInsert()) {
+                        String queryString = updateQuery.replaceFirst("CONSTRUCT", "INSERT");
                         RepositoryConnection connection = null;
+                        URI outputGraph = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
                         try {
-                            connection = outputDataUnit.getConnection();
-                            URI outputGraph = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
-                            connection.add(graph, outputGraph);
-                        } catch (RepositoryException | DataUnitException ex) {
-                            LOG.error("Could not add triples from graph", ex);
-
+                            connection = intputDataUnit.getConnection();
+                            Update update = connection.prepareUpdate(QueryLanguage.SPARQL, queryString);
+                            update.setDataset(new DatasetBuilder()
+                                    .withDefaultGraphs(RDFHelper.getGraphsURISet(intputDataUnit))
+                                    .withInsertGraph(outputGraph)
+                                    .build());
+                            update.execute();
+                        } catch (DataUnitException | RepositoryException | MalformedQueryException | UpdateExecutionException ex) {
+                            throw new DPUException(ex);
                         } finally {
                             if (connection != null) {
                                 try {
                                     connection.close();
                                 } catch (RepositoryException ex) {
+                                    LOG.warn("Error in close.", ex);
+                                }
+                            }
+                        }
+                    } else {
+                        isFirstUpdateQuery = false;
+                        //creating newConstruct replaced query
+                        PlaceholdersHelper placeHolders = new PlaceholdersHelper(
+                                context);
+                        String constructQuery = placeHolders.getReplacedQuery(
+                                updateQuery,
+                                inputs);
+
+                        //execute given construct query
+                        Dataset dataSet = createGraphDataSet(inputs);
+                        RepositoryConnection connectionInput = null;
+                        Graph graph = null;
+                        try {
+                            connectionInput = intputDataUnit.getConnection();
+                            graph = executeConstructQuery(connectionInput, constructQuery, dataSet);
+                        } catch (DataUnitException ex) {
+                            LOG.error("Could not add triples from graph", ex);
+                        } finally {
+                            if (connectionInput != null) {
+                                try {
+                                    connectionInput.close();
+                                } catch (RepositoryException ex) {
                                     context.sendMessage(DPUContext.MessageType.WARNING, ex.getMessage(), ex.fillInStackTrace().toString());
                                 }
                             }
                         }
-                    }
-                    //					}
 
+                        if (graph != null) {
+                            RepositoryConnection connection = null;
+                            try {
+                                connection = outputDataUnit.getConnection();
+                                URI outputGraph = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
+                                connection.add(graph, outputGraph);
+                            } catch (RepositoryException | DataUnitException ex) {
+                                LOG.error("Could not add triples from graph", ex);
+
+                            } finally {
+                                if (connection != null) {
+                                    try {
+                                        connection.close();
+                                    } catch (RepositoryException ex) {
+                                        context.sendMessage(DPUContext.MessageType.WARNING, ex.getMessage(), ex.fillInStackTrace().toString());
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else {
 
                     PlaceholdersHelper placeHolders = new PlaceholdersHelper(
