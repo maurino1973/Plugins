@@ -58,6 +58,10 @@ public class SPARQLConfig_V1 {
 
     public void setSPARQL_Update_Query(String SPARQL_Update_Query) {
         this.SPARQL_Update_Query = SPARQL_Update_Query;
+        if (SPARQL_Update_Query != null) {
+            queryPairs.add(new SPARQLQueryPair(SPARQL_Update_Query,
+                    isConstructType));
+        }
     }
 
     public boolean isIsConstructType() {
