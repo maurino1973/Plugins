@@ -29,7 +29,6 @@ import eu.unifiedviews.dpu.DPU.AsTransformer;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUContext.MessageType;
 import eu.unifiedviews.dpu.DPUException;
-import eu.unifiedviews.helpers.dataunit.copyhelper.AddAllHelper;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -44,8 +43,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  */
 @AsTransformer
 public class SPARQLTransformer
-extends ConfigurableBase<SPARQLTransformerConfig>
-implements ConfigDialogProvider<SPARQLTransformerConfig> {
+        extends ConfigurableBase<SPARQLTransformerConfig>
+        implements ConfigDialogProvider<SPARQLTransformerConfig> {
 
     private final Logger LOG = LoggerFactory.getLogger(SPARQLTransformer.class);
 
@@ -223,7 +222,7 @@ implements ConfigDialogProvider<SPARQLTransformerConfig> {
 
                     isFirstUpdateQuery = false;
 
-                    prepareRepository(inputs);
+                    prepareRepository(inputs, outputGraphName.stringValue());
 
                 }
 
@@ -273,13 +272,53 @@ implements ConfigDialogProvider<SPARQLTransformerConfig> {
     }
 
     //	TODO michal.klempa this should not be needed anymore
-    private void prepareRepository(List<RDFDataUnit> inputs) throws DPUException {
+    private void prepareRepository(List<RDFDataUnit> inputs, String targetGraphName) throws DPUException {
         try {
             for (RDFDataUnit input : inputs) {
-                AddAllHelper.addAll(input, outputDataUnit);
+                addAll(input, outputDataUnit, targetGraphName);
             }
         } catch (DataUnitException ex) {
             throw new DPUException(ex);
+        }
+    }
+
+    public void addAll(RDFDataUnit source, WritableRDFDataUnit destination, String targetGraphName) throws DataUnitException {
+        RepositoryConnection connection = null;
+        try {
+            connection = destination.getConnection();
+
+            for (URI sourceGraph : RDFHelper.getGraphsURISet(source)) {
+                String sourceGraphName = sourceGraph.stringValue();
+
+                LOG.info("Trying to merge {} triples from <{}> to <{}>.",
+                        connection.size(sourceGraph), sourceGraphName,
+                        targetGraphName);
+
+                String mergeQuery = String.format("ADD <%s> TO <%s>", sourceGraphName,
+                        targetGraphName);
+
+                Update update = connection.prepareUpdate(
+                        QueryLanguage.SPARQL, mergeQuery);
+
+                update.execute();
+
+                LOG.info("Merged {} triples from <{}> to <{}>.",
+                        connection.size(sourceGraph), sourceGraphName,
+                        targetGraphName);
+            }
+        } catch (MalformedQueryException ex) {
+            LOG.error("NOT VALID QUERY: {}", ex);
+        } catch (RepositoryException | DataUnitException | UpdateExecutionException ex) {
+            LOG.error(ex.getMessage(), ex);
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (RepositoryException ex) {
+                    LOG.warn("Error when closing connection", ex);
+                    // eat close exception, we cannot do anything clever here
+                }
+            }
         }
     }
 
@@ -435,7 +474,7 @@ implements ConfigDialogProvider<SPARQLTransformerConfig> {
             } catch (QueryEvaluationException ex) {
                 throw new InvalidQueryException(
                         "This query is probably not valid. " + ex
-                        .getMessage(),
+                                .getMessage(),
                         ex);
             }
 

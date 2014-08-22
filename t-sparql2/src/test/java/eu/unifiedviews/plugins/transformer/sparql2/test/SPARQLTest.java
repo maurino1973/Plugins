@@ -399,4 +399,131 @@ public class SPARQLTest {
             env.release();
         }
     }
+
+    @Test
+    public void addAllAndNewDeleteOnlyOld2() throws Exception {
+        // prepare dpu
+        SPARQL trans = new SPARQL();
+
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        config.setQueryPairs(Arrays.asList(
+                new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
+                new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
+                new SPARQLQueryPair("DELETE { ?s ?p ?o } where {?s ?p ?o  FILTER ( ?p != <http://test> ) }", false)));
+
+        trans.configureDirectly(config);
+
+        // prepare test environment
+        TestEnvironment env = new TestEnvironment();
+
+        // prepare data units
+        WritableRDFDataUnit input = env.createRdfInput("input", false);
+        WritableRDFDataUnit output = env.createRdfOutput("output", false);
+
+        InputStream inputStream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("metadata.ttl");
+        InputStream addOnlyConstructInputStream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("addOnlyNew.ttl");
+
+        RepositoryConnection connection = null;
+        RepositoryConnection connection2 = null;
+        try {
+            connection = input.getConnection();
+            String baseURI = "";
+            URI graph = input.addNewDataGraph("test");
+            connection.add(inputStream, baseURI, RDFFormat.TURTLE, graph);
+            ByteArrayOutputStream inputBos = new ByteArrayOutputStream();
+            connection.export(new TurtleWriter(inputBos), graph);
+
+            // some triples has been loaded
+            assertTrue(connection.size(graph) > 0);
+            // run
+            env.run(trans);
+            connection2 = output.getConnection();
+            // verify result
+            assertTrue(connection.size(graph) == connection2.size(RDFHelper.getGraphsURIArray(output)));
+
+            ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
+            connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
+
+            assertEquals(IOUtils.toString(addOnlyConstructInputStream), outputBos.toString("UTF-8"));
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            }
+            if (connection2 != null) {
+                try {
+                    connection2.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            } // release resources
+            env.release();
+        }
+    }
+
+    @Test
+    public void swapTripleTest() throws Exception {
+        // prepare dpu
+        SPARQL trans = new SPARQL();
+
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        config.setQueryPairs(Arrays.asList(
+                new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
+                new SPARQLQueryPair("DELETE { ?s ?p ?o. } INSERT { ?o ?p ?s. } WHERE { ?s  ?p ?o. }", false)
+                ));
+        trans.configureDirectly(config);
+
+        // prepare test environment
+        TestEnvironment env = new TestEnvironment();
+
+        // prepare data units
+        WritableRDFDataUnit input = env.createRdfInput("input", false);
+        WritableRDFDataUnit output = env.createRdfOutput("output", false);
+
+        InputStream inputStream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("onetriple.ttl");
+        InputStream swappedInputStream = Thread.currentThread().getContextClassLoader()
+                .getResourceAsStream("onetripleswapped.ttl");
+
+        RepositoryConnection connection = null;
+        RepositoryConnection connection2 = null;
+        try {
+            connection = input.getConnection();
+            URI graph = input.addNewDataGraph("test");
+            connection.add(inputStream, "", RDFFormat.TURTLE, graph);
+            // some triples has been loaded
+            assertTrue(connection.size(graph) > 0);
+            // run
+            env.run(trans);
+
+            connection2 = output.getConnection();
+            // verify result
+            assertTrue(connection.size(graph) == connection2.size(RDFHelper.getGraphsURIArray(output)));
+            ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
+            connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
+
+            assertEquals(IOUtils.toString(swappedInputStream), outputBos.toString("UTF-8"));
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            }
+            if (connection2 != null) {
+                try {
+                    connection2.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            } // release resources
+            env.release();
+        }
+    }
 }

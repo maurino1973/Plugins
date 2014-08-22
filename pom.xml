@@ -20,7 +20,7 @@
 		<module>e-httpDownload</module>
 
 		<!-- TRANSFORMERS -->
-		<module>t-sparql</module>
+<!--		<module>t-sparql</module> -->
 		<module>t-sparql2</module>
 		<module>t-sparqlLegacy</module>
 		<module>t-sparqlSelect</module>
