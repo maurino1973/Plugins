@@ -441,7 +441,7 @@ public class SPARQL
      *             query is not valid.
      */
     public Graph executeConstructQuery(RepositoryConnection connection, String constructQuery, Dataset dataSet)
-            throws InvalidQueryException {
+            throws DPUException {
 
         try {
 
@@ -459,14 +459,14 @@ public class SPARQL
                 return QueryResults.asModel(result);
 
             } catch (QueryEvaluationException ex) {
-                throw new InvalidQueryException(
+                throw new DPUException(
                         "This query is probably not valid. " + ex
                                 .getMessage(),
                         ex);
             }
 
         } catch (MalformedQueryException ex) {
-            throw new InvalidQueryException(
+            throw new DPUException(
                     "This query is probably not valid. "
                             + ex.getMessage(), ex);
         } catch (RepositoryException ex) {
@@ -474,7 +474,7 @@ public class SPARQL
                     ex.getMessage(), ex);
         }
 
-        throw new InvalidQueryException(
+        throw new DPUException(
                 "Getting GraphQueryResult using SPARQL construct query failed.");
     }
 

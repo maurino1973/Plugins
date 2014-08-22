@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformer.sparql.test;
+package eu.unifiedviews.plugins.transformer.sparql2.test;
 
 import static org.junit.Assert.assertTrue;
 
