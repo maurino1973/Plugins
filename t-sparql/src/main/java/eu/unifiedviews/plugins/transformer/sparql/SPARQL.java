@@ -166,7 +166,7 @@ public class SPARQL
             try {
                 if (isConstructQuery) {
                     if (config.isRewriteConstructToInsert()) {
-                        String queryString = updateQuery.replaceFirst("CONSTRUCT", "INSERT");
+                        String queryString = updateQuery.replaceFirst("(?i)CONSTRUCT", "INSERT");
                         RepositoryConnection connection = null;
                         URI outputGraph = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
                         try {
