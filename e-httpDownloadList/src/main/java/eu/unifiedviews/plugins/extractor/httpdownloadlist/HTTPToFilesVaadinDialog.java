@@ -1,17 +1,17 @@
 package eu.unifiedviews.plugins.extractor.httpdownloadlist;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.vaadin.data.util.ObjectProperty;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.TextArea;
+import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_V1> {
+public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_V1> implements ManipolableListComponentProvider {
     /**
      * 
      */
@@ -32,13 +32,17 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
 
     private static final String READ_TIMEOUT_LABEL = "Read timeout (HTTP)";
 
-    private static final String MAP_TEXT = "Files to download (one file = one line in format <symbolicName>;<URL>;[virtualPath])";
+	private static final int SYMBOLIC_NAME_COL = 0;
+	private static final int URL_COL = 1;
+	private static final int VIRTUAL_PATH_COL = 2;
+
+    private static final String INFO_TEXT = "Files to download (1st field = <symbolicName>, 2nd field = <URL>, 3rd field = <virtualPath>)";
 
     private ObjectProperty<Integer> connectionTimeout = new ObjectProperty<Integer>(0);
 
     private ObjectProperty<Integer> readTimeout = new ObjectProperty<Integer>(0);
 
-    private ObjectProperty<String> mapText = new ObjectProperty<String>("");
+	private ManipulableListManager dataManager;
 
     public HTTPToFilesVaadinDialog() {
         super(HTTPToFilesConfig_V1.class);
@@ -46,19 +50,26 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
     }
 
     private void initialize() {
+    	setSizeFull();
+    	
         FormLayout formLayout = new FormLayout();
 
         formLayout.addComponent(new TextField(CONNECTION_TIMEOUT_LABEL, connectionTimeout));
         formLayout.addComponent(new TextField(READ_TIMEOUT_LABEL, readTimeout));
 
         VerticalLayout mainLayout = new VerticalLayout();
-
-        TextArea textArea = new TextArea(MAP_TEXT, mapText);
-        textArea.setWidth("100%");
-        textArea.setInputPrompt("shakespeare;https://commondatastorage.googleapis.com/ckannet-storage/2012-04-24T183403/will_play_text.csv;inputs/shakespeare.csv");
+        mainLayout.setSizeFull();
 
         mainLayout.addComponent(formLayout);
-        mainLayout.addComponent(textArea);
+        
+        Panel panel = new Panel();
+        panel.setSizeFull();
+        
+        dataManager = new ManipulableListManager(this);
+        panel.setContent(dataManager.initList(null));
+        mainLayout.addComponent(new Label(INFO_TEXT));
+        mainLayout.addComponent(panel);
+        mainLayout.setExpandRatio(panel, 1);
 
         setCompositionRoot(mainLayout);
     }
@@ -67,52 +78,51 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
     public void setConfiguration(HTTPToFilesConfig_V1 conf) throws DPUConfigException {
         connectionTimeout.setValue(conf.getConnectionTimeout());
         readTimeout.setValue(conf.getReadTimeout());
-        StringBuilder sb = new StringBuilder();
+        
+        List<Component> data = new LinkedList<>();
+        
         for (String key : conf.getSymbolicNameToURIMap().keySet()) {
-            sb.append(key);
-            sb.append(";");
-            sb.append(conf.getSymbolicNameToURIMap().get(key));
-            if (conf.getSymbolicNameToVirtualPathMap().containsKey(key)) {
-                sb.append(";");
-                sb.append(conf.getSymbolicNameToVirtualPathMap().get(key));
-            }
-            sb.append("\n");
+            
+            data.add(createNewComponent(key, conf.getSymbolicNameToURIMap().get(key),
+            		conf.getSymbolicNameToVirtualPathMap().get(key)));
         }
-        mapText.setValue(sb.toString());
+        dataManager.setDataList(data);
     }
 
     @Override
     public HTTPToFilesConfig_V1 getConfiguration() throws DPUConfigException {
         Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
         Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
-        BufferedReader br = new BufferedReader(new StringReader(mapText.getValue()));
 
-        String line;
-        int i = 1;
-        try {
-            while ((line = br.readLine()) != null) {
-                String[] val = StringUtils.splitByWholeSeparatorPreserveAllTokens(line, ";");
-                if (val.length < 2) {
-                    throw new DPUConfigException(String.format("Line %d %s has invalid format.", i, line));
-                }
-
-                if (symbolicNameToURIMap.containsKey(val[0])) {
-                    throw new DPUConfigException(String.format("Duplicate symbolic name %s on line %d.", val[0], i));
-                }
-
-                try {
-                    new java.net.URL(val[1]);
-                } catch (MalformedURLException ex) {
-                    throw new DPUConfigException(String.format("Wrong URL on line %d symbolic name", i, val[0]), ex);
-                }
-                symbolicNameToURIMap.put(val[0], val[1]);
-                if (val.length >= 3) {
-                    symbolicNameToVirtualPathMap.put(val[0], val[2]);
-                }
-                i++;
-            }
-        } catch (IOException ex) {
-            throw new DPUConfigException(ex);
+        List<Component> dataList = dataManager.getDataList();
+        String symbolicName = null;
+        String url = null;
+        String virtualPath = null;
+        for (Component layout : dataList) {
+        	symbolicName = getValue(layout, SYMBOLIC_NAME_COL);
+        	url = getValue(layout, URL_COL);
+        	virtualPath = getValue(layout, VIRTUAL_PATH_COL);
+        	
+        	if (symbolicName.isEmpty()) {
+        		throw new DPUConfigException("Symbolic name can't be empty.");
+        	}
+        	
+        	if (symbolicNameToURIMap.containsKey(symbolicName)) {
+        		throw new DPUConfigException(String.format("Duplicate symbolic name %s.", symbolicName));
+        	}
+        	
+        	try {
+        		new java.net.URL(url);
+        	} catch (MalformedURLException ex) {
+        		throw new DPUConfigException(String.format("Wrong URL for symbolic name %s", symbolicName), ex);
+        	}
+        	
+        	if (!getTextField(layout, VIRTUAL_PATH_COL).isValid()) {
+        		throw new DPUConfigException(String.format("Missing virtual path for symbolic name %s.", symbolicName));
+			}
+        	
+        	symbolicNameToURIMap.put(symbolicName, url);
+        	symbolicNameToVirtualPathMap.put(symbolicName, virtualPath);
         }
 
         HTTPToFilesConfig_V1 conf = new HTTPToFilesConfig_V1();
@@ -122,5 +132,42 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
         conf.setReadTimeout(readTimeout.getValue());
         return conf;
     }
+    
+    private TextField getTextField(Component layout, int column) {
+    	GridLayout gridLayout = (GridLayout) layout;
+    	return (TextField) gridLayout.getComponent(column, 0);    	
+    }
+    
+    private String getValue(Component layout, int column) {
+    	return getTextField(layout, column).getValue().trim();
+    }
 
+	@Override
+	public Component createNewComponent() {
+		return createNewComponent("", "", "");
+	}
+	
+	private Component createNewComponent(String symbolicName, String URI, String virtualPath) {
+		GridLayout layout = new GridLayout(3, 1);
+		layout.setSpacing(true);
+
+		TextField text = new TextField();
+		text.setRequired(true);
+		text.setValue(symbolicName == null ? "" : symbolicName.trim());
+		text.setInputPrompt("shakespeare");
+		layout.addComponent(text, SYMBOLIC_NAME_COL, 0);
+		
+		text = new TextField();
+		text.setRequired(true);
+		text.setValue(URI == null ? "" : URI.trim());
+		text.setInputPrompt("https://commondatastorage.googleapis.com/ckannet-storage/2012-04-24T183403/will_play_text.csv");
+		layout.addComponent(text, URL_COL, 0);
+		
+		text = new TextField();
+		text.setRequired(true);
+		text.setValue(virtualPath == null ? "" : virtualPath.trim());
+		text.setInputPrompt("inputs/shakespeare.csv");
+		layout.addComponent(text, VIRTUAL_PATH_COL, 0);
+		return layout;
+	}
 }
