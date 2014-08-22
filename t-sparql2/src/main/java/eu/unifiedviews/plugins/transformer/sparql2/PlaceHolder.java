@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformer.sparql;
+package eu.unifiedviews.plugins.transformer.sparql2;
 
 /**
  * Class responsible for keeping mapping between DPU name a graph name for this

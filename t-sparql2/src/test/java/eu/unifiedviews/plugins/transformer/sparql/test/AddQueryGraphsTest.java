@@ -18,7 +18,7 @@ import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
-import eu.unifiedviews.plugins.transformer.sparql.SPARQL;
+import eu.unifiedviews.plugins.transformer.sparql2.SPARQL;
 
 public class AddQueryGraphsTest {
 

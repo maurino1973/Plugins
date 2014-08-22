@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformer.sparql;
+package eu.unifiedviews.plugins.transformer.sparql2;
 
 import java.util.LinkedList;
 import java.util.List;
