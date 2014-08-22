@@ -1,50 +1,51 @@
-package com.example;
+package eu.unifiedviews.plugins.dputemplate;
 
-import cz.cuni.mff.xrg.odcs.commons.data.DataUnitException;
-import cz.cuni.mff.xrg.odcs.commons.dpu.DPUContext;
-import cz.cuni.mff.xrg.odcs.commons.dpu.DPUException;
-import cz.cuni.mff.xrg.odcs.commons.dpu.annotation.AsTransformer;
-import cz.cuni.mff.xrg.odcs.commons.dpu.annotation.InputDataUnit;
-import cz.cuni.mff.xrg.odcs.commons.dpu.annotation.OutputDataUnit;
-import cz.cuni.mff.xrg.odcs.commons.module.dpu.ConfigurableBase;
-import cz.cuni.mff.xrg.odcs.commons.web.AbstractConfigDialog;
-import cz.cuni.mff.xrg.odcs.commons.web.ConfigDialogProvider;
-import cz.cuni.mff.xrg.odcs.rdf.RDFDataUnit;
-import cz.cuni.mff.xrg.odcs.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.dataunit.DataUnit;
+import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
+import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
+import eu.unifiedviews.dpu.DPU.AsTransformer;
+import eu.unifiedviews.dpu.DPUContext;
+import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
+import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
+import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 // TODO 1: You can choose AsLoader or AsExtractor instead of AsTransformer
 @AsTransformer
-public class DPUTemplate extends ConfigurableBase<DPUTemplateConfig>
-        implements
-        // If you do not want the dialog, delete the following line
-        // 	and getConfigurationDialog function
-        ConfigDialogProvider<DPUTemplateConfig>
-{
+public class DPUTemplate extends ConfigurableBase<DPUTemplateConfig_V1> implements ConfigDialogProvider<DPUTemplateConfig_V1> {
+// If you do not want the dialog, use the following DPU declaration
+// and remove getConfigurationDialog function
+//public class DPUTemplate implements DPU {
 
-    @InputDataUnit(name = "input")
+    @DataUnit.AsInput(name = "input")
     public RDFDataUnit rdfInput;
 
-    @OutputDataUnit(name = "output")
-    public WritableRDFDataUnit rdfOutput;
+    @DataUnit.AsOutput(name = "filesOutput")
+    public WritableFilesDataUnit filesOutput;
 
     public DPUTemplate() {
-        super(DPUTemplateConfig.class);
+        super(DPUTemplateConfig_V1.class);
     }
 
     @Override
-    public AbstractConfigDialog<DPUTemplateConfig> getConfigurationDialog() {
-        return new DPUTemplateDialog();
+    public AbstractConfigDialog<DPUTemplateConfig_V1> getConfigurationDialog() {
+        return new DPUTemplateVaadinDialog();
     }
 
     // TODO 2: Implement the method execute being called when the DPU is launched
     @Override
-    public void execute(DPUContext context)
-            throws DPUException,
-            DataUnitException {
-
-        // DPU's configuration is accessible under 'this.config' 
+    public void execute(DPUContext context) throws DPUException {
+        // DPU's configuration is accessible under 'this.config'
         // DPU's context is accessible under 'context'
-        // DPU's data units are accessible under 'rdfInput' and 'rdfOutput'
+        // DPU's data units are accessible under 'rdfInput' and 'filesOutput'
+
+        //Let's write simple RDF graph to file transformer DPU
+        //It will export each RDF data graph from rdfInput to single RDF+XML file on the filesOutput
+        //Copy any metadata from graph to file to be neat to others using them
+        //And finally, we will generate one new file, which name is configured by user in dialog
+        //and it will contain list of symbolicName;graphUri;fileLocation for each graph-file pair on each line
+        //it is of no practical meaning, just to show the API
+
     }
 
 }

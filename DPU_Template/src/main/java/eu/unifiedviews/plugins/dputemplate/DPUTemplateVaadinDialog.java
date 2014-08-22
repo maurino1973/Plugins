@@ -1,25 +1,25 @@
-package com.example;
+package eu.unifiedviews.plugins.dputemplate;
 
-import cz.cuni.mff.xrg.odcs.commons.configuration.ConfigException;
-import cz.cuni.mff.xrg.odcs.commons.module.dialog.BaseConfigDialog;
+import eu.unifiedviews.dpu.config.DPUConfigException;
+import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
 /**
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class DPUTemplateDialog extends BaseConfigDialog<DPUTemplateConfig> {
+public class DPUTemplateVaadinDialog extends BaseConfigDialog<DPUTemplateConfig_V1> {
 
-    public DPUTemplateDialog() {
-        super(DPUTemplateConfig.class);
+    public DPUTemplateVaadinDialog() {
+        super(DPUTemplateConfig_V1.class);
     }
 
     @Override
-    public void setConfiguration(DPUTemplateConfig conf) throws ConfigException {
+    public void setConfiguration(DPUTemplateConfig_V1 conf) throws DPUConfigException {
         // TODO : load configuration from function parameter into dialog
     }
 
     @Override
-    public DPUTemplateConfig getConfiguration() throws ConfigException {
+    public DPUTemplateConfig_V1 getConfiguration() throws DPUConfigException {
         // TODO : gather information from dialog and store them into configuration, then return it
         return null;
     }
