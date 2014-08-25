@@ -54,7 +54,7 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException {
-        //check that XSLT is available 
+        //check that XSLT is available
         if (config.getXslTemplate().isEmpty()) {
             throw new DPUException("No XSLT template available, execution interrupted");
         }
@@ -88,7 +88,7 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
         MapHelper mapHelper = MapHelpers.create(filesInput);
         String xsltParametersMapName = config.getXlstParametersMapName();
         try {
-            while ((shouldContinue) && (filesIteration.hasNext())) {
+            while (shouldContinue && filesIteration.hasNext()) {
                 FilesDataUnit.Entry entry;
                 try {
                     entry = filesIteration.next();
@@ -157,6 +157,11 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
             } catch (DataUnitException ex) {
                 LOG.warn("Error closing filesInput", ex);
             }
+            try {
+                mapHelper.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close", ex);
+            }
         }
         String message = String.format("Processed %d/%d", filesSuccessfulCount, index);
         dpuContext.sendMessage(filesSuccessfulCount < index ? DPUContext.MessageType.WARNING : DPUContext.MessageType.INFO, message);
@@ -168,8 +173,9 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
             // Check for special case: 11 - 13 are all "th".
             // So if the second to last digit is 1, it is "th".
             char secondToLastDigit = value.charAt(value.length() - 2);
-            if (secondToLastDigit == '1')
+            if (secondToLastDigit == '1') {
                 return value + "th";
+            }
         }
         char lastDigit = value.charAt(value.length() - 1);
         switch (lastDigit) {
