@@ -229,6 +229,8 @@ implements ConfigDialogProvider<SPARQLConfig_V1> {
                 CleverDataset dataset = new CleverDataset();
                 dataset.addDefaultGraph(outputGraphName);
                 dataset.addNamedGraph(outputGraphName);
+                dataset.setDefaultInsertGraph(outputGraphName);
+                dataset.addDefaultRemoveGraph(outputGraphName);
 
                 RepositoryConnection connection = null;
                 try {
