@@ -18,6 +18,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
+import cz.cuni.mff.xrg.odcs.transformer.sparql.SPARQLConfig_V1;
+import cz.cuni.mff.xrg.odcs.transformer.sparql.SPARQLQueryPair;
+import cz.cuni.mff.xrg.odcs.transformer.sparql.SPARQL;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
@@ -27,12 +30,12 @@ public class SPARQLLegacyTest {
     @Test
     public void addAllTest() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
         String SPARQL_Update_Query = "CONSTRUCT {?s ?p ?o} where {?s ?p ?o }";
         boolean isConstructType = true;
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig(
+        SPARQLConfig_V1 config = new SPARQLConfig_V1(
                 SPARQL_Update_Query, isConstructType);
 
         trans.configureDirectly(config);
@@ -89,9 +92,9 @@ public class SPARQLLegacyTest {
     @Test
     public void addAllAndNew() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("CONSTRUCT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("CONSTRUCT {?s <http://test> ?o . } where {?s ?p ?o}", true)));
@@ -151,9 +154,9 @@ public class SPARQLLegacyTest {
     @Test
     public void addAllAndNew2() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("CONSTRUCT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false)));
@@ -213,9 +216,9 @@ public class SPARQLLegacyTest {
     @Test
     public void addAllAndNew3() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false)));
 
@@ -274,9 +277,9 @@ public class SPARQLLegacyTest {
     @Test
     public void addOnlyNew() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("CONSTRUCT {?s <http://test> ?o . } where {?s ?p ?o}", true)));
 
@@ -334,9 +337,9 @@ public class SPARQLLegacyTest {
     @Test
     public void addAllAndNewDeleteOnlyNew() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("CONSTRUCT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
@@ -396,9 +399,9 @@ public class SPARQLLegacyTest {
     @Test
     public void deleteOnlyNew() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
                 new SPARQLQueryPair("DELETE where {?s <http://test> ?o}", false)));
@@ -457,9 +460,9 @@ public class SPARQLLegacyTest {
     @Test
     public void addAllAndNewDeleteOnlyOld() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("CONSTRUCT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
@@ -523,9 +526,9 @@ public class SPARQLLegacyTest {
     @Test
     public void swapTripleTest() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("DELETE { ?s ?p ?o. } INSERT { ?o ?p ?s. } WHERE { ?s  ?p ?o. }", false)
                 ));
@@ -584,9 +587,9 @@ public class SPARQLLegacyTest {
     @Test
     public void constrainedDelete() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("CONSTRUCT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("DELETE { ?s ?p ?o. } WHERE { ?s  ?p ?o. }", false)
@@ -642,9 +645,9 @@ public class SPARQLLegacyTest {
     @Test
     public void constrainedDelete2() throws Exception {
         // prepare dpu
-        SPARQLTransformer trans = new SPARQLTransformer();
+        SPARQL trans = new SPARQL();
 
-        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 config = new SPARQLConfig_V1();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("DELETE { ?s ?p ?o. } WHERE { ?s  ?p ?o. }", false)
                 ));

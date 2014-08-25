@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryLanguage;

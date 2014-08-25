@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 /**
  * It is responsible for right validation of queries.

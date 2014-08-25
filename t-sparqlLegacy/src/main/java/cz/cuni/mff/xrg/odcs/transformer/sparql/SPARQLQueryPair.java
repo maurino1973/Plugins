@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 /**
  * Responsible for keeping pair of SPARQL query and boolean value, where value

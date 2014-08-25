@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
+import cz.cuni.mff.xrg.odcs.transformer.sparql.SPARQL;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPUException;
@@ -24,7 +25,7 @@ public class AddQueryGraphsTest {
 
     private static TestEnvironment testEnvironment;
 
-    private static SPARQLTransformer trans;
+    private static SPARQL trans;
 
     private static String GRAPH_NAME;
 
@@ -39,7 +40,7 @@ public class AddQueryGraphsTest {
         repository = testEnvironment.createRdfInput("LocalRepository", false);
         GRAPH_NAME_URI = repository.addNewDataGraph("fdsafds");
         GRAPH_NAME = GRAPH_NAME_URI.stringValue();
-        trans = new SPARQLTransformer();
+        trans = new SPARQL();
 
     }
 

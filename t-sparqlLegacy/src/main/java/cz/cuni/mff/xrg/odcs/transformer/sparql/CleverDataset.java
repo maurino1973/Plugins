@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;

@@ -91,16 +91,4 @@ public class SPARQLConfig_V1 {
     public void setRewriteConstructToInsert(boolean rewriteConstructToInsert) {
         this.rewriteConstructToInsert = rewriteConstructToInsert;
     }
-
-    /**
-     * Fill missing configuration with default values.
-     */
-//    @Override
-//    public void onDeserialize() {
-//        if (SPARQL_Update_Query != null) {
-//            queryPairs.add(new SPARQLQueryPair(SPARQL_Update_Query,
-//                    isConstructType));
-//        }
-//    }
-
 }

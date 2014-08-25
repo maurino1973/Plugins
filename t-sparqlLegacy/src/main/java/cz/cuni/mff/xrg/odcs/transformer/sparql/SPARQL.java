@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +42,11 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  * @author tknap
  */
 @AsTransformer
-public class SPARQLTransformer
-        extends ConfigurableBase<SPARQLTransformerConfig>
-        implements ConfigDialogProvider<SPARQLTransformerConfig> {
+public class SPARQL
+        extends ConfigurableBase<SPARQLConfig_V1>
+        implements ConfigDialogProvider<SPARQLConfig_V1> {
 
-    private final Logger LOG = LoggerFactory.getLogger(SPARQLTransformer.class);
+    private final Logger LOG = LoggerFactory.getLogger(SPARQL.class);
 
     public static final String[] DPUNames = { "input", "optional1", "optional2", "optional3" };
 
@@ -81,8 +81,8 @@ public class SPARQLTransformer
     @DataUnit.AsOutput(name = "output")
     public WritableRDFDataUnit outputDataUnit;
 
-    public SPARQLTransformer() {
-        super(SPARQLTransformerConfig.class);
+    public SPARQL() {
+        super(SPARQLConfig_V1.class);
     }
 
     private Dataset createGraphDataSet(List<RDFDataUnit> inputs) throws DPUException {
@@ -328,8 +328,8 @@ public class SPARQLTransformer
      * @return the configuration dialogue for SPARQL transformer.
      */
     @Override
-    public AbstractConfigDialog<SPARQLTransformerConfig> getConfigurationDialog() {
-        return new SPARQLTransformerDialog();
+    public AbstractConfigDialog<SPARQLConfig_V1> getConfigurationDialog() {
+        return new SPARQLVaadinDialog();
     }
 
     /**

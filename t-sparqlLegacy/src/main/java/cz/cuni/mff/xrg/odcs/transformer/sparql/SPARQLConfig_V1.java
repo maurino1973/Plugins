@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author Jiri Tomes
  * @author tknap
  */
-public class SPARQLTransformerConfig {
+public class SPARQLConfig_V1 {
 
     private List<SPARQLQueryPair> queryPairs;
 
@@ -17,16 +17,20 @@ public class SPARQLTransformerConfig {
 
     boolean isConstructType;
 
-    public SPARQLTransformerConfig() {
+    private String outputGraphSymbolicName = "T-SPARQL/output" + String.valueOf(new java.util.Random().nextInt(100));
+
+    private boolean rewriteConstructToInsert = false;
+
+    public SPARQLConfig_V1() {
         this.queryPairs = new LinkedList<>();
     }
 
-    public SPARQLTransformerConfig(String query, boolean isContructType) {
+    public SPARQLConfig_V1(String query, boolean isContructType) {
         this.queryPairs = new LinkedList<>();
         this.queryPairs.add(new SPARQLQueryPair(query, isContructType));
     }
 
-    public SPARQLTransformerConfig(List<SPARQLQueryPair> queryPairs) {
+    public SPARQLConfig_V1(List<SPARQLQueryPair> queryPairs) {
         this.queryPairs = queryPairs;
     }
 
@@ -72,10 +76,19 @@ public class SPARQLTransformerConfig {
         this.queryPairs = queryPairs;
     }
 
-    /**
-     * Fill missing configuration with default values.
-     */
-    public void onDeserialize() {
+    public String getOutputGraphSymbolicName() {
+        return outputGraphSymbolicName;
+    }
 
+    public void setOutputGraphSymbolicName(String outputGraphSymbolicName) {
+        this.outputGraphSymbolicName = outputGraphSymbolicName;
+    }
+
+    public boolean isRewriteConstructToInsert() {
+        return rewriteConstructToInsert;
+    }
+
+    public void setRewriteConstructToInsert(boolean rewriteConstructToInsert) {
+        this.rewriteConstructToInsert = rewriteConstructToInsert;
     }
 }

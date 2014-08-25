@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package cz.cuni.mff.xrg.odcs.transformer.sparql;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,7 +20,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  *
  * @authod Petr Škoda
  */
-public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerConfig> {
+public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
 
     private enum QueryType {
         INVALID,
@@ -39,8 +39,8 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      */
     private final HashMap<TextArea, QueryType> queryTypes = new HashMap<>();
 
-    public SPARQLTransformerDialog() {
-        super(SPARQLTransformerConfig.class);
+    public SPARQLVaadinDialog() {
+        super(SPARQLConfig_V1.class);
         init();
     }
 
@@ -176,7 +176,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(SPARQLTransformerConfig conf) throws DPUConfigException {
+    public void setConfiguration(SPARQLConfig_V1 conf) throws DPUConfigException {
         queries.clear();
         queryTypes.clear();
         accordion.removeAllComponents();
@@ -200,9 +200,9 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      *         configuration dialog.
      */
     @Override
-    public SPARQLTransformerConfig getConfiguration() throws DPUConfigException {
+    public SPARQLConfig_V1 getConfiguration() throws DPUConfigException {
 
-        SPARQLTransformerConfig conf = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 conf = new SPARQLConfig_V1();
         List<SPARQLQueryPair> queryPairs = conf.getQueryPairs();
 
         for (int i = 0; i < queries.size(); i++) {
