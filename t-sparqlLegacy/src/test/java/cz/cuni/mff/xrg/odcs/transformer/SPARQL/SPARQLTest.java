@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.openrdf.model.URI;
+import org.openrdf.model.ValueFactory;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.turtle.TurtleWriter;
@@ -561,6 +562,121 @@ public class SPARQLTest {
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
             System.out.println(outputBos.toString("UTF-8"));
             assertEquals(IOUtils.toString(swappedInputStream), outputBos.toString("UTF-8"));
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            }
+            if (connection2 != null) {
+                try {
+                    connection2.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            } // release resources
+            env.release();
+        }
+    }
+
+    @Test
+    public void constrainedDelete() throws Exception {
+        // prepare dpu
+        SPARQLTransformer trans = new SPARQLTransformer();
+
+        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        config.setQueryPairs(Arrays.asList(
+                new SPARQLQueryPair("CONSTRUCT {?s ?p ?o} where {?s ?p ?o }", true),
+                new SPARQLQueryPair("DELETE { ?s ?p ?o. } WHERE { ?s  ?p ?o. }", false)
+                ));
+        trans.configureDirectly(config);
+
+        // prepare test environment
+        TestEnvironment env = new TestEnvironment();
+
+        // prepare data units
+        WritableRDFDataUnit input = env.createRdfInput("input", false);
+        WritableRDFDataUnit output = env.createRdfOutput("output", false);
+
+        RepositoryConnection connection = null;
+        RepositoryConnection connection2 = null;
+        try {
+            connection = input.getConnection();
+            URI graph = input.addNewDataGraph("test");
+            ValueFactory vf = connection.getValueFactory();
+            URI notGraph = vf.createURI("http://context");
+            connection.add(vf.createURI("http://subject"), vf.createURI("http://predicate"), vf.createURI("http://object"), graph);
+            connection.add(vf.createURI("http://subject"), vf.createURI("http://predicate"), vf.createURI("http://object"), notGraph);
+
+            // some triples has been loaded
+            assertTrue(connection.size(graph) == 1);
+            assertTrue(connection.size(notGraph) == 1);
+            // run
+            env.run(trans);
+
+            connection2 = output.getConnection();
+            // verify result
+            assertTrue(0 == connection2.size(RDFHelper.getGraphsURIArray(output)));
+            assertTrue(connection2.size(notGraph) == 1);
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            }
+            if (connection2 != null) {
+                try {
+                    connection2.close();
+                } catch (Throwable ex) {
+                    LOG.warn("Error closing connection", ex);
+                }
+            } // release resources
+            env.release();
+        }
+    }
+
+    @Test
+    public void constrainedDelete2() throws Exception {
+        // prepare dpu
+        SPARQLTransformer trans = new SPARQLTransformer();
+
+        SPARQLTransformerConfig config = new SPARQLTransformerConfig();
+        config.setQueryPairs(Arrays.asList(
+                new SPARQLQueryPair("DELETE { ?s ?p ?o. } WHERE { ?s  ?p ?o. }", false)
+                ));
+        trans.configureDirectly(config);
+
+        // prepare test environment
+        TestEnvironment env = new TestEnvironment();
+
+        // prepare data units
+        WritableRDFDataUnit input = env.createRdfInput("input", false);
+        WritableRDFDataUnit output = env.createRdfOutput("output", false);
+
+        RepositoryConnection connection = null;
+        RepositoryConnection connection2 = null;
+        try {
+            connection = input.getConnection();
+            URI graph = input.addNewDataGraph("test");
+            ValueFactory vf = connection.getValueFactory();
+            URI notGraph = vf.createURI("http://context");
+            connection.add(vf.createURI("http://subject"), vf.createURI("http://predicate"), vf.createURI("http://object"), graph);
+            connection.add(vf.createURI("http://subject"), vf.createURI("http://predicate"), vf.createURI("http://object"), notGraph);
+
+            // some triples has been loaded
+            assertTrue(connection.size(graph) == 1);
+            assertTrue(connection.size(notGraph) == 1);
+            // run
+            env.run(trans);
+
+            connection2 = output.getConnection();
+            // verify result
+            assertTrue(0 == connection2.size(RDFHelper.getGraphsURIArray(output)));
+            assertTrue(connection2.size(notGraph) == 1);
         } finally {
             if (connection != null) {
                 try {
