@@ -1,15 +1,18 @@
-package cz.cuni.mff.xrg.odcs.transformer.sparql;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
@@ -21,6 +24,13 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * @authod Petr Škoda
  */
 public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
+    private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
+
+    private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
+
+    private static final String REWRITE_CONSTRUCT_TO_INSERT_LABEL = "Rewrite construct query type to insert";
+
+    private ObjectProperty<Boolean> rewriteConstructToInsert = new ObjectProperty<Boolean>(Boolean.FALSE);
 
     private enum QueryType {
         INVALID,
@@ -100,6 +110,9 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
         mainLayout.addComponent(accordion);
         mainLayout.setExpandRatio(accordion, 1);
 
+        mainLayout.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
+        mainLayout.addComponent(new CheckBox(REWRITE_CONSTRUCT_TO_INSERT_LABEL, rewriteConstructToInsert));
+
         setCompositionRoot(mainLayout);
     }
 
@@ -165,10 +178,10 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
     }
 
     /**
-     * Load values from configuration object implementing {@link DPUConfigObject} interface and configuring DPU into the dialog
+     * Load values from configuration object implementing {@link DPUConfig} interface and configuring DPU into the dialog
      * where the configuration object may be edited.
      *
-     * @throws ConfigException
+     * @throws DPUConfigException
      *             Exception not used in current implementation of
      *             this method.
      * @param conf
@@ -186,6 +199,8 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
         }
 
         btnDelete.setEnabled(!conf.getQueryPairs().isEmpty());
+        outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
+        rewriteConstructToInsert.setValue(conf.isRewriteConstructToInsert());
     }
 
     /**
@@ -193,7 +208,7 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
      * to configuration object implementing {@link DPUConfigObject} interface
      * and configuring DPU
      *
-     * @throws ConfigException
+     * @throws DPUConfigException
      *             Exception which might be thrown when any of
      *             SPARQL queries are invalid.
      * @return conf Object holding configuration which is used in {@link #setConfiguration} to initialize fields in the
@@ -215,6 +230,8 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
             queryPairs.add(new SPARQLQueryPair(txtQuery.getValue(), isConstruct));
         }
 
+        conf.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
+        conf.setRewriteConstructToInsert(rewriteConstructToInsert.getValue());
         return conf;
     }
 

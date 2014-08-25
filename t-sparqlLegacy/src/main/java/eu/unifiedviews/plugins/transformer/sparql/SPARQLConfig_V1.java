@@ -1,4 +1,4 @@
-package cz.cuni.mff.xrg.odcs.transformer.sparql;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 import java.util.LinkedList;
 import java.util.List;
