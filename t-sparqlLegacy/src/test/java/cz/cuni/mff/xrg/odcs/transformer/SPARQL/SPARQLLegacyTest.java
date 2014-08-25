@@ -21,8 +21,8 @@ import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 
-public class SPARQLTest {
-    private static final Logger LOG = LoggerFactory.getLogger(SPARQLTest.class);
+public class SPARQLLegacyTest {
+    private static final Logger LOG = LoggerFactory.getLogger(SPARQLLegacyTest.class);
 
     @Test
     public void addAllTest() throws Exception {

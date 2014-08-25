@@ -24,8 +24,8 @@ import eu.unifiedviews.plugins.transformer.sparql2.SPARQL;
 import eu.unifiedviews.plugins.transformer.sparql2.SPARQLConfig_V1;
 import eu.unifiedviews.plugins.transformer.sparql2.SPARQLQueryPair;
 
-public class SPARQLTest {
-    private static final Logger LOG = LoggerFactory.getLogger(SPARQLTest.class);
+public class SPARQL2Test {
+    private static final Logger LOG = LoggerFactory.getLogger(SPARQL2Test.class);
 
     @Test
     public void addAllTest() throws Exception {
