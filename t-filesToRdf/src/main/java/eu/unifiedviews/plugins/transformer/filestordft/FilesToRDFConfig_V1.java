@@ -5,19 +5,21 @@ import java.util.Map;
 
 public class FilesToRDFConfig_V1 {
     public static final String STOP_EXTRACTION_ERROR_HANDLING = "STOP_EXTRACTION";
+
     public static final String SKIP_CONTINUE_THIS_FILE_ERROR_HANDLING = "SKIP_CONTINUE_THIS_FILE";
+
     public static final String SKIP_CONTINUE_NEXT_FILE_ERROR_HANDLING = "SKIP_CONTINUE_NEXT_FILE";
-    
+
     private Map<String, String> symbolicNameToBaseURIMap;
 
     private Map<String, String> symbolicNameToFormatMap;
 
-    private int commitSize = 1;
-    
+    private int commitSize = 100000;
+
     private String fatalErrorHandling = STOP_EXTRACTION_ERROR_HANDLING;
-    
+
     private String errorHandling = SKIP_CONTINUE_THIS_FILE_ERROR_HANDLING;
-    
+
     private String warningHandling = SKIP_CONTINUE_THIS_FILE_ERROR_HANDLING;
 
     // DPUTemplateConfig must provide public non-parametric constructor
