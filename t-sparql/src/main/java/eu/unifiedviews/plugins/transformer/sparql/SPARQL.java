@@ -43,8 +43,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  */
 @AsTransformer
 public class SPARQL
-        extends ConfigurableBase<SPARQLConfig_V1>
-        implements ConfigDialogProvider<SPARQLConfig_V1> {
+extends ConfigurableBase<SPARQLConfig_V1>
+implements ConfigDialogProvider<SPARQLConfig_V1> {
 
     private final Logger LOG = LoggerFactory.getLogger(SPARQL.class);
 
@@ -157,7 +157,7 @@ public class SPARQL
         int queryCount = 0;
         URI outputGraphName;
         try {
-            outputGraphName = outputDataUnit.addNewDataGraph("sparqlLegacyOutput");
+            outputGraphName = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
         } catch (DataUnitException ex) {
             throw new DPUException(ex);
         }
@@ -474,7 +474,7 @@ public class SPARQL
             } catch (QueryEvaluationException ex) {
                 throw new InvalidQueryException(
                         "This query is probably not valid. " + ex
-                                .getMessage(),
+                        .getMessage(),
                         ex);
             }
 
