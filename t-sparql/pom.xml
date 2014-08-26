@@ -11,7 +11,7 @@
 	</parent>
 
 	<groupId>eu.unifiedviews.plugins</groupId>
-	<artifactId>uv-t-sparql2</artifactId>
+	<artifactId>uv-t-sparql</artifactId>
 	<name>T-SPARQL</name>
 	<description>Transforms data using SPARQL</description>
 	<packaging>bundle</packaging>
