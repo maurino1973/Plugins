@@ -33,20 +33,20 @@ public class UploadToFiles extends ConfigurableBase<UploadToFilesConfig_V1> impl
         String longMessage = String.format("Configuration: files providing: %d", symbolicNameToURIMap.size());
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
         LOG.info(shortMessage + " " + longMessage);
-        
+
         boolean shouldContinue = !dpuContext.canceled();
         for (String symbolicName : symbolicNameToURIMap.keySet()) {
             if (!shouldContinue) {
                 break;
             }
-            
+
             try {
                 filesOutput.addExistingFile(symbolicName, symbolicNameToURIMap.get(symbolicName));
                 if (dpuContext.isDebugging()) {
                     LOG.debug("Providing " + symbolicName + " from " + symbolicNameToURIMap.get(symbolicName));
                 }
             } catch (DataUnitException ex) {
-                dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when downloading.", "Symbolic name " + symbolicName + " from location ", ex);
+                throw new DPUException("Error when providing: Symbolic name " + symbolicName + " from location " + symbolicNameToURIMap.get(symbolicName), ex);
             }
         }
     }

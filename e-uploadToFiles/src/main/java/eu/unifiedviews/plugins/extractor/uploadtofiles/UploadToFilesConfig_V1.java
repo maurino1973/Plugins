@@ -4,8 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class UploadToFilesConfig_V1 {
-	
-	private Map<String, String> symbolicNameToURIMap;
+
+    private Map<String, String> symbolicNameToURIMap;
 
     // DPUTemplateConfig must provide public non-parametric constructor
     public UploadToFilesConfig_V1() {
