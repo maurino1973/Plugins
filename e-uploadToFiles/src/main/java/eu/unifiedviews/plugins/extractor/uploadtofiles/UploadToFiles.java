@@ -29,7 +29,8 @@ public class UploadToFiles extends ConfigurableBase<UploadToFilesConfig_V1> impl
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException, InterruptedException {
-        Map<String, String> symbolicNameToURIMap = config.getSymbolicNameToURIMap();
+        final Map<String, String> symbolicNameToURIMap = config.getSymbolicNameToURIMap();
+        final Map<String, String> symbolicNameToVirtualPathMap = config.getSymbolicNameToVirtualPathMap();
         String shortMessage = this.getClass().getSimpleName() + " starting.";
         String longMessage = String.format("Configuration: files providing: %d", symbolicNameToURIMap.size());
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
@@ -43,10 +44,10 @@ public class UploadToFiles extends ConfigurableBase<UploadToFilesConfig_V1> impl
 
             try {
                 filesOutput.addExistingFile(symbolicName, symbolicNameToURIMap.get(symbolicName));
-                // TODO mvi - virtual path from config
-                VirtualPathHelpers.setVirtualPath(filesOutput, symbolicName, symbolicName);
+                VirtualPathHelpers.setVirtualPath(filesOutput, symbolicName, symbolicNameToVirtualPathMap.get(symbolicName));
                 if (dpuContext.isDebugging()) {
-                    LOG.debug("Providing " + symbolicName + " from " + symbolicNameToURIMap.get(symbolicName));
+                    LOG.debug("Providing " + symbolicName + " from " + symbolicNameToURIMap.get(symbolicName) 
+                    		+ " with virtual path " + symbolicNameToVirtualPathMap.get(symbolicName));
                 }
             } catch (DataUnitException ex) {
                 throw new DPUException("Error when providing: Symbolic name " + symbolicName + " from location " + symbolicNameToURIMap.get(symbolicName), ex);
