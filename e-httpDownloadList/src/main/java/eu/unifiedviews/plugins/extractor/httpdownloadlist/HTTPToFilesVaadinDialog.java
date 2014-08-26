@@ -22,7 +22,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_V1> implements ManipolableListComponentProvider {
+public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_V1> {
     /**
      * 
      */
@@ -65,7 +65,38 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
         Panel panel = new Panel();
         panel.setSizeFull();
         
-        dataManager = new ManipulableListManager(this);
+        dataManager = new ManipulableListManager(new ManipulableListComponentProvider() {
+			
+			@Override
+			public Component createNewComponent() {
+				return createNewComponent(new String[] {"", "", ""});
+			}
+
+			@Override
+			public Component createNewComponent(String[] values) {
+				GridLayout layout = new GridLayout(3, 1);
+				layout.setSpacing(true);
+
+				TextField text = new TextField();
+				text.setRequired(true);
+				text.setValue(values[0] == null ? "" : values[0].trim());
+				text.setInputPrompt("shakespeare");
+				layout.addComponent(text, SYMBOLIC_NAME_COL, 0);
+				
+				text = new TextField();
+				text.setRequired(true);
+				text.setValue(values[1] == null ? "" : values[1].trim());
+				text.setInputPrompt("https://commondatastorage.googleapis.com/ckannet-storage/2012-04-24T183403/will_play_text.csv");
+				layout.addComponent(text, URL_COL, 0);
+				
+				text = new TextField();
+				text.setRequired(true);
+				text.setValue(values[2] == null ? "" : values[2].trim());
+				text.setInputPrompt("inputs/shakespeare.csv");
+				layout.addComponent(text, VIRTUAL_PATH_COL, 0);
+				return layout;
+			}
+		});
         panel.setContent(dataManager.initList(null));
         mainLayout.addComponent(new Label(INFO_TEXT));
         mainLayout.addComponent(panel);
@@ -79,14 +110,14 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
         connectionTimeout.setValue(conf.getConnectionTimeout());
         readTimeout.setValue(conf.getReadTimeout());
         
-        List<Component> data = new LinkedList<>();
-        
+        dataManager.clearComponents();
         for (String key : conf.getSymbolicNameToURIMap().keySet()) {
             
-            data.add(createNewComponent(key, conf.getSymbolicNameToURIMap().get(key),
-            		conf.getSymbolicNameToVirtualPathMap().get(key)));
+            dataManager.addComponent(new String[]{key,
+            		conf.getSymbolicNameToURIMap().get(key),
+            		conf.getSymbolicNameToVirtualPathMap().get(key)});
         }
-        dataManager.setDataList(data);
+        dataManager.refreshData();
     }
 
     @Override
@@ -94,7 +125,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
         Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
         Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
 
-        List<Component> dataList = dataManager.getDataList();
+        List<Component> dataList = dataManager.getComponentList();
         String symbolicName = null;
         String url = null;
         String virtualPath = null;
@@ -141,33 +172,4 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
     private String getValue(Component layout, int column) {
     	return getTextField(layout, column).getValue().trim();
     }
-
-	@Override
-	public Component createNewComponent() {
-		return createNewComponent("", "", "");
-	}
-	
-	private Component createNewComponent(String symbolicName, String URI, String virtualPath) {
-		GridLayout layout = new GridLayout(3, 1);
-		layout.setSpacing(true);
-
-		TextField text = new TextField();
-		text.setRequired(true);
-		text.setValue(symbolicName == null ? "" : symbolicName.trim());
-		text.setInputPrompt("shakespeare");
-		layout.addComponent(text, SYMBOLIC_NAME_COL, 0);
-		
-		text = new TextField();
-		text.setRequired(true);
-		text.setValue(URI == null ? "" : URI.trim());
-		text.setInputPrompt("https://commondatastorage.googleapis.com/ckannet-storage/2012-04-24T183403/will_play_text.csv");
-		layout.addComponent(text, URL_COL, 0);
-		
-		text = new TextField();
-		text.setRequired(true);
-		text.setValue(virtualPath == null ? "" : virtualPath.trim());
-		text.setInputPrompt("inputs/shakespeare.csv");
-		layout.addComponent(text, VIRTUAL_PATH_COL, 0);
-		return layout;
-	}
 }

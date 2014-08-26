@@ -7,7 +7,7 @@ import com.vaadin.ui.Component;
  * @author mvi
  *
  */
-public interface ManipolableListComponentProvider {
+public interface ManipulableListComponentProvider {
 
 	/**
 	 * Creating new component with unset value
@@ -15,5 +15,13 @@ public interface ManipolableListComponentProvider {
 	 * @return
 	 */
 	Component createNewComponent();
+	
+	/**
+	 * creates new component with values set 
+	 * 
+	 * @param values
+	 * @return
+	 */
+	Component createNewComponent(String[] values);
 
 }

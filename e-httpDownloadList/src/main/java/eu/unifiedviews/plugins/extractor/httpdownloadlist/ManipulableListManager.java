@@ -13,7 +13,7 @@ import com.vaadin.ui.Button.ClickEvent;
  * Manager for manipulating list of components. This
  * creates vaadin component with option to add (+ button)
  * or remove (- button) "rows". The class creating this
- * manager should implement {@link ManipolableListComponentProvider}.
+ * manager should implement {@link ManipulableListComponentProvider}.
  * This class manages the process of adding and removing components
  * from the list and not the components itself.
  * 
@@ -21,12 +21,16 @@ import com.vaadin.ui.Button.ClickEvent;
  *
  */
 public class ManipulableListManager {
+	
 	private String buttonWidth = "55px";
-	private List<Component> dataList;
-	private ManipolableListComponentProvider componentProvider;
+	
+	private List<Component> componentList;
+	
+	private ManipulableListComponentProvider componentProvider;
+	
 	private GridLayout mainLayout;
 	
-	public ManipulableListManager(ManipolableListComponentProvider componentProvider) {
+	public ManipulableListManager(ManipulableListComponentProvider componentProvider) {
 		this.componentProvider = componentProvider;
 	}
 	
@@ -36,7 +40,7 @@ public class ManipulableListManager {
 	 * @return
 	 */
 	public GridLayout initList(List<Component> list) {
-		this.dataList = list != null ? list : new LinkedList<Component>();
+		this.componentList = list != null ? list : new LinkedList<Component>();
 		
 		mainLayout = new GridLayout();
 		mainLayout.setSpacing(true);
@@ -50,19 +54,23 @@ public class ManipulableListManager {
 		return mainLayout;
 	}
 	
-	private void refreshData() {
+	/**
+	 * refreshes the view, if there are no compoments added
+	 * or components are cleared, adds a empty one
+	 */
+	public void refreshData() {
 		mainLayout.removeAllComponents();
 
-		if (dataList.size() < 1) {
-			dataList.add(componentProvider.createNewComponent());
+		if (componentList.size() < 1) {
+			componentList.add(componentProvider.createNewComponent());
 		}
 		
 		int row = 0;
-		mainLayout.setRows(dataList.size() + 1);
-		for (Component component : dataList) {
+		mainLayout.setRows(componentList.size() + 1);
+		for (Component component : componentList) {
 			
 			Button removeButton = new Button();
-			removeButton.setEnabled(dataList.size() > 1);
+			removeButton.setEnabled(componentList.size() > 1);
 			removeButton.setWidth(buttonWidth);
 			removeButton.setCaption("-");
 			removeButton.setData(row);
@@ -72,7 +80,7 @@ public class ManipulableListManager {
 				@Override
 				public void buttonClick(ClickEvent event) {
 					Integer row = (Integer) event.getButton().getData();
-					removeData(row);
+					removeComponent(row);
 					refreshData();
 				}
 			});
@@ -94,25 +102,62 @@ public class ManipulableListManager {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				dataList.add(componentProvider.createNewComponent());
+				componentList.add(componentProvider.createNewComponent());
 				refreshData();
 			}
 		});
 		mainLayout.addComponent(addButton, 0, row);
 	}
 
-	private void removeData(int row) {
-		if (dataList.size() > 1) {
-			dataList.remove(row);
+	/**
+	 * removes components in selected row
+	 * 
+	 * @param row
+	 */
+	private void removeComponent(int row) {
+		if (componentList.size() > 1) {
+			componentList.remove(row);
 		}
 	}
 
-	public List<Component> getDataList() {
-		return dataList;
+	/**
+	 * retrieving component list
+	 * 
+	 * @return
+	 */
+	public List<Component> getComponentList() {
+		return componentList;
+	}
+	
+	/**
+	 * clears all components
+	 */
+	public void clearComponents() {
+		this.componentList.clear();
 	}
 
-	public void setDataList(List<Component> dataList) {
-		this.dataList = dataList;
+	/**
+	 * sets the components and refreshes the view 
+	 * 
+	 * @param dataList
+	 */
+	public void setComponentList(List<Component> dataList) {
+		this.componentList = dataList;
 		refreshData();
 	}
+	
+	/**
+	 * refreshData() should be called after last added component
+	 * 
+	 * @param values
+	 */
+	public void addComponent(String[] values) {
+		this.componentList.add(componentProvider.createNewComponent(values));
+	}
+
+	public void setButtonWidth(String buttonWidth) {
+		this.buttonWidth = buttonWidth;
+		refreshData();
+	}
+	
 }
