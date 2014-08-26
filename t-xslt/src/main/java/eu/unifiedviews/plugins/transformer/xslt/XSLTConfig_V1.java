@@ -10,6 +10,8 @@ public class XSLTConfig_V1 {
 
     private String xlstParametersMapName = "xlstParameters";
 
+    private String outputFileExtension = ".ttl";
+
     public XSLTConfig_V1() {
     }
 
@@ -46,8 +48,16 @@ public class XSLTConfig_V1 {
         this.xlstParametersMapName = xlstParametersMapName;
     }
 
+    public String getOutputFileExtension() {
+        return outputFileExtension;
+    }
+
+    public void setOutputFileExtension(String outputFileExtension) {
+        this.outputFileExtension = outputFileExtension;
+    }
+
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "[templateFile=" + xslTemplateFileNameShownInDialog + ",skipOnError=" + String.valueOf(skipOnError) + ",xsltParametersMapName=" + xlstParametersMapName + "]";
+        return this.getClass().getSimpleName() + "[templateFile=" + xslTemplateFileNameShownInDialog + ",skipOnError=" + String.valueOf(skipOnError) + ",xsltParametersMapName=" + xlstParametersMapName + ",outputFileExtension=" + outputFileExtension + "]";
     }
 }
