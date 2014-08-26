@@ -28,9 +28,7 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
 
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
-    private static final String REWRITE_CONSTRUCT_TO_INSERT_LABEL = "Rewrite construct query type to insert";
-
-    private ObjectProperty<Boolean> rewriteConstructToInsert = new ObjectProperty<Boolean>(Boolean.FALSE);
+    private static final String REWRITE_CONSTRUCT_TO_INSERT_LABEL = "Rewrite construct query type to insert (always done, cannot change)";
 
     private enum QueryType {
         INVALID,
@@ -111,7 +109,9 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
         mainLayout.setExpandRatio(accordion, 1);
 
         mainLayout.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
-        mainLayout.addComponent(new CheckBox(REWRITE_CONSTRUCT_TO_INSERT_LABEL, rewriteConstructToInsert));
+        CheckBox rewriteConstructToInsertCheckbox = new CheckBox(REWRITE_CONSTRUCT_TO_INSERT_LABEL, true);
+        rewriteConstructToInsertCheckbox.setEnabled(false);
+        mainLayout.addComponent(rewriteConstructToInsertCheckbox);
 
         setCompositionRoot(mainLayout);
     }
@@ -200,7 +200,6 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
 
         btnDelete.setEnabled(!conf.getQueryPairs().isEmpty());
         outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
-        rewriteConstructToInsert.setValue(conf.isRewriteConstructToInsert());
     }
 
     /**
@@ -231,7 +230,6 @@ public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
         }
 
         conf.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
-        conf.setRewriteConstructToInsert(rewriteConstructToInsert.getValue());
         return conf;
     }
 
