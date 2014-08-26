@@ -1,5 +1,6 @@
 package eu.unifiedviews.plugins.transformer.sparql2;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -39,6 +40,8 @@ public class SPARQL extends ConfigurableBase<SPARQLConfig_V1> implements ConfigD
 
     private final Logger LOG = LoggerFactory.getLogger(SPARQL.class);
 
+    private SPARQLConfig_V2 configInternal;
+
     /**
      * The repository input for SPARQL transformer.
      */
@@ -75,8 +78,10 @@ public class SPARQL extends ConfigurableBase<SPARQLConfig_V1> implements ConfigD
      */
     @Override
     public void execute(DPUContext context) throws DPUException {
-
-        final List<SPARQLQueryPair> queryPairs = config.getQueryPairs();
+        if (configInternal == null) {
+            configInternal = migrateConfig(config);
+        }
+        final List<SPARQLQueryPair> queryPairs = configInternal.getQueryPairs();
         if (queryPairs == null) {
             throw new DPUException("All queries for SPARQL transformer are null values");
         } else {
@@ -86,7 +91,7 @@ public class SPARQL extends ConfigurableBase<SPARQLConfig_V1> implements ConfigD
         }
         int queryCount = 0;
         try {
-            URI outputGraph = outputDataUnit.addNewDataGraph(config.getOutputGraphSymbolicName());
+            URI outputGraph = outputDataUnit.addNewDataGraph(configInternal.getOutputGraphSymbolicName());
             for (SPARQLQueryPair nextPair : queryPairs) {
                 queryCount++;
                 String updateQuery = nextPair.getSPARQLQuery();
@@ -157,4 +162,35 @@ public class SPARQL extends ConfigurableBase<SPARQLConfig_V1> implements ConfigD
         }
     }
 
+    public void setConfigInternal(SPARQLConfig_V2 sparqlConfig_V2) {
+        this.configInternal = sparqlConfig_V2;
+    }
+
+    private SPARQLConfig_V2 migrateConfig(SPARQLConfig_V1 oldConfig) throws DPUException {
+        SPARQLConfig_V2 resultConfig = new SPARQLConfig_V2();
+        resultConfig.setOutputGraphSymbolicName(oldConfig.getOutputGraphSymbolicName());
+        List<SPARQLQueryPair> queryPairs = new ArrayList<>();
+        boolean outputDirtied = false;
+        for (SPARQLQueryPair oldQueryPair : oldConfig.getQueryPairs()) {
+            if (oldQueryPair.isConstructType()) {
+                queryPairs.add(new SPARQLQueryPair(
+                        oldQueryPair.getSPARQLQuery().replaceFirst("(?i)CONSTRUCT", "INSERT"),
+                        true));
+                outputDirtied = true;
+            } else {
+                if (!outputDirtied) {
+                    queryPairs.add(new SPARQLQueryPair(
+                            "INSERT { ?s ?p ?o } WHERE { ?s ?p ?o }",
+                            true));
+                    outputDirtied = true;
+                }
+                queryPairs.add(new SPARQLQueryPair(oldQueryPair.getSPARQLQuery(), false));
+            }
+        }
+        resultConfig.setQueryPairs(queryPairs);
+        if (!outputDirtied) {
+            throw new DPUException("Misconfiguration, no query will write anything to output.");
+        }
+        return resultConfig;
+    }
 }

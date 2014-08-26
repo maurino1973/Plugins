@@ -21,7 +21,7 @@ import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
 import eu.unifiedviews.plugins.transformer.sparql2.SPARQL;
-import eu.unifiedviews.plugins.transformer.sparql2.SPARQLConfig_V1;
+import eu.unifiedviews.plugins.transformer.sparql2.SPARQLConfig_V2;
 import eu.unifiedviews.plugins.transformer.sparql2.SPARQLQueryPair;
 
 public class SPARQL2Test {
@@ -32,13 +32,10 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        String SPARQL_Update_Query = "INSERT {?s ?p ?o} where {?s ?p ?o }";
-        boolean isConstructType = true;
-
-        SPARQLConfig_V1 config = new SPARQLConfig_V1(
-                SPARQL_Update_Query, isConstructType);
-
-        trans.configureDirectly(config);
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
+        config.setQueryPairs(Arrays.asList(
+                new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true)));
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -94,12 +91,12 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", true)));
 
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -156,12 +153,12 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false)));
 
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -218,11 +215,11 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", true)));
 
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -278,13 +275,13 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
                 new SPARQLQueryPair("DELETE where {?s <http://test> ?o}", false)));
 
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -340,13 +337,13 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
                 new SPARQLQueryPair("DELETE where {?s ?p ?o}", true)));
 
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -406,13 +403,13 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("INSERT {?s <http://test> ?o . } where {?s ?p ?o}", false),
                 new SPARQLQueryPair("DELETE { ?s ?p ?o } where {?s ?p ?o  FILTER ( ?p != <http://test> ) }", false)));
 
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -472,12 +469,12 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("DELETE { ?s ?p ?o. } INSERT { ?o ?p ?s. } WHERE { ?s  ?p ?o. }", false)
                 ));
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -533,12 +530,12 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("DELETE { ?s ?p ?o. } WHERE { ?s  ?p ?o. }", false)
                 ));
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();
@@ -591,12 +588,12 @@ public class SPARQL2Test {
         // prepare dpu
         SPARQL trans = new SPARQL();
 
-        SPARQLConfig_V1 config = new SPARQLConfig_V1();
+        SPARQLConfig_V2 config = new SPARQLConfig_V2();
         config.setQueryPairs(Arrays.asList(
                 new SPARQLQueryPair("INSERT {?s ?p ?o} where {?s ?p ?o }", true),
                 new SPARQLQueryPair("DELETE WHERE { ?s  ?p ?o. }", false)
                 ));
-        trans.configureDirectly(config);
+        trans.setConfigInternal(config);
 
         // prepare test environment
         TestEnvironment env = new TestEnvironment();

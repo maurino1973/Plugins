@@ -10,7 +10,7 @@ import org.openrdf.query.parser.QueryParserUtil;
  *
  * @author Jiri Tomes
  */
-public class SPARQLUpdateValidator {
+public class SPARQLUpdateValidator implements QueryValidator {
 
     private String updateQuery;
 
@@ -33,6 +33,7 @@ public class SPARQLUpdateValidator {
      *
      * @return true, if query is valid, false otherwise.
      */
+    @Override
     public boolean isQueryValid() {
         boolean isValid = true;
 
@@ -52,6 +53,7 @@ public class SPARQLUpdateValidator {
      *
      * @return empty string, when query is valid.
      */
+    @Override
     public String getErrorMessage() {
         return message;
     }
