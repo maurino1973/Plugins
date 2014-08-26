@@ -10,7 +10,7 @@ public class XSLTConfig_V1 {
 
     private String xlstParametersMapName = "xlstParameters";
 
-    private String outputFileExtension = ".ttl";
+    private String outputFileExtension = "";
 
     public XSLTConfig_V1() {
     }

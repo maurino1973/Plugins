@@ -101,9 +101,9 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
 
                 String outputFilename = filesOutput.addNewFile(inSymbolicName);
                 String inputVirtualPath = inputVirtualPathHelper.getVirtualPath(inSymbolicName);
-                if (inputVirtualPath != null) {
+                if (inputVirtualPath != null && config.getOutputFileExtension() != null && !config.getOutputFileExtension().isEmpty()) {
                     outputVirtualPathHelper.setVirtualPath(inSymbolicName, FilenameUtils.removeExtension(inputVirtualPath) + config.getOutputFileExtension());
-                } else {
+                } else if (config.getOutputFileExtension() != null && !config.getOutputFileExtension().isEmpty()) {
                     outputVirtualPathHelper.setVirtualPath(inSymbolicName, inSymbolicName + config.getOutputFileExtension());
                 }
                 File outputFile = new File(URI.create(outputFilename));
