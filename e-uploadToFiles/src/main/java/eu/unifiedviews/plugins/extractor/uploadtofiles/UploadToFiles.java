@@ -11,6 +11,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -42,6 +43,8 @@ public class UploadToFiles extends ConfigurableBase<UploadToFilesConfig_V1> impl
 
             try {
                 filesOutput.addExistingFile(symbolicName, symbolicNameToURIMap.get(symbolicName));
+                // TODO mvi - virtual path from config
+                VirtualPathHelpers.setVirtualPath(filesOutput, symbolicName, symbolicName);
                 if (dpuContext.isDebugging()) {
                     LOG.debug("Providing " + symbolicName + " from " + symbolicNameToURIMap.get(symbolicName));
                 }
