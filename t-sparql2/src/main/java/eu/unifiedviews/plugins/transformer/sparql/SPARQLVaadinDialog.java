@@ -1,11 +1,9 @@
-package eu.unifiedviews.plugins.transformer.sparql2;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Accordion;
@@ -25,14 +23,17 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  *
  * @authod Petr Škoda
  */
-public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
+public class SPARQLVaadinDialog extends BaseConfigDialog<SPARQLConfig_V1> {
     private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
 
     private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
 
-    private static final String DATASET_INPUT_LABEL = "Query should be run as construct (with input data unit graphs as default/named graphs)";
+    private static final String REWRITE_CONSTRUCT_TO_INSERT_LABEL = "Rewrite construct query type to insert";
+
+    private ObjectProperty<Boolean> rewriteConstructToInsert = new ObjectProperty<Boolean>(Boolean.FALSE);
 
     private enum QueryType {
+        INVALID,
         CONSTRUCT,
         UPDATE
     };
@@ -48,13 +49,21 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
      */
     private final HashMap<TextArea, QueryType> queryTypes = new HashMap<>();
 
-    public SPARQLVaadinDialog2() {
+    public SPARQLVaadinDialog() {
         super(SPARQLConfig_V1.class);
         init();
     }
 
     private void init() {
         this.setSizeFull();
+
+        VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setSizeFull();
+        mainLayout.setSpacing(true);
+
+        HorizontalLayout topLineLayout = new HorizontalLayout();
+        topLineLayout.setSizeUndefined();
+        topLineLayout.setSpacing(true);
 
         Button btnAddQuery = new Button();
         btnAddQuery.setCaption("Add query tab");
@@ -63,9 +72,10 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                addGraph("INSERT { ?s ?p ?o } WHERE {?s ?p ?o }");
+                addGraph("CONSTRUCT { ?s ?p ?o } WHERE {?s ?p ?o }");
             }
         });
+        topLineLayout.addComponent(btnAddQuery);
 
         btnDelete = new Button("Delete current");
         btnDelete.setEnabled(false);
@@ -90,15 +100,7 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
             }
         });
 
-        HorizontalLayout topLineLayout = new HorizontalLayout();
-        topLineLayout.setSizeUndefined();
-        topLineLayout.setSpacing(true);
-        topLineLayout.addComponent(btnAddQuery);
         topLineLayout.addComponent(btnDelete);
-
-        VerticalLayout mainLayout = new VerticalLayout();
-        mainLayout.setSizeFull();
-        mainLayout.setSpacing(true);
 
         mainLayout.addComponent(topLineLayout);
         mainLayout.setExpandRatio(topLineLayout, 0);
@@ -109,38 +111,26 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
         mainLayout.setExpandRatio(accordion, 1);
 
         mainLayout.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
+        mainLayout.addComponent(new CheckBox(REWRITE_CONSTRUCT_TO_INSERT_LABEL, rewriteConstructToInsert));
+
         setCompositionRoot(mainLayout);
     }
 
     private void addGraph(String query) {
+        VerticalLayout subLayout = new VerticalLayout();
+        subLayout.setSizeFull();
+        subLayout.setMargin(true);
+
         final TextArea txtQuery = new TextArea();
         txtQuery.setSizeFull();
         txtQuery.setValue(query);
         txtQuery.setSizeFull();
 
-        final CheckBox checkBox = new CheckBox(DATASET_INPUT_LABEL, false);
-        checkBox.addValueChangeListener(new ValueChangeListener() {
-
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                if (checkBox.getValue()) {
-                    queryTypes.put(txtQuery, QueryType.CONSTRUCT);
-                } else {
-                    queryTypes.put(txtQuery, QueryType.UPDATE);
-                }
-            }
-        });
-
-        VerticalLayout subLayout = new VerticalLayout();
-        subLayout.setSizeFull();
-        subLayout.setMargin(true);
-
         subLayout.addComponent(txtQuery);
-        subLayout.addComponent(checkBox);
 
         // add to main component list
         this.queries.add(txtQuery);
-        this.queryTypes.put(txtQuery, QueryType.UPDATE);
+        this.queryTypes.put(txtQuery, QueryType.INVALID);
 
         final Tab tab = this.accordion.addTab(subLayout, "Query");
 
@@ -151,15 +141,35 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
                 final String query = value.toString();
 
                 if (query.isEmpty()) {
-                    throw new InvalidValueException("SPARQL query is empty it must be filled");
+                    throw new InvalidValueException(
+                            "SPARQL query is empty it must be filled");
                 }
 
-                SPARQLUpdateValidator updateValidator = new SPARQLUpdateValidator(query);
+                QueryValidator updateValidator =
+                        new SPARQLUpdateValidator(query);
+                SPARQLQueryValidator constructValidator =
+                        new SPARQLQueryValidator(query, SPARQLQueryType.CONSTRUCT);
+
+                // also store type in case of sucessful validation
+                if (constructValidator.isQueryValid()) {
+                    queryTypes.put(txtQuery, QueryType.CONSTRUCT);
+                    return;
+                }
+
                 if (updateValidator.isQueryValid()) {
                     queryTypes.put(txtQuery, QueryType.UPDATE);
                     return;
+                }
+
+                queryTypes.put(txtQuery, QueryType.INVALID);
+
+                // return message based on query type
+                if (constructValidator.hasSameType()) {
+                    throw new InvalidValueException(
+                            constructValidator.getErrorMessage());
                 } else {
-                    throw new InvalidValueException("Not a valid SPARQL update query " + updateValidator.getErrorMessage());
+                    throw new InvalidValueException(
+                            updateValidator.getErrorMessage());
                 }
             }
         });
@@ -190,6 +200,7 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
 
         btnDelete.setEnabled(!conf.getQueryPairs().isEmpty());
         outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
+        rewriteConstructToInsert.setValue(conf.isRewriteConstructToInsert());
     }
 
     /**
@@ -220,6 +231,7 @@ public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
         }
 
         conf.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
+        conf.setRewriteConstructToInsert(rewriteConstructToInsert.getValue());
         return conf;
     }
 

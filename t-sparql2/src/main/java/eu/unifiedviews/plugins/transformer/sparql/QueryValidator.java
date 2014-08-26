@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformer.sparql2;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 /**
  * It is responsible for right validation of queries.

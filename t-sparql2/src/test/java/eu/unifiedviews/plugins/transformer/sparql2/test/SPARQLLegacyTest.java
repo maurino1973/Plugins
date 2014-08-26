@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.helpers.dataunit.rdfhelper.RDFHelper;
-import eu.unifiedviews.plugins.transformer.sparql2.SPARQL;
-import eu.unifiedviews.plugins.transformer.sparql2.SPARQLConfig_V1;
-import eu.unifiedviews.plugins.transformer.sparql2.SPARQLQueryPair;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQL;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLConfig_V1;
+import eu.unifiedviews.plugins.transformer.sparql.SPARQLQueryPair;
 
 public class SPARQLLegacyTest {
     private static final Logger LOG = LoggerFactory.getLogger(SPARQLLegacyTest.class);

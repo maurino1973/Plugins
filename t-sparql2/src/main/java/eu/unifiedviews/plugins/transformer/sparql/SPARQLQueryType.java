@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformer.sparql2;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 /**
  * Possible types of SPARQL queries.

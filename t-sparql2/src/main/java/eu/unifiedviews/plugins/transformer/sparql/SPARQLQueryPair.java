@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.transformer.sparql2;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 /**
  * Responsible for keeping pair of SPARQL query and boolean value, where value
