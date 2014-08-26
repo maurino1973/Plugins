@@ -19,3 +19,4 @@
    dcterms:license <http://opendatacommons.org/licenses/pddl/1-0/> ;
    dcterms:source <http://www.czso.cz/csu/klasifik.nsf/i/struktura_uzemi_cr_od_1_1_2008_do_1_1_2012_xls/$File/Struktura%20%C3%BAzem%C3%AD_od%201.1.2008%20do%201.1.2012.xls> .
   
+  
