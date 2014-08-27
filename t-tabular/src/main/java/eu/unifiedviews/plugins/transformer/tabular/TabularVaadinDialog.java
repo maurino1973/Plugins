@@ -1,14 +1,20 @@
 package eu.unifiedviews.plugins.transformer.tabular;
 
+import java.util.Map;
+
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-import java.util.Map;
-
 public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
+
+    private static final String ADD_BLANK_CELLS_LABEL = "Add blank cells <http://linked.opendata.cz/ontology/odcs/tabular/blank-cell>";
+
+    private ObjectProperty<Boolean> addBlankCells = new ObjectProperty<Boolean>(false);
 
     private VerticalLayout mainLayout;
 
@@ -89,6 +95,8 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
 
         this.baseFormLayout.addComponent(new Label(
                 "Column to property URI mappings"));
+
+        this.baseFormLayout.addComponent(new CheckBox(ADD_BLANK_CELLS_LABEL, addBlankCells));
 
         this.mainLayout.addComponent(this.baseFormLayout);
 
@@ -225,6 +233,8 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
             this.addColumnToPropertyMapping(null, null);
 
         }
+
+        addBlankCells.setValue(c.isAddBlankCells());
     }
 
     @Override
@@ -305,6 +315,8 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
         } catch (NumberFormatException ex) {
             cnf.setRowLimit(0);
         }
+
+        cnf.setAddBlankCells(addBlankCells.getValue());
 
         return cnf;
     }

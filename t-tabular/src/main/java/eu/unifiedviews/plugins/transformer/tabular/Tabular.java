@@ -1,7 +1,13 @@
 package eu.unifiedviews.plugins.transformer.tabular;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +18,18 @@ import org.jamel.dbf.structure.DbfField;
 import org.jamel.dbf.structure.DbfHeader;
 import org.jamel.dbf.utils.DbfUtils;
 import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.supercsv.io.CsvListReader;
 import org.supercsv.io.ICsvListReader;
 import org.supercsv.prefs.CsvPreference;
+
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -31,17 +41,13 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-import java.util.ArrayList;
-import org.openrdf.model.*;
-import org.openrdf.repository.RepositoryConnection;
-import org.openrdf.repository.RepositoryException;
 
 /**
  * @author Škoda Petr
  */
 @DPU.AsTransformer
 public class Tabular extends ConfigurableBase<TabularConfig_V1>
-        implements ConfigDialogProvider<TabularConfig_V1> {
+implements ConfigDialogProvider<TabularConfig_V1> {
 
     private static final int COMMIT_SIZE = 50000;
 
@@ -63,24 +69,34 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
 
     private ValueFactory valueFactory;
 
+    private int commitSize = 50000;
+
+    private boolean transactionOpen = false;
+
+    private int statementCounter = 0;
+
+    private long realStatementCounter = 0L;
+
     public Tabular() {
         super(TabularConfig_V1.class);
     }
 
     private void add(Resource rsrc, URI uri, Value value) throws RepositoryException {
-        buffer.add(valueFactory.createStatement(rsrc, uri, value));
-        if (buffer.size() > COMMIT_SIZE) {
-            flushBuffer();
+        if (!transactionOpen) {
+            outConnection.begin();
+            transactionOpen = true;
         }
-    }
-
-    private void flushBuffer() throws RepositoryException {
-        outConnection.begin();
-        for (Statement state : buffer) {
-            outConnection.add(state, currentGraphURI);
+        outConnection.add(valueFactory.createStatement(rsrc, uri, value), currentGraphURI);
+        statementCounter++;
+        if (transactionOpen && statementCounter == commitSize) {
+            outConnection.commit();
+            if (LOG.isDebugEnabled()) {
+                realStatementCounter += statementCounter;
+                LOG.debug("Commit {}", realStatementCounter);
+            }
+            statementCounter = 0;
+            transactionOpen = false;
         }
-        outConnection.commit();
-        buffer.clear();
     }
 
     @Override
@@ -134,7 +150,6 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                 // TODO Add support for multiple graphs
                 proceedFile(context, sourceFile);
                 // store buffer
-                flushBuffer();
 
                 //
                 // Add metadata
@@ -245,7 +260,7 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                     if (columnWithURISupplementNumber >= 0) {
                         suffixURI = this.convertStringToURIPart(row.get(columnWithURISupplementNumber));
                     } else {
-                        suffixURI = (new Integer(rowno)).toString();
+                        suffixURI = new Integer(rowno).toString();
                     }
 
                     Resource subj = valueFactory.createURI(baseURI + suffixURI);
@@ -253,8 +268,10 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                     int i = 0;
                     for (String strValue : row) {
                         if (strValue == null || "".equals(strValue)) {
-                            URI obj = valueFactory.createURI("http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
-                            add(subj, propertyMap[i], obj);
+                            if (config.isAddBlankCells()) {
+                                URI obj = valueFactory.createURI("http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
+                                add(subj, propertyMap[i], obj);
+                            }
                         } else {
                             Value obj = valueFactory.createLiteral(strValue);
                             add(subj, propertyMap[i], obj);
@@ -265,7 +282,7 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                     Value rowvalue = valueFactory.createLiteral(String.valueOf(rowno));
                     add(subj, propertyRow, rowvalue);
 
-                    if ((rowno % 1000) == 0) {
+                    if (rowno % 1000 == 0) {
                         LOG.debug("Row number {} processed.", rowno);
                     }
 
@@ -345,7 +362,7 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                 if (columnWithURISupplementNumber >= 0) {
                     suffixURI = this.convertStringToURIPart(this.getCellValue(row[columnWithURISupplementNumber], encoding));
                 } else {
-                    suffixURI = (new Integer(rowno)).toString();
+                    suffixURI = new Integer(rowno).toString();
                 }
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
@@ -353,8 +370,10 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                 for (int i = 0; i < row.length; i++) {
                     String strValue = this.getCellValue(row[i], encoding);
                     if (strValue == null || "".equals(strValue)) {
-                        URI obj = valueFactory.createURI("http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
-                        add(subj, propertyMap[i], obj);
+                        if (config.isAddBlankCells()) {
+                            URI obj = valueFactory.createURI("http://linked.opendata.cz/ontology/odcs/tabular/blank-cell");
+                            add(subj, propertyMap[i], obj);
+                        }
                     } else {
                         Value obj = valueFactory.createLiteral(this.getCellValue(row[i], encoding));
                         add(subj, propertyMap[i], obj);
@@ -364,7 +383,7 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
                 Value rowvalue = valueFactory.createLiteral(this.getCellValue(rowno, encoding));
                 add(subj, propertyRow, rowvalue);
 
-                if ((rowno % 1000) == 0) {
+                if (rowno % 1000 == 0) {
                     LOG.debug("Row number {} processed.", rowno);
                 }
                 rowno++;
@@ -376,6 +395,7 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
             }
             reader.close();
         }
+        outConnection.commit();
     }
 
     private String getCellValue(Object cell, String encoding) {

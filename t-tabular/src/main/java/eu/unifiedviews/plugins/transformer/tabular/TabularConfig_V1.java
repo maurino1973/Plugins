@@ -21,6 +21,8 @@ public class TabularConfig_V1 {
 
     private Integer rowLimit = 10000;
 
+    private boolean addBlankCells = true;
+
     /**
      * Values from {@link TableType}.
      */
@@ -99,6 +101,14 @@ public class TabularConfig_V1 {
 
     public void setTableType(String tableType) {
         this.tableType = tableType;
+    }
+
+    public boolean isAddBlankCells() {
+        return addBlankCells;
+    }
+
+    public void setAddBlankCells(boolean addBlankCells) {
+        this.addBlankCells = addBlankCells;
     }
 
 }
