@@ -33,6 +33,7 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
     private static final long serialVersionUID = 2397849673588724L;
 
     private Map<String, String> symbolicNameToURIMap = new HashMap<String, String>();
+    private Map<String, String> symbolicNameToVirtualPathMap = new HashMap<String, String>();
 
     private File destinationDir;
 
@@ -75,6 +76,7 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
                     Files.copy(fileIS, outputFile.toPath(), co);
 
                     symbolicNameToURIMap.put(fileName, outputFile.toURI().toASCIIString());
+                    symbolicNameToVirtualPathMap.put(fileName, fileName); // TODO
                     refreshFiles();
                 } catch (IOException e) {
                     Notification.show("Failed to upload file.", e.getMessage(), Notification.Type.ERROR_MESSAGE);
@@ -137,6 +139,8 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
     public void setConfiguration(UploadToFilesConfig_V1 conf) throws DPUConfigException {
         symbolicNameToURIMap.clear();
         symbolicNameToURIMap.putAll(conf.getSymbolicNameToURIMap());
+        symbolicNameToVirtualPathMap.clear();
+        symbolicNameToVirtualPathMap.putAll(conf.getSymbolicNameToVirtualPathMap());
 
         refreshFiles();
     }
@@ -146,6 +150,7 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
 
         UploadToFilesConfig_V1 conf = new UploadToFilesConfig_V1();
         conf.setSymbolicNameToURIMap(symbolicNameToURIMap);
+        conf.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
 
         return conf;
     }
