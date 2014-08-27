@@ -11,9 +11,10 @@ import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFFormat;
 
 import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
@@ -42,18 +43,30 @@ public class FilesToRDFVaadinDialog extends BaseConfigDialog<FilesToRDFConfig_V1
     }
 
     private void initialize() {
-        FormLayout mainLayout = new FormLayout();
+    	// top-level component properties
+    	setSizeFull();
+    	
+    	Panel panel = new Panel();
+    	panel.setSizeFull();
 
-        // top-level component properties
-        setWidth("100%");
-        setHeight("100%");
+    	VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setMargin(false);
+        mainLayout.setSpacing(true);
+        mainLayout.setImmediate(false);
+        mainLayout.setWidth("100%");
+        mainLayout.setHeight("-1px");
+        
         mainLayout.addComponent(new TextField(COMMIT_SIZE_LABEL, commitSize));
 
         TextArea ta = new TextArea(MAP_TEXT, mapText);
+        ta.setNullRepresentation("");
+        ta.setImmediate(false);
         ta.setRows(50);
         ta.setColumns(50);
         mainLayout.addComponent(ta);
-        setCompositionRoot(mainLayout);
+        
+        panel.setContent(mainLayout);
+        setCompositionRoot(panel);
     }
 
     @Override
