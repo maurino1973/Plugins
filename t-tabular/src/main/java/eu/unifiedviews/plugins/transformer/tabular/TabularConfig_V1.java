@@ -21,6 +21,8 @@ public class TabularConfig_V1 {
 
     private Integer rowLimit = 10000;
 
+    private Boolean staticRowCounter = false;
+
     private boolean addBlankCells = true;
 
     /**
@@ -101,6 +103,14 @@ public class TabularConfig_V1 {
 
     public void setTableType(String tableType) {
         this.tableType = tableType;
+    }
+
+    public Boolean isStaticRowCounter() {
+        return staticRowCounter;
+    }
+
+    public void setStaticRowCounter(Boolean staticRowCounter) {
+        this.staticRowCounter = staticRowCounter;
     }
 
     public boolean isAddBlankCells() {

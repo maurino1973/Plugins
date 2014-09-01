@@ -47,7 +47,7 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
  */
 @DPU.AsTransformer
 public class Tabular extends ConfigurableBase<TabularConfig_V1>
-implements ConfigDialogProvider<TabularConfig_V1> {
+        implements ConfigDialogProvider<TabularConfig_V1> {
 
     private static final int COMMIT_SIZE = 50000;
 
@@ -69,7 +69,7 @@ implements ConfigDialogProvider<TabularConfig_V1> {
 
     private ValueFactory valueFactory;
 
-    private int commitSize = 50000;
+    private int rowNumber = 0;
 
     private boolean transactionOpen = false;
 
@@ -88,7 +88,7 @@ implements ConfigDialogProvider<TabularConfig_V1> {
         }
         outConnection.add(valueFactory.createStatement(rsrc, uri, value), currentGraphURI);
         statementCounter++;
-        if (transactionOpen && statementCounter == commitSize) {
+        if (transactionOpen && statementCounter > COMMIT_SIZE) {
             outConnection.commit();
             if (LOG.isDebugEnabled()) {
                 realStatementCounter += statementCounter;
@@ -180,6 +180,13 @@ implements ConfigDialogProvider<TabularConfig_V1> {
     // TODO Rework this method !!
     private void proceedFile(DPUContext context, File tableFile)
             throws RepositoryException {
+        Boolean staticRowCounter = config.isStaticRowCounter();
+        if (staticRowCounter == null || staticRowCounter == false) {
+            // null = false
+            rowNumber = 0;
+        } else {
+            // it's true, so we do not reset
+        }
 
         String tableFileName = tableFile.getName();
 
@@ -247,11 +254,10 @@ implements ConfigDialogProvider<TabularConfig_V1> {
 
                 List<String> row = listReader.read();
 
-                int rowno = 0;
                 while (row != null) {
 
                     if (config.getRowLimit() > 0) {
-                        if (rowno >= config.getRowLimit()) {
+                        if (rowNumber >= config.getRowLimit()) {
                             break;
                         }
                     }
@@ -260,7 +266,7 @@ implements ConfigDialogProvider<TabularConfig_V1> {
                     if (columnWithURISupplementNumber >= 0) {
                         suffixURI = this.convertStringToURIPart(row.get(columnWithURISupplementNumber));
                     } else {
-                        suffixURI = new Integer(rowno).toString();
+                        suffixURI = new Integer(rowNumber).toString();
                     }
 
                     Resource subj = valueFactory.createURI(baseURI + suffixURI);
@@ -279,14 +285,14 @@ implements ConfigDialogProvider<TabularConfig_V1> {
                         i++;
                     }
 
-                    Value rowvalue = valueFactory.createLiteral(String.valueOf(rowno));
+                    Value rowvalue = valueFactory.createLiteral(String.valueOf(rowNumber));
                     add(subj, propertyRow, rowvalue);
 
-                    if (rowno % 1000 == 0) {
-                        LOG.debug("Row number {} processed.", rowno);
+                    if (rowNumber % 1000 == 0) {
+                        LOG.debug("Row number {} processed.", rowNumber);
                     }
 
-                    rowno++;
+                    rowNumber++;
                     row = listReader.read();
 
                     if (context.canceled()) {
@@ -348,12 +354,11 @@ implements ConfigDialogProvider<TabularConfig_V1> {
             }
 
             Object[] row = null;
-            int rowno = 0;
 
             while ((row = reader.nextRecord()) != null) {
 
                 if (config.getRowLimit() > 0) {
-                    if (rowno >= config.getRowLimit()) {
+                    if (rowNumber >= config.getRowLimit()) {
                         break;
                     }
                 }
@@ -362,7 +367,7 @@ implements ConfigDialogProvider<TabularConfig_V1> {
                 if (columnWithURISupplementNumber >= 0) {
                     suffixURI = this.convertStringToURIPart(this.getCellValue(row[columnWithURISupplementNumber], encoding));
                 } else {
-                    suffixURI = new Integer(rowno).toString();
+                    suffixURI = new Integer(rowNumber).toString();
                 }
 
                 Resource subj = valueFactory.createURI(baseURI + suffixURI);
@@ -380,13 +385,13 @@ implements ConfigDialogProvider<TabularConfig_V1> {
                     }
                 }
 
-                Value rowvalue = valueFactory.createLiteral(this.getCellValue(rowno, encoding));
+                Value rowvalue = valueFactory.createLiteral(this.getCellValue(rowNumber, encoding));
                 add(subj, propertyRow, rowvalue);
 
-                if (rowno % 1000 == 0) {
-                    LOG.debug("Row number {} processed.", rowno);
+                if (rowNumber % 1000 == 0) {
+                    LOG.debug("Row number {} processed.", rowNumber);
                 }
-                rowno++;
+                rowNumber++;
                 if (context.canceled()) {
                     LOG.info("DPU cancelled");
                     reader.close();

@@ -38,6 +38,8 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
 
     private TextField tfRowLimit;
 
+    private CheckBox checkStaticRowCounter;
+
     public TabularVaadinDialog() {
         super(TabularConfig_V1.class);
 
@@ -57,7 +59,7 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
         this.mainLayout.setImmediate(false);
         this.mainLayout.setWidth("100%");
         this.mainLayout.setHeight("-1px");
-        this.mainLayout.setMargin(false);
+        this.mainLayout.setMargin(true);
 
         this.baseFormLayout = new FormLayout();
         this.baseFormLayout.setSizeUndefined();
@@ -92,6 +94,10 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
 
         this.tfRowLimit = new TextField("Rows limit");
         this.baseFormLayout.addComponent(this.tfRowLimit);
+
+        this.checkStaticRowCounter = new CheckBox("Use static row counter");
+        this.checkStaticRowCounter.setDescription("If checked then row counter is not set to 0 between processing of multiple files.");
+        this.baseFormLayout.addComponent(this.checkStaticRowCounter);
 
         this.baseFormLayout.addComponent(new Label(
                 "Column to property URI mappings"));
@@ -234,6 +240,7 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
 
         }
 
+        checkStaticRowCounter.setValue(c.isStaticRowCounter());
         addBlankCells.setValue(c.isAddBlankCells());
     }
 
@@ -316,6 +323,7 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
             cnf.setRowLimit(0);
         }
 
+        cnf.setStaticRowCounter(checkStaticRowCounter.getValue());
         cnf.setAddBlankCells(addBlankCells.getValue());
 
         return cnf;
