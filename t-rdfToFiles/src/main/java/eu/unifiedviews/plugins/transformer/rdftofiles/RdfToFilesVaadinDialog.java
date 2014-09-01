@@ -112,6 +112,9 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
             checkGenGraphFile.setValue(c.isGenGraphFile());
             if (c.isGenGraphFile()) {
                 txtOutGraphName.setValue(c.getOutGraphName());
+                txtOutGraphName.setEnabled(true);
+            } else {
+                txtOutGraphName.setEnabled(false);
             }
 
             if (!c.getGraphToFileInfo().isEmpty()) {
