@@ -10,7 +10,7 @@
 	<!-- list of core modules -->
 	<modules>
 		<!-- Base DPU pom file as aggregator of common dependencies -->
-		<module>dpu-base-pom</module>
+<!--		<module>dpu-base-pom</module>-->
 
 		<!-- EXTRACTORS -->
 		<module>e-filesFromLocal</module>
