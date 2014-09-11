@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>eu.unifiedviews</groupId>
 			<artifactId>uv-dataunit-helpers</artifactId>
-			<version>1.0.1/version>
+			<version>1.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 
