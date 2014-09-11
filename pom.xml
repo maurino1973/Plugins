@@ -9,9 +9,6 @@
 
 	<!-- list of core modules -->
 	<modules>
-		<!-- Base DPU pom file as aggregator of common dependencies -->
-<!--		<module>dpu-base-pom</module>-->
-
 		<!-- EXTRACTORS -->
 		<module>e-filesFromLocal</module>
 		<module>e-rdfFromSparql</module>
@@ -41,10 +38,6 @@
 		<module>l-filesToSparql</module>
 		<module>l-filesToVirtuoso</module>
 	</modules>
-
-	<properties>
-		<project.output.dpu>${project.build.directory}/../../target/</project.output.dpu>
-	</properties>
 
 	<repositories>
 		<repository>
