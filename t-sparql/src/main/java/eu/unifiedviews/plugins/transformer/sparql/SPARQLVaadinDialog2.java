@@ -1,15 +1,20 @@
-package cz.cuni.mff.xrg.odcs.transformer.SPARQL;
+package eu.unifiedviews.plugins.transformer.sparql;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.vaadin.data.Property.ValueChangeEvent;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
@@ -20,10 +25,14 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  *
  * @authod Petr Škoda
  */
-public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerConfig> {
+public class SPARQLVaadinDialog2 extends BaseConfigDialog<SPARQLConfig_V1> {
+    private static final String OUTPUT_GRAPH_SYMBOLIC_NAME = "Output graph symbolic name";
+
+    private ObjectProperty<String> outputGraphSymbolicName = new ObjectProperty<String>("");
+
+    private static final String DATASET_INPUT_LABEL = "Query should be run as construct (with input data unit graphs as default/named graphs)";
 
     private enum QueryType {
-        INVALID,
         CONSTRUCT,
         UPDATE
     };
@@ -39,21 +48,13 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      */
     private final HashMap<TextArea, QueryType> queryTypes = new HashMap<>();
 
-    public SPARQLTransformerDialog() {
-        super(SPARQLTransformerConfig.class);
+    public SPARQLVaadinDialog2() {
+        super(SPARQLConfig_V1.class);
         init();
     }
 
     private void init() {
         this.setSizeFull();
-
-        VerticalLayout mainLayout = new VerticalLayout();
-        mainLayout.setSizeFull();
-        mainLayout.setSpacing(true);
-
-        HorizontalLayout topLineLayout = new HorizontalLayout();
-        topLineLayout.setSizeUndefined();
-        topLineLayout.setSpacing(true);
 
         Button btnAddQuery = new Button();
         btnAddQuery.setCaption("Add query tab");
@@ -62,10 +63,9 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                addGraph("CONSTRUCT { ?s ?p ?o } WHERE {?s ?p ?o }");
+                addGraph("INSERT { ?s ?p ?o } WHERE {?s ?p ?o }");
             }
         });
-        topLineLayout.addComponent(btnAddQuery);
 
         btnDelete = new Button("Delete current");
         btnDelete.setEnabled(false);
@@ -90,7 +90,15 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
             }
         });
 
+        HorizontalLayout topLineLayout = new HorizontalLayout();
+        topLineLayout.setSizeUndefined();
+        topLineLayout.setSpacing(true);
+        topLineLayout.addComponent(btnAddQuery);
         topLineLayout.addComponent(btnDelete);
+
+        VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setSizeFull();
+        mainLayout.setSpacing(true);
 
         mainLayout.addComponent(topLineLayout);
         mainLayout.setExpandRatio(topLineLayout, 0);
@@ -100,24 +108,39 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
         mainLayout.addComponent(accordion);
         mainLayout.setExpandRatio(accordion, 1);
 
+        mainLayout.addComponent(new TextField(OUTPUT_GRAPH_SYMBOLIC_NAME, outputGraphSymbolicName));
         setCompositionRoot(mainLayout);
     }
 
     private void addGraph(String query) {
-        VerticalLayout subLayout = new VerticalLayout();
-        subLayout.setSizeFull();
-        subLayout.setMargin(true);
-
         final TextArea txtQuery = new TextArea();
         txtQuery.setSizeFull();
         txtQuery.setValue(query);
         txtQuery.setSizeFull();
 
+        final CheckBox checkBox = new CheckBox(DATASET_INPUT_LABEL, false);
+        checkBox.addValueChangeListener(new ValueChangeListener() {
+
+            @Override
+            public void valueChange(ValueChangeEvent event) {
+                if (checkBox.getValue()) {
+                    queryTypes.put(txtQuery, QueryType.CONSTRUCT);
+                } else {
+                    queryTypes.put(txtQuery, QueryType.UPDATE);
+                }
+            }
+        });
+
+        VerticalLayout subLayout = new VerticalLayout();
+        subLayout.setSizeFull();
+        subLayout.setMargin(true);
+
         subLayout.addComponent(txtQuery);
+        subLayout.addComponent(checkBox);
 
         // add to main component list
         this.queries.add(txtQuery);
-        this.queryTypes.put(txtQuery, QueryType.INVALID);
+        this.queryTypes.put(txtQuery, QueryType.UPDATE);
 
         final Tab tab = this.accordion.addTab(subLayout, "Query");
 
@@ -128,35 +151,15 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
                 final String query = value.toString();
 
                 if (query.isEmpty()) {
-                    throw new InvalidValueException(
-                            "SPARQL query is empty it must be filled");
+                    throw new InvalidValueException("SPARQL query is empty it must be filled");
                 }
 
-                QueryValidator updateValidator =
-                        new SPARQLUpdateValidator(query);
-                SPARQLQueryValidator constructValidator =
-                        new SPARQLQueryValidator(query, SPARQLQueryType.CONSTRUCT);
-
-                // also store type in case of sucessful validation
-                if (constructValidator.isQueryValid()) {
-                    queryTypes.put(txtQuery, QueryType.CONSTRUCT);
-                    return;
-                }
-
+                SPARQLUpdateValidator updateValidator = new SPARQLUpdateValidator(query);
                 if (updateValidator.isQueryValid()) {
                     queryTypes.put(txtQuery, QueryType.UPDATE);
                     return;
-                }
-
-                queryTypes.put(txtQuery, QueryType.INVALID);
-
-                // return message based on query type
-                if (constructValidator.hasSameType()) {
-                    throw new InvalidValueException(
-                            constructValidator.getErrorMessage());
                 } else {
-                    throw new InvalidValueException(
-                            updateValidator.getErrorMessage());
+                    throw new InvalidValueException("Not a valid SPARQL update query " + updateValidator.getErrorMessage());
                 }
             }
         });
@@ -165,10 +168,10 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
     }
 
     /**
-     * Load values from configuration object implementing {@link DPUConfigObject} interface and configuring DPU into the dialog
+     * Load values from configuration object implementing {@link DPUConfig} interface and configuring DPU into the dialog
      * where the configuration object may be edited.
      *
-     * @throws ConfigException
+     * @throws DPUConfigException
      *             Exception not used in current implementation of
      *             this method.
      * @param conf
@@ -176,7 +179,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      *            fields in the configuration dialog.
      */
     @Override
-    public void setConfiguration(SPARQLTransformerConfig conf) throws DPUConfigException {
+    public void setConfiguration(SPARQLConfig_V1 conf) throws DPUConfigException {
         queries.clear();
         queryTypes.clear();
         accordion.removeAllComponents();
@@ -186,6 +189,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
         }
 
         btnDelete.setEnabled(!conf.getQueryPairs().isEmpty());
+        outputGraphSymbolicName.setValue(conf.getOutputGraphSymbolicName());
     }
 
     /**
@@ -193,16 +197,16 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
      * to configuration object implementing {@link DPUConfigObject} interface
      * and configuring DPU
      *
-     * @throws ConfigException
+     * @throws DPUConfigException
      *             Exception which might be thrown when any of
      *             SPARQL queries are invalid.
      * @return conf Object holding configuration which is used in {@link #setConfiguration} to initialize fields in the
      *         configuration dialog.
      */
     @Override
-    public SPARQLTransformerConfig getConfiguration() throws DPUConfigException {
+    public SPARQLConfig_V1 getConfiguration() throws DPUConfigException {
 
-        SPARQLTransformerConfig conf = new SPARQLTransformerConfig();
+        SPARQLConfig_V1 conf = new SPARQLConfig_V1();
         List<SPARQLQueryPair> queryPairs = conf.getQueryPairs();
 
         for (int i = 0; i < queries.size(); i++) {
@@ -215,6 +219,7 @@ public class SPARQLTransformerDialog extends BaseConfigDialog<SPARQLTransformerC
             queryPairs.add(new SPARQLQueryPair(txtQuery.getValue(), isConstruct));
         }
 
+        conf.setOutputGraphSymbolicName(outputGraphSymbolicName.getValue());
         return conf;
     }
 
