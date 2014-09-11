@@ -46,8 +46,6 @@ INSERT INTO `dpu_template` VALUES (22,'T-XSLT',0,'','<object-stream>\n  <Configu
 INSERT INTO `dpu_template` VALUES (23,'T-Zipper',0,'','<object-stream>\n  <ConfigurationVersion>\n    <version>1</version>\n    <className>eu.unifiedviews.plugins.transformer.zipper.ZipperConfig_V1</className>\n  </ConfigurationVersion>\n  <Configuration>\n    <zipFile>data.zip</zipFile>\n  </Configuration>\n</object-stream>',NULL,0,1,1,1,'uv-t-zipper','uv-t-zipper-1.3.1.jar','Zip input files into zip file of given name.');
 /*!40000 ALTER TABLE `dpu_template` ENABLE KEYS */;
 UNLOCK TABLES;
-
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
