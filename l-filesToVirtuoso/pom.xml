@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>eu.unifiedviews.plugins</groupId>
 		<artifactId>dpu-base-pom</artifactId>
-		<version>1.3.1-SNAPSHOT</version>
+		<version>1.3.1</version>
 		<relativePath/>
 	</parent>
 	<groupId>eu.unifiedviews.plugins</groupId>
@@ -14,7 +14,7 @@
     <name>L-FilesToVirtuoso</name>
 	<description>VirtuosoLoader issues Virtuoso internal functions to load directory of RDF data.</description>
 	<packaging>bundle</packaging>
-	<version>1.3.1-SNAPSHOT</version>
+	<version>1.3.1</version>
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.filestovirtuoso</dpu.package>
