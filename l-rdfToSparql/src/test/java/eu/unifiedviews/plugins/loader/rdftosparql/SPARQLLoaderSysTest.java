@@ -1,10 +1,5 @@
 package eu.unifiedviews.plugins.loader.rdftosparql;
 
-import eu.unifiedviews.plugins.loader.rdftosparql.RdfToSparqlEndpointConfig_V1;
-import eu.unifiedviews.plugins.loader.rdftosparql.InsertType;
-import eu.unifiedviews.plugins.loader.rdftosparql.LoaderEndpointParams;
-import eu.unifiedviews.plugins.loader.rdftosparql.SPARQLoader;
-import eu.unifiedviews.plugins.loader.rdftosparql.WriteGraphType;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -23,16 +18,16 @@ import org.openrdf.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.unifiedviews.dpu.DPUContext;
-import eu.unifiedviews.dpu.DPUException;
 import cz.cuni.mff.xrg.odcs.dpu.test.TestEnvironment;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.rdf.RDFDataUnit;
 import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
+import eu.unifiedviews.dpu.DPUContext;
+import eu.unifiedviews.dpu.DPUException;
 
 /**
  * Test funcionality loading to SPARQL endpoint.
- * 
+ *
  * @author Jiri Tomes
  */
 public class SPARQLLoaderSysTest {
@@ -101,7 +96,7 @@ public class SPARQLLoaderSysTest {
     }
 
     //@Test
-    public void loadDataToSPARQLEndpointTest() {
+    public void loadDataToSPARQLEndpointTest() throws RepositoryException {
         RDFDataUnit repository = testEnvironment.createRdfFDataUnit("");
 
         RdfToSparqlEndpointConfig_V1 c = new RdfToSparqlEndpointConfig_V1();
@@ -141,7 +136,7 @@ public class SPARQLLoaderSysTest {
         c.setGraphsUri(Arrays.asList(goalGraphName));
         c.setInsertOption(InsertType.SKIP_BAD_PARTS);
         c.setGraphOption(WriteGraphType.OVERRIDE);
-        
+
         SPARQLoader loader = new SPARQLoader(repository, getTestContext(),
                 c);
         try {
@@ -155,7 +150,7 @@ public class SPARQLLoaderSysTest {
                     predicate.stringValue(),
                     object.stringValue());
 
-        } 
+        }
         connection.close();
         assertTrue(isLoaded);
     }
