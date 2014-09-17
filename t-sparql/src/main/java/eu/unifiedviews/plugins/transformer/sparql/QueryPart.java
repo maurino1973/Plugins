@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * For given SELECT/CONTRUCT/DESCRIBE query you can split it for 2 parts -
  * prefixes and rest of query.
  * Support for {@link SPARQLQueryValidator}.
- * 
+ *
  * @author Jiri Tomes
  */
 public class QueryPart {
@@ -18,7 +18,7 @@ public class QueryPart {
 
     /**
      * Create new instance of {@link QueryPart} based on given SPARQL query.
-     * 
+     *
      * @param query
      *            SPARQL query you can analyze - split to prefixes and rest.
      */
@@ -53,7 +53,7 @@ public class QueryPart {
 
     /**
      * Returns string representation of query without defined prefixes.
-     * 
+     *
      * @return String representation of query without defined prefixes.
      */
     public String getQueryWithoutPrefixes() {
@@ -62,7 +62,7 @@ public class QueryPart {
 
     /**
      * Returns all defined prefixes in given query.
-     * 
+     *
      * @return all defined prefixes in given query.
      */
     public String getQueryPrefixes() {
@@ -71,7 +71,7 @@ public class QueryPart {
 
     /**
      * Returns original SPARQL query.
-     * 
+     *
      * @return string representation of query.
      */
     public String getQuery() {
@@ -84,7 +84,7 @@ public class QueryPart {
 
     /**
      * Return one of enum as query type - SELECT, CONTRUCT, DESCRIBE, UNKNOWN.
-     * 
+     *
      * @return one possible of enum {@link SPARQLQueryType}.
      */
     public SPARQLQueryType getSPARQLQueryType() {

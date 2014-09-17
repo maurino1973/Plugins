@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * SPARQL transformer configuration.
- * 
+ *
  * @author Jiri Tomes
  * @author tknap
  */
@@ -18,6 +18,8 @@ public class SPARQLConfig_V1 {
     boolean isConstructType;
 
     private String outputGraphSymbolicName = "T-SPARQL/output" + String.valueOf(new java.util.Random().nextInt(100));
+
+    private boolean rewriteConstructToInsert = false;
 
     public SPARQLConfig_V1() {
         this.queryPairs = new LinkedList<>();
@@ -34,7 +36,7 @@ public class SPARQLConfig_V1 {
 
     /**
      * Returns collection of {@link SPARQLQueryPair} instance.
-     * 
+     *
      * @return collection of {@link SPARQLQueryPair} instance.
      */
     public List<SPARQLQueryPair> getQueryPairs() {
@@ -43,7 +45,7 @@ public class SPARQLConfig_V1 {
 
     /**
      * Returns true, if DPU configuration is valid, false otherwise.
-     * 
+     *
      * @return true, if DPU configuration is valid, false otherwise.
      */
     public boolean isValid() {
@@ -56,6 +58,10 @@ public class SPARQLConfig_V1 {
 
     public void setSPARQL_Update_Query(String SPARQL_Update_Query) {
         this.SPARQL_Update_Query = SPARQL_Update_Query;
+        if (SPARQL_Update_Query != null) {
+            queryPairs.add(new SPARQLQueryPair(SPARQL_Update_Query,
+                    isConstructType));
+        }
     }
 
     public boolean isIsConstructType() {
@@ -78,16 +84,11 @@ public class SPARQLConfig_V1 {
         this.outputGraphSymbolicName = outputGraphSymbolicName;
     }
 
-    /**
-     * Fill missing configuration with default values.
-     */
-//    @Override
-//    public void onDeserialize() {
-//        if (SPARQL_Update_Query != null) {
-//            queryPairs.add(new SPARQLQueryPair(SPARQL_Update_Query,
-//                    isConstructType));
-//        }
-//    }
-    
-    
+    public boolean isRewriteConstructToInsert() {
+        return rewriteConstructToInsert;
+    }
+
+    public void setRewriteConstructToInsert(boolean rewriteConstructToInsert) {
+        this.rewriteConstructToInsert = rewriteConstructToInsert;
+    }
 }

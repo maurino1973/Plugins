@@ -1,6 +1,4 @@
-package com.example;
-
-import cz.cuni.mff.xrg.odcs.commons.module.config.DPUConfigObjectBase;
+package eu.unifiedviews.plugins.dputemplate;
 
 /**
  * Put your DPU's configuration here.
@@ -8,19 +6,19 @@ import cz.cuni.mff.xrg.odcs.commons.module.config.DPUConfigObjectBase;
  * to validate the configuration.
  * <b>This class must have default (parameter less) constructor!</b>
  */
-public class DPUTemplateConfig extends DPUConfigObjectBase {
+public class DPUTemplateConfig_V1 {
 
     private int width;
 
     private int height;
 
     // DPUTemplateConfig must provide public non-parametric constructor
-    public DPUTemplateConfig() {
+    public DPUTemplateConfig_V1() {
         width = 100;
         height = 100;
     }
 
-    public DPUTemplateConfig(int w, int h) {
+    public DPUTemplateConfig_V1(int w, int h) {
         width = w;
         height = h;
     }

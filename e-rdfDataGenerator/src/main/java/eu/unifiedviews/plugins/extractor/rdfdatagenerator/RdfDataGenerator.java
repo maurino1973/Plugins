@@ -20,8 +20,8 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsExtractor
 public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig_V1> implements ConfigDialogProvider<RdfDataGeneratorConfig_V1> {
-	private static final Logger LOG = LoggerFactory.getLogger(RdfDataGenerator.class);
-	
+    private static final Logger LOG = LoggerFactory.getLogger(RdfDataGenerator.class);
+
     public RdfDataGenerator() {
         super(RdfDataGeneratorConfig_V1.class);
     }
@@ -32,10 +32,10 @@ public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig_V1
     @Override
     public void execute(DPUContext dpuContext)
             throws DPUException {
-    	String shortMessage = this.getClass().getSimpleName() + " starting.";
+        String shortMessage = this.getClass().getSimpleName() + " starting.";
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage);
         LOG.info(shortMessage);
-        
+
         RepositoryConnection connection = null;
         try {
             connection = rdfOutput.getConnection();
@@ -43,13 +43,13 @@ public class RdfDataGenerator extends ConfigurableBase<RdfDataGeneratorConfig_V1
             ValueFactory f = new MemValueFactory();
             connection.begin();
             int j = 1;
-            for (int i = 0; i < config.getTripleCount(); i++) {
+            for (int i = 1; i <= config.getTripleCount(); i++) {
                 connection.add(f.createStatement(
                         f.createURI("http://example.org/people/d" + String.valueOf(j++)),
                         f.createURI("http://example.org/ontology/e" + String.valueOf(j++)),
                         f.createLiteral("Alice" + String.valueOf(j++))
                         ), outputGraph);
-                if ((i % 25000) == 0) {
+                if (i % 25000 == 0) {
                     connection.commit();
                     dpuContext.sendMessage(DPUContext.MessageType.DEBUG, "Number of triples " + String.valueOf(i));
                     if (dpuContext.canceled()) {

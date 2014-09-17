@@ -7,7 +7,7 @@ import org.openrdf.query.parser.QueryParserUtil;
 /**
  * Class responsible to find out, if sparql update queries are valid or not. It
  * using very often as query in transformer.
- * 
+ *
  * @author Jiri Tomes
  */
 public class SPARQLUpdateValidator implements QueryValidator {
@@ -19,7 +19,7 @@ public class SPARQLUpdateValidator implements QueryValidator {
     /**
      * Create new instance of {@link SPARQLUpdateValidator} with given SPARQL
      * update query you can validate.
-     * 
+     *
      * @param updateQuery
      *            SPARQL update query you can validate
      */
@@ -30,7 +30,7 @@ public class SPARQLUpdateValidator implements QueryValidator {
 
     /**
      * Method for detection right syntax of query.
-     * 
+     *
      * @return true, if query is valid, false otherwise.
      */
     @Override
@@ -50,7 +50,7 @@ public class SPARQLUpdateValidator implements QueryValidator {
 
     /**
      * String message describes syntax problem of validation query.
-     * 
+     *
      * @return empty string, when query is valid.
      */
     @Override

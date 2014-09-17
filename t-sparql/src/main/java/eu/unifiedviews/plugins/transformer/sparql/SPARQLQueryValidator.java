@@ -6,7 +6,7 @@ import org.openrdf.query.parser.QueryParserUtil;
 
 /**
  * Class responsible to find out, if sparql queries are valid or not.
- * 
+ *
  * @author Jiri Tomes
  */
 public class SPARQLQueryValidator implements QueryValidator {
@@ -23,7 +23,7 @@ public class SPARQLQueryValidator implements QueryValidator {
      * Create new instance of {@link SPARQLQueryValidator} with given SPARQL
      * query you can validate.
      * For SPARQL update query use {@link SPARQLUpdateValidator}.
-     * 
+     *
      * @param query
      *            SPARQL query you can validate
      */
@@ -39,7 +39,7 @@ public class SPARQLQueryValidator implements QueryValidator {
      * Create new instance of {@link SPARQLQueryValidator} with given SPARQL
      * query and it´s required {@link SPARQLQueryType} you can validate.
      * For SPARQL update query use {@link SPARQLUpdateValidator}.
-     * 
+     *
      * @param query
      *            SPARQL query you can validate
      * @param requiredType
@@ -61,7 +61,7 @@ public class SPARQLQueryValidator implements QueryValidator {
      * If query has required type returns true if type of the given query and
      * required type are the same, false otherwise. If no required query type is
      * set returns true.
-     * 
+     *
      * @return true if query has required type and type of the given query and
      *         required type are the same, false otherwise. If no required query
      *         type is set returns true.
@@ -82,7 +82,7 @@ public class SPARQLQueryValidator implements QueryValidator {
 
     /**
      * Method for detection right syntax of sparql query.
-     * 
+     *
      * @return true, if query is valid, false otherwise.
      */
     @Override
@@ -112,7 +112,7 @@ public class SPARQLQueryValidator implements QueryValidator {
 
     /**
      * String message describes syntax problem of SPARQL query.
-     * 
+     *
      * @return empty string, when SPARQL query is valid
      */
     @Override

@@ -1,0 +1,18 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+<http://linked.opendata.cz/resource/dataset/czso.cz/regions> a prov:Entity , void:Dataset ;
+	dcterms:title "Regiony"@cs , "Regions"@en ;
+	dcterms:description "RDF data extracted from excel files published at czso.cz with regions (IDs and hierarchy)."@en , "Data o regionech obsahující ID a hierarchii extrahovaná z Excelovských souborů publikovaných na czso.cz ve formátu RDF"@cs ;
+	void:exampleResource <http://linked.opendata.cz/resource/region/535826> ;
+	void:sparqlEndpoint <http://linked.opendata.cz/sparql> ;
+	void:dataDump <http://linked.opendata.cz/dump/regions.zip> ;
+	dcterms:creator <http://opendata.cz/necasky#me> ;
+	dcterms:modified "2012-09-06"^^xsd:date ;
+	dcterms:publisher <http://opendata.cz> ;
+	dcterms:license <http://opendatacommons.org/licenses/pddl/1-0/> ;
+	dcterms:source <http://www.czso.cz/csu/klasifik.nsf/i/struktura_uzemi_cr_od_1_1_2008_do_1_1_2012_xls/$File/Struktura%20%C3%BAzem%C3%AD_od%201.1.2008%20do%201.1.2012.xls> ;
+	<http://test> prov:Entity , void:Dataset , "Regiony"@cs , "Regions"@en , "RDF data extracted from excel files published at czso.cz with regions (IDs and hierarchy)."@en , "Data o regionech obsahující ID a hierarchii extrahovaná z Excelovských souborů publikovaných na czso.cz ve formátu RDF"@cs , <http://linked.opendata.cz/resource/region/535826> , <http://linked.opendata.cz/sparql> , <http://linked.opendata.cz/dump/regions.zip> , <http://opendata.cz/necasky#me> , "2012-09-06"^^xsd:date , <http://opendata.cz> , <http://opendatacommons.org/licenses/pddl/1-0/> , <http://www.czso.cz/csu/klasifik.nsf/i/struktura_uzemi_cr_od_1_1_2008_do_1_1_2012_xls/$File/Struktura%20%C3%BAzem%C3%AD_od%201.1.2008%20do%201.1.2012.xls> .

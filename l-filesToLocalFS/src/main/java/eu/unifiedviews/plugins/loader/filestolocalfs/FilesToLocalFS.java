@@ -40,7 +40,7 @@ public class FilesToLocalFS extends
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException,
-            InterruptedException {
+    InterruptedException {
         String shortMessage = this.getClass().getSimpleName() + " starting.";
         String longMessage = String.valueOf(config);
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
@@ -68,7 +68,7 @@ public class FilesToLocalFS extends
         VirtualPathHelper inputVirtualPathHelper = VirtualPathHelpers.create(filesInput);
 
         try {
-            while ((shouldContinue)&& (filesIteration.hasNext())) {
+            while (shouldContinue && filesIteration.hasNext()) {
                 index++;
 
                 FilesDataUnit.Entry entry;
@@ -76,11 +76,14 @@ public class FilesToLocalFS extends
                     entry = filesIteration.next();
                     Path inputPath = new File(URI.create(entry.getFileURIString())).toPath();
                     String outputRelativePath = inputVirtualPathHelper.getVirtualPath(entry.getSymbolicName());
-                    if( outputRelativePath == null || outputRelativePath.isEmpty()) {
+                    if (outputRelativePath == null || outputRelativePath.isEmpty()) {
                         outputRelativePath = entry.getSymbolicName();
                     }
-                    Path outputPath = new File(destinationAbsolutePath + File.separator
-                            + outputRelativePath).toPath();
+                    File outputFile = new File(destinationAbsolutePath + File.separator
+                            + outputRelativePath);
+                    outputFile.mkdirs();
+
+                    Path outputPath = outputFile.toPath();
                     try {
                         Date start = new Date();
                         if (dpuContext.isDebugging()) {
@@ -97,16 +100,16 @@ public class FilesToLocalFS extends
                     } catch (IOException ex) {
                         dpuContext.sendMessage(
                                 config.isSkipOnError() ? DPUContext.MessageType.WARNING : DPUContext.MessageType.ERROR,
-                                "Error processing " + appendNumber(index) + " file",
-                                String.valueOf(entry),
-                                ex);
+                                        "Error processing " + appendNumber(index) + " file",
+                                        String.valueOf(entry),
+                                        ex);
                     }
                 } catch (DataUnitException ex) {
                     dpuContext.sendMessage(
                             config.isSkipOnError() ? DPUContext.MessageType.WARNING : DPUContext.MessageType.ERROR,
-                            "DataUnit exception.",
-                            "",
-                            ex);
+                                    "DataUnit exception.",
+                                    "",
+                                    ex);
                 }
 
                 shouldContinue = !dpuContext.canceled();
@@ -118,6 +121,11 @@ public class FilesToLocalFS extends
                 filesIteration.close();
             } catch (DataUnitException ex) {
                 LOG.warn("Error closing filesInput", ex);
+            }
+            try {
+                inputVirtualPathHelper.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close", ex);
             }
         }
     }
@@ -133,8 +141,9 @@ public class FilesToLocalFS extends
             // Check for special case: 11 - 13 are all "th".
             // So if the second to last digit is 1, it is "th".
             char secondToLastDigit = value.charAt(value.length() - 2);
-            if (secondToLastDigit == '1')
+            if (secondToLastDigit == '1') {
                 return value + "th";
+            }
         }
         char lastDigit = value.charAt(value.length() - 1);
         switch (lastDigit) {

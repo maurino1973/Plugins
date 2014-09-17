@@ -1,14 +1,20 @@
 package eu.unifiedviews.plugins.transformer.tabular;
 
+import java.util.Map;
+
+import com.vaadin.data.util.ObjectProperty;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
 
-import java.util.Map;
-
 public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
+
+    private static final String ADD_BLANK_CELLS_LABEL = "Add blank cells <http://linked.opendata.cz/ontology/odcs/tabular/blank-cell>";
+
+    private ObjectProperty<Boolean> addBlankCells = new ObjectProperty<Boolean>(false);
 
     private VerticalLayout mainLayout;
 
@@ -32,6 +38,8 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
 
     private TextField tfRowLimit;
 
+    private CheckBox checkStaticRowCounter;
+
     public TabularVaadinDialog() {
         super(TabularConfig_V1.class);
 
@@ -51,7 +59,7 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
         this.mainLayout.setImmediate(false);
         this.mainLayout.setWidth("100%");
         this.mainLayout.setHeight("-1px");
-        this.mainLayout.setMargin(false);
+        this.mainLayout.setMargin(true);
 
         this.baseFormLayout = new FormLayout();
         this.baseFormLayout.setSizeUndefined();
@@ -87,8 +95,14 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
         this.tfRowLimit = new TextField("Rows limit");
         this.baseFormLayout.addComponent(this.tfRowLimit);
 
+        this.checkStaticRowCounter = new CheckBox("Use static row counter");
+        this.checkStaticRowCounter.setDescription("If checked then row counter is not set to 0 between processing of multiple files.");
+        this.baseFormLayout.addComponent(this.checkStaticRowCounter);
+
         this.baseFormLayout.addComponent(new Label(
                 "Column to property URI mappings"));
+
+        this.baseFormLayout.addComponent(new CheckBox(ADD_BLANK_CELLS_LABEL, addBlankCells));
 
         this.mainLayout.addComponent(this.baseFormLayout);
 
@@ -225,6 +239,9 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
             this.addColumnToPropertyMapping(null, null);
 
         }
+
+        checkStaticRowCounter.setValue(c.isStaticRowCounter());
+        addBlankCells.setValue(c.isAddBlankCells());
     }
 
     @Override
@@ -305,6 +322,9 @@ public class TabularVaadinDialog extends BaseConfigDialog<TabularConfig_V1> {
         } catch (NumberFormatException ex) {
             cnf.setRowLimit(0);
         }
+
+        cnf.setStaticRowCounter(checkStaticRowCounter.getValue());
+        cnf.setAddBlankCells(addBlankCells.getValue());
 
         return cnf;
     }
