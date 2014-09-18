@@ -7,6 +7,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -162,6 +163,18 @@ public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
     @Override
     public AbstractConfigDialog<UnZipperConfig_V1> getConfigurationDialog() {
         return new UnZipperVaadinDialog();
+    }
+
+    @Override
+    public void configureDirectly(UnZipperConfig_V1 newConfig) throws DPUConfigException {
+        // workaround as configuration was initialy part of the Unzipper
+        // so original version of this function throws an exception
+        if (newConfig != null) {
+            config = newConfig;
+        } else {
+            // ignore and use default
+            config = new UnZipperConfig_V1();
+        }
     }
 
 }
