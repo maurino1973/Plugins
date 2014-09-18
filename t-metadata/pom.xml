@@ -11,7 +11,7 @@
 	<artifactId>uv-t-metadata</artifactId>
 	<name>T-Metadata</name>
 	<description>Generates metadata on output from input</description>
-	<version>1.3.1</version>
+	<version>1.3.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<properties>    

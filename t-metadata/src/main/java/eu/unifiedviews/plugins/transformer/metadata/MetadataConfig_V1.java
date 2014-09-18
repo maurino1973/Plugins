@@ -7,9 +7,14 @@ public class MetadataConfig_V1 {
 
     private String outputGraphName = "http://localhost/metadata";
 
-    private String datasetURI;
+    private String datasetURI = "http://linked.opendata.cz/resource/dataset/";
 
-    private String distroURI;
+    private String distroURI = "http://linked.opendata.cz/resource/dataset//distribution";
+
+    /**
+     * Language used for {@link title_cs}, {@link desc_cs}
+     */
+    private String language_cs = "cs";
 
     private String title_cs = "Název datasetu";
 
@@ -53,13 +58,13 @@ public class MetadataConfig_V1 {
 
     private LinkedList<String> possibleThemes = new LinkedList<>();
 
-    private String contactPoint;
+    private String contactPoint = "http://opendata.cz/contacts";
 
-    private String sparqlEndpoint;
+    private String sparqlEndpoint = "http://linked.opendata.cz/sparql";
 
-    private String dataDump;
+    private String dataDump = "http://linked.opendata.cz/dump/";
 
-    private String periodicity;
+    private String periodicity = "http://purl.org/linked-data/sdmx/2009/code#freq-M";
 
     private boolean useNow = true;
 
@@ -68,26 +73,7 @@ public class MetadataConfig_V1 {
     private Date modified = new Date();
 
     public MetadataConfig_V1() {
-        datasetURI = "http://linked.opendata.cz/resource/dataset/";
-        distroURI = "http://linked.opendata.cz/resource/dataset//distribution";
-        licenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
-        sparqlEndpoint = "http://linked.opendata.cz/sparql";
-        dataDump = "http://linked.opendata.cz/dump/";
-        contactPoint = "http://opendata.cz/contacts";
-        periodicity = "http://purl.org/linked-data/sdmx/2009/code#freq-M";
-        modified = new Date();
-        possibleSources.add("http://linked.opendata.cz");
-        possibleLicenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
-        possibleLicenses.add("http://creativecommons.org/licenses/by/3.0/lu/");
-        possiblePublishers.add("http://opendata.cz");
-        publishers.add("http://opendata.cz");
-        possibleAuthors.add("http://purl.org/klimek#me");
-        possibleAuthors.add("http://opendata.cz/necasky#me");
-        possibleAuthors.add("http://mynarz.net/#jindrich");
-        possibleThemes.add("http://dbpedia.org/resource/EHealth");
-        possibleLanguages.add("http://id.loc.gov/vocabulary/iso639-1/en");
-        possibleLanguages.add("http://id.loc.gov/vocabulary/iso639-1/cs");
-        licenses.add("http://opendatacommons.org/licenses/pddl/1-0/");
+
     }
 
     public String getOutputGraphName() {
@@ -104,6 +90,14 @@ public class MetadataConfig_V1 {
 
     public void setDatasetURI(String datasetURI) {
         this.datasetURI = datasetURI;
+    }
+
+    public String getLanguage_cs() {
+        return language_cs;
+    }
+
+    public void setLanguage_cs(String language_cs) {
+        this.language_cs = language_cs;
     }
 
     public String getDistroURI() {

@@ -148,13 +148,13 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
             outConnection.add(datasetURI, RDF.TYPE, qb_DataSet, outGraphURI);
         }
         if (config.getDesc_cs() != null) {
-            outConnection.add(datasetURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_cs(), "cs"), outGraphURI);
+            outConnection.add(datasetURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_cs(), config.getLanguage_cs()), outGraphURI);
         }
         if (config.getDesc_en() != null) {
             outConnection.add(datasetURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_en(), "en"), outGraphURI);
         }
         if (config.getTitle_cs() != null) {
-            outConnection.add(datasetURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_cs(), "cs"), outGraphURI);
+            outConnection.add(datasetURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_cs(), config.getLanguage_cs()), outGraphURI);
         }
         if (config.getTitle_en() != null) {
             outConnection.add(datasetURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_en(), "en"), outGraphURI);
