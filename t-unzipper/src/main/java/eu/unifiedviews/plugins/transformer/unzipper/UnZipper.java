@@ -8,6 +8,9 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
+import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
+import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
+import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Iterator;
@@ -21,7 +24,8 @@ import org.slf4j.LoggerFactory;
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class UnZipper implements DPU {
+public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
+        implements ConfigDialogProvider<UnZipperConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(UnZipper.class);
 
@@ -34,7 +38,7 @@ public class UnZipper implements DPU {
     private DPUContext context;
 
     public UnZipper() {
-
+        super(UnZipperConfig_V1.class);
     }
 
     @Override
@@ -118,13 +122,18 @@ public class UnZipper implements DPU {
         while (iter.hasNext()) {
             final File newFile = iter.next();
             final String relativePath = directoryPath.relativize(newFile.toPath()).toString();
-            final String newSymbolicName = relativePath;
+            final String newSymbolicName;
+            if (config.isNotPrefixed()) {
+                newSymbolicName = relativePath;
+            } else {
+                newSymbolicName = sourceSymbolicName + "/" + relativePath;
+            }
             // add file
             outFilesData.addExistingFile(newSymbolicName, newFile.toURI().toString());
             //
             // add metadata
             //
-            VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, relativePath);
+            VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, newSymbolicName);
         }
     }
 
@@ -148,6 +157,11 @@ public class UnZipper implements DPU {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public AbstractConfigDialog<UnZipperConfig_V1> getConfigurationDialog() {
+        return new UnZipperVaadinDialog();
     }
 
 }
