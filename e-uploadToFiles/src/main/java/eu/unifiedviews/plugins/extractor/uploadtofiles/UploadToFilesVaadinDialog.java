@@ -1,6 +1,8 @@
 package eu.unifiedviews.plugins.extractor.uploadtofiles;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -10,7 +12,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.HorizontalLayout;
@@ -24,6 +31,7 @@ import com.wcs.wcslib.vaadin.widget.multifileupload.ui.UploadStateWindow;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
+import eu.unifiedviews.plugins.extractor.uploadtofiles.OnDemandFileDownloader.OnDemandStreamResource;
 
 /**
  * DPU's configuration dialog. User can use this dialog to configure DPU
@@ -31,6 +39,8 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  */
 public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesConfig_V1> {
     private static final long serialVersionUID = 2397849673588724L;
+    
+    private static final Logger LOG = LoggerFactory.getLogger(UploadToFilesVaadinDialog.class);
 
     private Map<String, String> symbolicNameToURIMap = new HashMap<String, String>();
     private Map<String, String> symbolicNameToVirtualPathMap = new HashMap<String, String>();
@@ -96,19 +106,62 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
     private void refreshFiles() {
         filesLayout.removeAllComponents();
         HorizontalLayout layout;
+        OnDemandStreamResource fileSource = null;
+        
         for (String fileName : symbolicNameToURIMap.keySet()) {
             layout = new HorizontalLayout();
             layout.setSpacing(true);
-            Button removeButton = new Button("X");
-            layout.addComponent(removeButton);
-            layout.addComponent(new Label(fileName));
-            if (!fileExists(fileName)) {
-                layout.addComponent(new Label("<b style=\"color:red;\">"
-                        + "File doesn't exist.</b>", ContentMode.HTML));
-            }
+            
+            Button removeButton = new Button();
+            removeButton.addStyleName("small_button");
+            removeButton.setIcon(new ThemeResource("icons/trash.png"));
             removeButton.addClickListener(new RemoveFileClickListener(fileName));
+            layout.addComponent(removeButton);
+            
+            fileSource = createSource(fileName);
+            Button downloadButton = new Button();
+            downloadButton.addStyleName("small_button");
+            downloadButton.setIcon(new ThemeResource("icons/download.png"));
+            new OnDemandFileDownloader(fileSource).extend(downloadButton);
+            layout.addComponent(downloadButton);
+            
+            Label label = new Label(fileName);
+            layout.addComponent(label);
+            layout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
+            
+            if (!fileExists(fileName)) {
+                label = new Label("<b style=\"color:red;\">"
+                        + "File doesn't exist.</b>", ContentMode.HTML);
+                layout.addComponent(label);
+                layout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
+            }
+            
             filesLayout.addComponent(layout);
         }
+    }
+
+    private OnDemandStreamResource createSource(final String fileName) {
+        return new OnDemandStreamResource() {
+            private static final long serialVersionUID = 3163461986720496196L;
+
+            @Override
+            public InputStream getStream() {
+                String uri = symbolicNameToURIMap.get(fileName);
+                File file = new File(URI.create(uri));
+                try {
+                    return new FileInputStream(file);
+                } catch (FileNotFoundException e) {
+                    LOG.error("Failed to download file: " + fileName, e);
+                    Notification.show("Failed to download file.", "Couldn't find file: " + fileName, Notification.Type.ERROR_MESSAGE);
+                    return null;
+                }
+            }
+            
+            @Override
+            public String getFilename() {
+                return fileName;
+            }
+        };
     }
 
     private boolean fileExists(String fileName) {
@@ -117,7 +170,7 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
         }
         return false;
     }
-
+    
     private class RemoveFileClickListener implements Button.ClickListener {
         private static final long serialVersionUID = 3088780607157858375L;
 
