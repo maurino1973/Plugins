@@ -1,5 +1,6 @@
 package eu.unifiedviews.plugins.transformer.filesfilter;
 
+import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -13,6 +14,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -52,9 +54,9 @@ public class FilesFilter extends ConfigurableBase<FilesFilterConfig_V1> implemen
         //
         // get file iterator
         //
-        final FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = inFilesData.getIteration();
+            filesIteration = FilesHelper.getFiles(inFilesData).iterator();
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
@@ -115,14 +117,6 @@ public class FilesFilter extends ConfigurableBase<FilesFilterConfig_V1> implemen
             }
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "Problem with DataUnit", "", ex);
-        }
-        //
-        // close
-        //
-        try {
-            filesIteration.close();
-        } catch (DataUnitException ex) {
-            LOG.warn("Error in close.", ex);
         }
     }
 

@@ -1,5 +1,7 @@
 package eu.unifiedviews.plugins.transformer.filesrenamer;
 
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +12,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.NonConfigurableBase;
@@ -36,16 +39,16 @@ public class Renamer extends NonConfigurableBase {
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException {
-        //check that XSLT is available 
+        //check that XSLT is available
 
         String shortMessage = this.getClass().getSimpleName() + " starting.";
 //        String longMessage = String.valueOf(config);
 //        dpuContext.sendMessage(MessageType.INFO, shortMessage, longMessage);
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, "");
 
-        FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = filesInput.getIteration();
+            filesIteration = FilesHelper.getFiles(filesInput).iterator();
         } catch (DataUnitException ex) {
             throw new DPUException("Could not obtain filesInput", ex);
         }
@@ -57,15 +60,14 @@ public class Renamer extends NonConfigurableBase {
         VirtualPathHelper virtualPathHelperOutput = VirtualPathHelpers.create(filesOutput);
         try {
 
-            while ((shouldContinue) && (filesIteration.hasNext())) {
+            while (shouldContinue && filesIteration.hasNext()) {
                 FilesDataUnit.Entry entry;
                 try {
                     entry = filesIteration.next();
                     index++;
 
                     final String newSymbolicName = entry.getSymbolicName() + ".ttl";
-                    final String newVirtualPath
-                            = virtualPathHelperInput.getVirtualPath(entry.getSymbolicName()) + ".ttl";
+                    final String newVirtualPath = virtualPathHelperInput.getVirtualPath(entry.getSymbolicName()) + ".ttl";
 
                     filesOutput.addExistingFile(newSymbolicName, entry.getFileURIString());
                     virtualPathHelperOutput.setVirtualPath(newSymbolicName, newVirtualPath);
@@ -81,13 +83,10 @@ public class Renamer extends NonConfigurableBase {
 
                 shouldContinue = !dpuContext.canceled();
             }
-        } catch (DataUnitException ex) {
-            throw new DPUException("Error iterating filesInput.", ex);
         } finally {
             try {
                 virtualPathHelperInput.close();
                 virtualPathHelperOutput.close();
-                filesIteration.close();
             } catch (DataUnitException ex) {
                 LOG.warn("Error closing filesInput", ex);
             }

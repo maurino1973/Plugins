@@ -12,7 +12,7 @@
     <artifactId>uv-t-tabular</artifactId>
     <name>T-Tabular</name>
     <description>Based on https://github.com/mff-uk/DPUs/blob/master/dpu-domain-specific/tabular. Temporary solution.</description>
-    <version>1.3.1</version>
+    <version>1.3.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 	
     <properties>    

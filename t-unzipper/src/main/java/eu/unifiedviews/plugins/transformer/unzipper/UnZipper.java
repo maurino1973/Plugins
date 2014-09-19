@@ -1,5 +1,16 @@
 package eu.unifiedviews.plugins.transformer.unzipper;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Iterator;
+
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -8,18 +19,11 @@ import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
 import eu.unifiedviews.dpu.config.DPUConfigException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Iterator;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Škoda Petr
@@ -46,9 +50,9 @@ public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
     public void execute(DPUContext context) throws DPUException {
         this.context = context;
 
-        final FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = inFilesData.getIteration();
+            filesIteration = FilesHelper.getFiles(inFilesData).iterator();
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
@@ -70,7 +74,7 @@ public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
                 FilesDataUnit.Entry entry = filesIteration.next();
                 //
                 // Prepare source/target file/directory
-                //                
+                //
                 final File sourceFile = new File(java.net.URI.create(entry.getFileURIString()));
 
                 String zipRelativePath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
@@ -109,11 +113,6 @@ public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Problem with data unit.", "", ex);
         } finally {
-            try {
-                filesIteration.close();
-            } catch (DataUnitException ex) {
-                LOG.warn("Error in close.", ex);
-            }
         }
     }
 
@@ -140,7 +139,7 @@ public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
 
     /**
      * Unzip given file into given directory.
-     * 
+     *
      * @param zipFile
      * @param targetDirectory
      * @return

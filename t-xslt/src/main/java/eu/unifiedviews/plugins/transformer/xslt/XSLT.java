@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.net.URI;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.xml.transform.stream.StreamSource;
@@ -28,6 +29,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.maphelper.MapHelper;
 import eu.unifiedviews.helpers.dataunit.maphelper.MapHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
@@ -78,11 +80,12 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
 
         dpuContext.sendMessage(DPUContext.MessageType.INFO, "Stylesheet was compiled successully");
 
-        FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = filesInput.getIteration();
+            filesIteration = FilesHelper.getFiles(filesInput).iterator();
         } catch (DataUnitException ex) {
-            throw new DPUException("Could not obtain filesInput", ex);
+            dpuContext.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
+            return;
         }
         long filesSuccessfulCount = 0L;
         long index = 0L;
@@ -154,11 +157,6 @@ public class XSLT extends ConfigurableBase<XSLTConfig_V1> implements ConfigDialo
         } catch (DataUnitException ex) {
             throw new DPUException("Error iterating filesInput.", ex);
         } finally {
-            try {
-                filesIteration.close();
-            } catch (DataUnitException ex) {
-                LOG.warn("Error closing filesInput", ex);
-            }
             try {
                 mapHelper.close();
             } catch (DataUnitException ex) {
