@@ -13,7 +13,7 @@
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-e-uploadToFiles</artifactId>
 	<name>E-UploadToFiles</name>
-	<version>1.3.1</version>
+	<version>1.3.2-SNAPSHOT</version>
 	<description>Downloads files from client during configuration. Then they are used during execution. Files are saved to directory specified in user.home system property.</description>
 	<packaging>bundle</packaging>
 
