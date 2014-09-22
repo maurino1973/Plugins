@@ -5,6 +5,8 @@ import java.util.LinkedList;
 
 public class MetadataConfig_V1 {
 
+    private String comsodeDatasetId = "";
+
     private String outputGraphName = "http://localhost/metadata";
 
     private String datasetURI = "http://linked.opendata.cz/resource/dataset/";
@@ -74,6 +76,14 @@ public class MetadataConfig_V1 {
 
     public MetadataConfig_V1() {
 
+    }
+
+    public String getComsodeDatasetId() {
+        return comsodeDatasetId;
+    }
+
+    public void setComsodeDatasetId(String comsodeDatasetId) {
+        this.comsodeDatasetId = comsodeDatasetId;
     }
 
     public String getOutputGraphName() {

@@ -43,6 +43,8 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
     private VerticalLayout mainLayout;
 
+    private TextField tfComsodeDatasetId;
+
     private TextField txtOutSymbolicName;
 
     private TextField tfLanguage;
@@ -135,6 +137,12 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         txtOutSymbolicName.setCaption("Output graph name:");
         txtOutSymbolicName.setWidth("100%");
         mainLayout.addComponent(txtOutSymbolicName);
+
+        tfComsodeDatasetId = new TextField();
+        tfComsodeDatasetId.setCaption("COMSODE Dataset ID (will be used as part of the URI)");
+        tfComsodeDatasetId.setWidth("100%");
+        tfComsodeDatasetId.setInputPrompt("MICR_3");
+        mainLayout.addComponent(tfComsodeDatasetId);
 
         tfDatasetUri = new TextField();
         tfDatasetUri.setCaption("Dataset URI:");
@@ -288,6 +296,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
     public void setConfiguration(MetadataConfig_V1 conf) throws DPUConfigException {
         //
         txtOutSymbolicName.setValue(conf.getOutputGraphName());
+        tfComsodeDatasetId.setValue(conf.getComsodeDatasetId());
         tfDatasetUri.setValue(conf.getDatasetURI().toString());
         tfDistributionUri.setValue(conf.getDistroURI().toString());
         tfDataDumpUrl.setValue(conf.getDataDump().toString());
@@ -383,7 +392,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
         try {
             conf.setOutputGraphName((new URL(txtOutSymbolicName.getValue())).toString());
-
+            conf.setComsodeDatasetId(tfComsodeDatasetId.getValue());
             conf.setDatasetURI((new URL(tfDatasetUri.getValue())).toString());
             conf.setDistroURI((new URL(tfDistributionUri.getValue())).toString());
             conf.setDataDump((new URL(tfDataDumpUrl.getValue())).toString());

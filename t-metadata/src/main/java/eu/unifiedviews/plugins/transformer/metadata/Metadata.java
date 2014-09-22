@@ -144,6 +144,13 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
 
         outConnection.add(datasetURI, RDF.TYPE, void_datasetClass, outGraphURI);
         outConnection.add(datasetURI, RDF.TYPE, dcat_datasetClass, outGraphURI);
+        if (config.getComsodeDatasetId() != null && !config.getComsodeDatasetId().isEmpty()) {
+            outConnection.add(datasetURI,
+                    valueFactory.createURI("http://comsode.eu/ontology/dataset"),
+                    valueFactory.createURI("http://comsode.eu/resource/dataset/" + config.getComsodeDatasetId()),
+                    outGraphURI);
+        }
+
         if (config.isIsQb()) {
             outConnection.add(datasetURI, RDF.TYPE, qb_DataSet, outGraphURI);
         }
