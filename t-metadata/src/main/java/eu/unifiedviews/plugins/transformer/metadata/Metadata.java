@@ -219,6 +219,11 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         outConnection.add(datasetURI, dcat_distribution, distroURI, outGraphURI);
         outConnection.commit();
 
+        if (context.canceled()) {
+            context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
+            return;
+        }
+
         // DCAT Distribution
         outConnection.begin();
         outConnection.add(distroURI, RDF.TYPE, dcat_distroClass, outGraphURI);
@@ -248,12 +253,23 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         executeCountQuery("SELECT (COUNT (distinct ?p) as ?count) WHERE {?s ?p ?o}", void_properties, datasetURI, dataset);
         executeCountQuery("SELECT (COUNT (distinct ?s) as ?count) WHERE {?s ?p ?o}", void_dSubjects, datasetURI, dataset);
         executeCountQuery("SELECT (COUNT (distinct ?o) as ?count) WHERE {?s ?p ?o}", void_dObjects, datasetURI, dataset);
-        context.sendMessage(DPUContext.MessageType.INFO, "Statistics computation done");
-        // Done computing statistics
+
+        // done computing statistics
+
+        if (context.canceled()) {
+            context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
+        } else {
+            context.sendMessage(DPUContext.MessageType.INFO, "Statistics computation done");
+        }
     }
 
     void executeCountQuery(String countQuery, URI property, URI datasetURI,
             Dataset dataset) {
+        if (context.canceled()) {
+            // end now
+            return;
+        }
+
         final ValueFactory valueFactory = inConnection.getValueFactory();
         URI xsd_integer = valueFactory.createURI("http://www.w3.org/2001/XMLSchema#integer");
         try {
@@ -270,6 +286,7 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         } catch (QueryEvaluationException | RepositoryException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "Query failed", "", ex);
         }
+
     }
 
 }
