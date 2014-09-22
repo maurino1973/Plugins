@@ -62,7 +62,6 @@ public class SparqlSelect extends ConfigurableBase<SparqlSelectConfig> implement
         try {
             outSymbolicName = outFilesData.getBaseFileURIString() + config.getTargetPath();
             outFileUri = outFilesData.addNewFile(outSymbolicName);
-            outFilesData.addExistingFile(outSymbolicName, outFileUri);
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "Problem with DataUnit", "Can't add new file.", ex);
             return;
