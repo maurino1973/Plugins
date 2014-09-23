@@ -39,10 +39,11 @@ import eu.unifiedviews.plugins.extractor.uploadtofiles.OnDemandFileDownloader.On
  */
 public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesConfig_V1> {
     private static final long serialVersionUID = 2397849673588724L;
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(UploadToFilesVaadinDialog.class);
 
     private Map<String, String> symbolicNameToURIMap = new HashMap<String, String>();
+
     private Map<String, String> symbolicNameToVirtualPathMap = new HashMap<String, String>();
 
     private File destinationDir;
@@ -88,8 +89,9 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
                     symbolicNameToURIMap.put(fileName, outputFile.toURI().toASCIIString());
                     symbolicNameToVirtualPathMap.put(fileName, fileName); // TODO
                     refreshFiles();
-                } catch (IOException e) {
-                    Notification.show("Failed to upload file.", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+                } catch (IOException ex) {
+                    Notification.show("Failed to upload file.", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    LOG.error("Failed to upload file.", ex);
                 }
             }
         }, new UploadStateWindow());
@@ -107,35 +109,35 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
         filesLayout.removeAllComponents();
         HorizontalLayout layout;
         OnDemandStreamResource fileSource = null;
-        
+
         for (String fileName : symbolicNameToURIMap.keySet()) {
             layout = new HorizontalLayout();
             layout.setSpacing(true);
-            
+
             Button removeButton = new Button();
             removeButton.addStyleName("small_button");
             removeButton.setIcon(new ThemeResource("icons/trash.png"));
             removeButton.addClickListener(new RemoveFileClickListener(fileName));
             layout.addComponent(removeButton);
-            
+
             fileSource = createSource(fileName);
             Button downloadButton = new Button();
             downloadButton.addStyleName("small_button");
             downloadButton.setIcon(new ThemeResource("icons/download.png"));
             new OnDemandFileDownloader(fileSource).extend(downloadButton);
             layout.addComponent(downloadButton);
-            
+
             Label label = new Label(fileName);
             layout.addComponent(label);
             layout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
-            
+
             if (!fileExists(fileName)) {
                 label = new Label("<b style=\"color:red;\">"
                         + "File doesn't exist.</b>", ContentMode.HTML);
                 layout.addComponent(label);
                 layout.setComponentAlignment(label, Alignment.MIDDLE_LEFT);
             }
-            
+
             filesLayout.addComponent(layout);
         }
     }
@@ -156,7 +158,7 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
                     return null;
                 }
             }
-            
+
             @Override
             public String getFilename() {
                 return fileName;
@@ -170,7 +172,7 @@ public class UploadToFilesVaadinDialog extends BaseConfigDialog<UploadToFilesCon
         }
         return false;
     }
-    
+
     private class RemoveFileClickListener implements Button.ClickListener {
         private static final long serialVersionUID = 3088780607157858375L;
 
