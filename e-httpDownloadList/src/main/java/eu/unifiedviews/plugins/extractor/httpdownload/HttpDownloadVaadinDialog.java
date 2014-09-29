@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.extractor.httpdownloadlist;
+package eu.unifiedviews.plugins.extractor.httpdownload;
 
 import java.net.MalformedURLException;
 import java.util.LinkedHashMap;
@@ -21,7 +21,7 @@ import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
  * DPU's configuration dialog. User can use this dialog to configure DPU
  * configuration.
  */
-public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_V1> {
+public class HttpDownloadVaadinDialog extends BaseConfigDialog<HttpDownloadConfig_V1> {
     /**
      * 
      */
@@ -43,8 +43,8 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
 
 	private ManipulableListManager dataManager;
 
-    public HTTPToFilesVaadinDialog() {
-        super(HTTPToFilesConfig_V1.class);
+    public HttpDownloadVaadinDialog() {
+        super(HttpDownloadConfig_V1.class);
         initialize();
     }
 
@@ -105,7 +105,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
     }
 
     @Override
-    public void setConfiguration(HTTPToFilesConfig_V1 conf) throws DPUConfigException {
+    public void setConfiguration(HttpDownloadConfig_V1 conf) throws DPUConfigException {
         connectionTimeout.setValue(conf.getConnectionTimeout());
         readTimeout.setValue(conf.getReadTimeout());
         
@@ -120,7 +120,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
     }
 
     @Override
-    public HTTPToFilesConfig_V1 getConfiguration() throws DPUConfigException {
+    public HttpDownloadConfig_V1 getConfiguration() throws DPUConfigException {
         Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
         Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
 
@@ -155,7 +155,7 @@ public class HTTPToFilesVaadinDialog extends BaseConfigDialog<HTTPToFilesConfig_
         	symbolicNameToVirtualPathMap.put(symbolicName, virtualPath);
         }
 
-        HTTPToFilesConfig_V1 conf = new HTTPToFilesConfig_V1();
+        HttpDownloadConfig_V1 conf = new HttpDownloadConfig_V1();
         conf.setSymbolicNameToURIMap(symbolicNameToURIMap);
         conf.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
         conf.setConnectionTimeout(connectionTimeout.getValue());

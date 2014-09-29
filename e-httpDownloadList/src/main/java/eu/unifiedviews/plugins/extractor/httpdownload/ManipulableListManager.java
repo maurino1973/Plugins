@@ -1,4 +1,4 @@
-package eu.unifiedviews.plugins.extractor.httpdownloadlist;
+package eu.unifiedviews.plugins.extractor.httpdownload;
 
 import java.util.LinkedList;
 import java.util.List;

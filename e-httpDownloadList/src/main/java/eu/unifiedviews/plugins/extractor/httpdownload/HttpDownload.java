@@ -1,4 +1,14 @@
-package eu.unifiedviews.plugins.extractor.httpdownloadlist;
+package eu.unifiedviews.plugins.extractor.httpdownload;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+import java.util.Map;
+
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
@@ -12,33 +22,23 @@ import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-import java.util.Map;
-
 @DPU.AsExtractor
-public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig_V1> implements ConfigDialogProvider<HTTPToFilesConfig_V1> {
+public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implements ConfigDialogProvider<HttpDownloadConfig_V1> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HTTPToFiles.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HttpDownload.class);
 
     @DataUnit.AsOutput(name = "filesOutput")
     public WritableFilesDataUnit filesOutput;
 
-    public HTTPToFiles() {
-        super(HTTPToFilesConfig_V1.class);
+    public HttpDownload() {
+        super(HttpDownloadConfig_V1.class);
     }
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException, InterruptedException {
         Map<String, String> symbolicNameToURIMap = config.getSymbolicNameToURIMap();
         Map<String, String> symbolicNameToVirtualPathMap = config.getSymbolicNameToVirtualPathMap();
-        
+
         int connectionTimeout = config.getConnectionTimeout();
         int readTimeout = config.getReadTimeout();
         String shortMessage = this.getClass().getSimpleName() + " starting.";
@@ -53,7 +53,7 @@ public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig_V1> implemen
                 if (!shouldContinue) {
                     break;
                 }
-    
+
                 String downloadedFilename = null;
                 File downloadedFile = null;
                 String downloadFromLocation = null;
@@ -66,10 +66,10 @@ public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig_V1> implemen
                     if (dpuContext.isDebugging()) {
                         LOG.debug("Downloaded " + symbolicName + " from " + downloadFromLocation + " to " + downloadedFilename);
                     }
-                    if (symbolicNameToVirtualPathMap.containsKey(symbolicName)){
+                    if (symbolicNameToVirtualPathMap.containsKey(symbolicName)) {
                         virtualPathHelper.setVirtualPath(symbolicName, symbolicNameToVirtualPathMap.get(symbolicName));
                     } else {
-                        virtualPathHelper.setVirtualPath(symbolicName,downloadFromLocationURL.getPath());
+                        virtualPathHelper.setVirtualPath(symbolicName, downloadFromLocationURL.getPath());
                     }
                 } catch (DataUnitException ex) {
                     dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when downloading.", "Symbolic name " + symbolicName + " from location ", ex);
@@ -88,8 +88,8 @@ public class HTTPToFiles extends ConfigurableBase<HTTPToFilesConfig_V1> implemen
     }
 
     @Override
-    public AbstractConfigDialog<HTTPToFilesConfig_V1> getConfigurationDialog() {
-        return new HTTPToFilesVaadinDialog();
+    public AbstractConfigDialog<HttpDownloadConfig_V1> getConfigurationDialog() {
+        return new HttpDownloadVaadinDialog();
     }
 
 }
