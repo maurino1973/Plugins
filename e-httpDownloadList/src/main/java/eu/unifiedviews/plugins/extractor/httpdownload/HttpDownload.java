@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -27,6 +28,8 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implem
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpDownload.class);
 
+    private HttpDownloadConfig_V2 configInternal;
+
     @DataUnit.AsOutput(name = "filesOutput")
     public WritableFilesDataUnit filesOutput;
 
@@ -36,11 +39,15 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implem
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException, InterruptedException {
-        Map<String, String> symbolicNameToURIMap = config.getSymbolicNameToURIMap();
-        Map<String, String> symbolicNameToVirtualPathMap = config.getSymbolicNameToVirtualPathMap();
+        if (configInternal == null) {
+            configInternal = migrateConfig(config);
+        }
 
-        int connectionTimeout = config.getConnectionTimeout();
-        int readTimeout = config.getReadTimeout();
+        Map<String, String> symbolicNameToURIMap = configInternal.getSymbolicNameToURIMap();
+        Map<String, String> symbolicNameToVirtualPathMap = configInternal.getSymbolicNameToVirtualPathMap();
+
+        int connectionTimeout = configInternal.getConnectionTimeout();
+        int readTimeout = configInternal.getReadTimeout();
         String shortMessage = this.getClass().getSimpleName() + " starting.";
         String longMessage = String.format("Configuration: files to download: %d, connectionTimeout: %d, readTimeout: %d", symbolicNameToURIMap.size(), connectionTimeout, readTimeout);
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
@@ -71,10 +78,8 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implem
                     } else {
                         virtualPathHelper.setVirtualPath(symbolicName, downloadFromLocationURL.getPath());
                     }
-                } catch (DataUnitException ex) {
-                    dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when downloading.", "Symbolic name " + symbolicName + " from location ", ex);
-                } catch (IOException ex) {
-                    dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when downloading.", "Symbolic name " + symbolicName + " from location " + downloadFromLocation + " could not be saved to " + downloadedFilename, ex);
+                } catch (IOException | DataUnitException ex) {
+                    throw new DPUException("Error when downloading. Symbolic name " + symbolicName + " from location " + downloadFromLocation + " could not be saved to " + downloadedFilename, ex);
                 }
                 shouldContinue = !dpuContext.canceled();
             }
@@ -92,4 +97,15 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implem
         return new HttpDownloadVaadinDialog();
     }
 
+    private HttpDownloadConfig_V2 migrateConfig(HttpDownloadConfig_V1 oldConfig) throws DPUException {
+        HttpDownloadConfig_V2 resultConfig = new HttpDownloadConfig_V2();
+        Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
+        Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
+        String oldConfigSymbolicName = oldConfig.getTarget();
+        symbolicNameToURIMap.put(oldConfigSymbolicName, oldConfig.getURL().toString());
+        symbolicNameToVirtualPathMap.put(oldConfigSymbolicName, oldConfigSymbolicName);
+        resultConfig.setSymbolicNameToURIMap(symbolicNameToURIMap);
+        resultConfig.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
+        return resultConfig;
+    }
 }

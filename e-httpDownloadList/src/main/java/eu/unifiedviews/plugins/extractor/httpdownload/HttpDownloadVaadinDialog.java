@@ -1,174 +1,149 @@
 package eu.unifiedviews.plugins.extractor.httpdownload;
-
-import java.net.MalformedURLException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.vaadin.data.util.ObjectProperty;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Panel;
+import com.vaadin.data.Validator;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-/**
- * DPU's configuration dialog. User can use this dialog to configure DPU
- * configuration.
- */
 public class HttpDownloadVaadinDialog extends BaseConfigDialog<HttpDownloadConfig_V1> {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = -5668436075836909428L;
 
-    private static final String CONNECTION_TIMEOUT_LABEL = "Connection timeout (HTTP)";
+	private VerticalLayout mainLayout;
 
-    private static final String READ_TIMEOUT_LABEL = "Read timeout (HTTP)";
+	private TextField txtURL;
 
-	private static final int SYMBOLIC_NAME_COL = 0;
-	private static final int URL_COL = 1;
-	private static final int VIRTUAL_PATH_COL = 2;
+	private TextField txtTarget;
 
-    private static final String INFO_TEXT = "Files to download (1st field = <symbolicName>, 2nd field = <URL>, 3rd field = <virtualPath>)";
+	private TextField txtRetryCount;
 
-    private ObjectProperty<Integer> connectionTimeout = new ObjectProperty<Integer>(0);
+	private TextField txtRetryDelay;
 
-    private ObjectProperty<Integer> readTimeout = new ObjectProperty<Integer>(0);
+	public HttpDownloadVaadinDialog() {
+		super(HttpDownloadConfig_V1.class);
+		buildMainLayout();
+	}
 
-	private ManipulableListManager dataManager;
+	private void buildMainLayout() {
+		mainLayout = new VerticalLayout();
+		mainLayout.setImmediate(false);
+		mainLayout.setWidth("100%");
+		mainLayout.setHeight("-1px");
+		mainLayout.setSpacing(true);
+		mainLayout.setMargin(true);
 
-    public HttpDownloadVaadinDialog() {
-        super(HttpDownloadConfig_V1.class);
-        initialize();
-    }
+		// top-level component properties
+		setWidth("100%");
+		setHeight("100%");
 
-    private void initialize() {
-    	setSizeFull();
-    	
-        FormLayout formLayout = new FormLayout();
+		txtURL = new TextField();
+		txtURL.setWidth("100%");
+		txtURL.setHeight("-1px");
+		txtURL.setCaption("URL:");
+		txtURL.setRequired(false);
+		txtURL.setNullRepresentation("");
+		mainLayout.addComponent(txtURL);
 
-        formLayout.addComponent(new TextField(CONNECTION_TIMEOUT_LABEL, connectionTimeout));
-        formLayout.addComponent(new TextField(READ_TIMEOUT_LABEL, readTimeout));
+		txtTarget = new TextField();
+		txtTarget.setWidth("100%");
+		txtTarget.setHeight("-1px");
+		txtTarget.setCaption("Target - file name and location in output:");
+		txtTarget.setRequired(true);
+		mainLayout.addComponent(txtTarget);
 
-        VerticalLayout mainLayout = new VerticalLayout();
-        mainLayout.setSizeFull();
+		txtRetryCount = new TextField();
+		txtRetryCount.setWidth("100%");
+		txtRetryCount.setHeight("-1px");
+		txtRetryCount.setCaption("Max attemts at one download:");
+		txtRetryCount.setRequired(true);
+		mainLayout.addComponent(txtRetryCount);
 
-        mainLayout.addComponent(formLayout);
-        
-        Panel panel = new Panel();
-        panel.setSizeFull();
-        
-        dataManager = new ManipulableListManager(new ManipulableListComponentProvider() {
-			
+		txtRetryDelay = new TextField();
+		txtRetryDelay.setWidth("100%");
+		txtRetryDelay.setHeight("-1px");
+		txtRetryDelay.setCaption("Interval between downloads:");
+		txtRetryDelay.setRequired(true);
+		mainLayout.addComponent(txtRetryDelay);
+
+		Validator validator = new Validator() {
 			@Override
-			public Component createNewComponent() {
-				return createNewComponent(new String[] {"", "", ""});
+			public void validate(Object value) throws Validator.InvalidValueException {
+				try {
+					Integer.parseInt(value.toString());
+				} catch (NumberFormatException e) {
+					throw new Validator.InvalidValueException("Wrong format number.");
+				}
 			}
+		};
 
-			@Override
-			public Component createNewComponent(String[] values) {
-				GridLayout layout = new GridLayout(3, 1);
-				layout.setSpacing(true);
+		txtRetryCount.addValidator(validator);
+		txtRetryDelay.addValidator(validator);
 
-				TextField text = new TextField();
-				text.setRequired(true);
-				text.setValue(values[0] == null ? "" : values[0].trim());
-				text.setInputPrompt("shakespeare");
-				layout.addComponent(text, SYMBOLIC_NAME_COL, 0);
-				
-				text = new TextField();
-				text.setRequired(true);
-				text.setValue(values[1] == null ? "" : values[1].trim());
-				text.setInputPrompt("https://commondatastorage.googleapis.com/ckannet-storage/2012-04-24T183403/will_play_text.csv");
-				layout.addComponent(text, URL_COL, 0);
-				
-				text = new TextField();
-				text.setRequired(true);
-				text.setValue(values[2] == null ? "" : values[2].trim());
-				text.setInputPrompt("inputs/shakespeare.csv");
-				layout.addComponent(text, VIRTUAL_PATH_COL, 0);
-				return layout;
+		setCompositionRoot(mainLayout);
+	}
+
+	@Override
+	public void setConfiguration(HttpDownloadConfig_V1 conf) throws DPUConfigException {
+		if (conf.getURL() != null) {
+			txtURL.setValue(conf.getURL().toString());
+		} else {
+			txtURL.setValue(null);
+		}
+		txtTarget.setValue(conf.getTarget());		
+		txtRetryCount.setValue(((Integer)conf.getRetryCount()).toString());
+		txtRetryDelay.setValue(((Integer)conf.getRetryDelay()).toString());
+	}
+
+	@Override
+	public HttpDownloadConfig_V1 getConfiguration() throws DPUConfigException {
+		HttpDownloadConfig_V1 conf = new HttpDownloadConfig_V1();
+
+		final boolean isValid = txtURL.isValid() && txtTarget.isValid() && 
+				txtRetryCount.isValid() && txtRetryDelay.isValid();
+
+		if (!isValid) {
+			throw new DPUConfigException("Some fields contains invalid value.");
+		}
+
+		final String stringURL = txtURL.getValue();
+		if (stringURL == null) {
+			if (getContext().isTemplate()) {
+				// ok
+			} else {
+				throw new DPUConfigException("URL is not specified.");
 			}
-		});
-        panel.setContent(dataManager.initList(null));
-        mainLayout.addComponent(new Label(INFO_TEXT));
-        mainLayout.addComponent(panel);
-        mainLayout.setExpandRatio(panel, 1);
-
-        setCompositionRoot(mainLayout);
-    }
-
-    @Override
-    public void setConfiguration(HttpDownloadConfig_V1 conf) throws DPUConfigException {
-        connectionTimeout.setValue(conf.getConnectionTimeout());
-        readTimeout.setValue(conf.getReadTimeout());
-        
-        dataManager.clearComponents();
-        for (String key : conf.getSymbolicNameToURIMap().keySet()) {
-            
-            dataManager.addComponent(new String[]{key,
-            		conf.getSymbolicNameToURIMap().get(key),
-            		conf.getSymbolicNameToVirtualPathMap().get(key)});
-        }
-        dataManager.refreshData();
-    }
-
-    @Override
-    public HttpDownloadConfig_V1 getConfiguration() throws DPUConfigException {
-        Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
-        Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
-
-        List<Component> dataList = dataManager.getComponentList();
-        String symbolicName = null;
-        String url = null;
-        String virtualPath = null;
-        for (Component layout : dataList) {
-        	symbolicName = getValue(layout, SYMBOLIC_NAME_COL);
-        	url = getValue(layout, URL_COL);
-        	virtualPath = getValue(layout, VIRTUAL_PATH_COL);
-        	
-        	if (symbolicName.isEmpty()) {
-        		throw new DPUConfigException("Symbolic name can't be empty.");
-        	}
-        	
-        	if (symbolicNameToURIMap.containsKey(symbolicName)) {
-        		throw new DPUConfigException(String.format("Duplicate symbolic name %s.", symbolicName));
-        	}
-        	
-        	try {
-        		new java.net.URL(url);
-        	} catch (MalformedURLException ex) {
-        		throw new DPUConfigException(String.format("Wrong URL for symbolic name %s", symbolicName), ex);
-        	}
-        	
-        	if (!getTextField(layout, VIRTUAL_PATH_COL).isValid()) {
-        		throw new DPUConfigException(String.format("Missing virtual path for symbolic name %s.", symbolicName));
+		} else {
+			try {
+				conf.setURL(new URL(txtURL.getValue()));
+			} catch (MalformedURLException ex) {
+				throw new DPUConfigException("Wrong URL format", ex);
 			}
-        	
-        	symbolicNameToURIMap.put(symbolicName, url);
-        	symbolicNameToVirtualPathMap.put(symbolicName, virtualPath);
-        }
+		}
 
-        HttpDownloadConfig_V1 conf = new HttpDownloadConfig_V1();
-        conf.setSymbolicNameToURIMap(symbolicNameToURIMap);
-        conf.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
-        conf.setConnectionTimeout(connectionTimeout.getValue());
-        conf.setReadTimeout(readTimeout.getValue());
-        return conf;
-    }
-    
-    private TextField getTextField(Component layout, int column) {
-    	GridLayout gridLayout = (GridLayout) layout;
-    	return (TextField) gridLayout.getComponent(column, 0);    	
-    }
-    
-    private String getValue(Component layout, int column) {
-    	return getTextField(layout, column).getValue().trim();
-    }
+		conf.setTarget(getTarget());
+		try {
+			conf.setRetryCount(Integer.parseInt(txtRetryCount.getValue()));
+			conf.setRetryDelay(Integer.parseInt(txtRetryDelay.getValue()));
+		} catch (NumberFormatException ex) {
+			throw new DPUConfigException("Bad number format.");
+		}
+		return conf;
+	}
+
+	@Override
+	public String getDescription() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("Download file from ");
+		sb.append(txtURL.getValue());
+		sb.append(" as ");
+		sb.append(getTarget());
+
+		return sb.toString();
+	}
+
+	private String getTarget() {
+		return txtTarget.getValue().replaceAll("\\\\", "/");
+	}	
+
 }

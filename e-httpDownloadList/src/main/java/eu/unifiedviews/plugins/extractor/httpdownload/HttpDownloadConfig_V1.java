@@ -1,52 +1,50 @@
 package eu.unifiedviews.plugins.extractor.httpdownload;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.net.URL;
 
 public class HttpDownloadConfig_V1 {
 
-    private int connectionTimeout = 2000;
+    private URL URL = null;
 
-    private int readTimeout = 2000;
+    private String target = "/file";
 
-    private Map<String, String> symbolicNameToURIMap;
+    /**
+     * Number of attempts to try before failure, -1 for infinite.
+     */
+    private int retryCount = -1;
 
-    private Map<String, String> symbolicNameToVirtualPathMap;
+    private int retryDelay = 1000;
+
+    public URL getURL() {
+        return URL;
+    }
+
+    public void setURL(URL URL) {
+        this.URL = URL;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public int getRetryCount() {
+        return retryCount;
+    }
+
+    public void setRetryCount(int retryCount) {
+        this.retryCount = retryCount;
+    }
+
+    public int getRetryDelay() {
+        return retryDelay;
+    }
+
+    public void setRetryDelay(int retryDelay) {
+        this.retryDelay = retryDelay;
+    }
     
-    // DPUTemplateConfig must provide public non-parametric constructor
-    public HttpDownloadConfig_V1() {
-        this.symbolicNameToURIMap = new LinkedHashMap<>();
-    }
-
-    public Map<String, String> getSymbolicNameToURIMap() {
-        return symbolicNameToURIMap;
-    }
-
-    public void setSymbolicNameToURIMap(Map<String, String> symbolicNameToURIMap) {
-        this.symbolicNameToURIMap = symbolicNameToURIMap;
-    }
-
-    public int getConnectionTimeout() {
-        return connectionTimeout;
-    }
-
-    public void setConnectionTimeout(int connectionTimeout) {
-        this.connectionTimeout = connectionTimeout;
-    }
-
-    public int getReadTimeout() {
-        return readTimeout;
-    }
-
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
-    }
-
-    public Map<String, String> getSymbolicNameToVirtualPathMap() {
-        return symbolicNameToVirtualPathMap;
-    }
-
-    public void setSymbolicNameToVirtualPathMap(Map<String, String> symbolicNameToVirtualPathMap) {
-        this.symbolicNameToVirtualPathMap = symbolicNameToVirtualPathMap;
-    }
 }
