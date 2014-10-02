@@ -11,12 +11,12 @@
 
 ***
 
-|Configuration parameters           |                                                            |
-|-----------------------------------|------------------------------------------------------------|
-|URL:                               |*Specifies the URL of the file to be downloaded.*           |
-|Output file name & path:           |*Specifies the target file name and the location of the downloaded file.*    |
-|Max attempts at one download:      |*Number of download attempts before failure occurs (use -1 for infinite).*                                    |
-|Interval between downloads:        |*Delay between download attempts (in miliseconds).*         | 
+|Configuration parameters                     |                                                            |
+|---------------------------------------------|------------------------------------------------------------|
+|URL:                                         |*Specifies the URL of the file to be downloaded.*           |
+|Target - file name and location in output:*  |*Specifies the target file name and the location of the downloaded file.*    |
+|Max attempts at one download:*               |*Number of download attempts before failure occurs (use -1 for infinite).*   |
+|Interval between downloads:*                 |*Delay between download attempts (in miliseconds).*         | 
 
 ***
 
@@ -33,5 +33,5 @@
 
 |Author           |Notes                                                                         |
 |-----------------|------------------------------------------------------------------------------|
-|                 |*no developer's notes added...*                                                   |                                
+|                 |*no developer's notes added...*                                               |                                
 
