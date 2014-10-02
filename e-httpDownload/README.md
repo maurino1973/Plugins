@@ -1,14 +1,13 @@
-
 # E-HTTPDownload #
 ----------
 ## General ##
 
-|**Name:**         | E-HTTPDownload                                                              |
+|                  |                                                                             |    
 |------------------|-----------------------------------------------------------------------------|
-|**Description:**  |Downloads a single file from given URL and saves it with given virtual path. |	
+|**Name:**         | E-HTTPDownload                                                              |
+|**Description:**  |Downloads a single file from given URL and saves it with given virtual path. |    
 |**Visibility:**   |no visibility specified...                                                   |
 |**Download:**     |uv-e-httpDownload/uv-e-httpDownload-1.3.1.jar                                |
-
 
 ## Configuration parameters ##
 
