@@ -12,6 +12,8 @@ This template is intended to be used for describing UnifiedViews plugins as READ
 
 - Enclose each configuration parameter name with ** for highlighting the text as bold. 
 
+- Add '(optional)' to Type of input or output if it is not mandatory (all inputs and outputs are mandatory by default). 
+
 - Delete these template comments after the completion of the document.  
 
 -->
@@ -37,6 +39,14 @@ This template is intended to be used for describing UnifiedViews plugins as READ
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
 |<<configuration parameter name>> |<<configuration parameter description>> |
+
+***
+
+### Inputs and outputs ###
+
+|Name                |Type       |DataUnit                         |Description                        |
+|--------------------|-----------|---------------------------------|-----------------------------------|
+|<<input or output>> |<<i or o>> |<<FilesDataUnit or RDFDataUnit>> |<<description of input or output>> |
 
 
 ***
