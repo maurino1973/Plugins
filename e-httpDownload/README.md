@@ -25,6 +25,14 @@
 
 ***
 
+### Inputs and outputs ###
+
+|Name         |Type           |DataUnit     |Description             |
+|-------------|---------------|-------------|------------------------|
+|filesOutput  |o              |FilesDataUnit|name of downloaded file |
+
+***
+
 ### Version history ###
 
 |Version          |Release notes               |
