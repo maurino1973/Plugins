@@ -26,7 +26,7 @@
 
 |Name    |Type           |DataUnit     |Description          |
 |--------|---------------|-------------|---------------------|
-|input   |i (optional)   |FilesDataUnit|list of files to zip |
+|input   |i              |FilesDataUnit|list of files to zip |
 |output  |o              |FilesDataUnit|name of zip file     |   
 
 ### Version history ###
