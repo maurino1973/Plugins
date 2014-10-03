@@ -6,8 +6,9 @@ Copy this README.md to root directory for the plugin to be described.
 
 Replace <<descriptive information>> with proper values.
 
-If no values are available, delete the <<xxx>> statement and leave it blank.
+If no values are available, replace the <<descriptive information>> with 'N/A'.
 
+Delete all template comments after the comlpetion of the document.  
 -->
 # <<DPU name>> #
 ----------
