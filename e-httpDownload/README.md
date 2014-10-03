@@ -1,11 +1,11 @@
-# E-HTTPDownload #
+# E-HttpDownload #
 ----------
 
 ###General###
 
 |                              |                                                                             |
 |------------------------------|-----------------------------------------------------------------------------|
-|**Name:**                     |E-HTTPDownload                                                               |
+|**Name:**                     |E-HttpDownload                                                               |
 |**Description:**              |Downloads a single file from given URL and saves it with given virtual path. |
 |                              |                                                                             |
 |**DPU class name:**           |HttpDownload                                                                 | 
