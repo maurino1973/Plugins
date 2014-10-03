@@ -2,14 +2,20 @@
 
 This template is intended to be used for describing UnifiedViews plugins as README.md. 
 
-Copy this README.md to root directory for the plugin to be described.  
+- Copy this README.md to root directory for the plugin to be described.  
 
-Replace <<descriptive information>> with proper values.
+- Replace <<descriptive information>> with proper values.
 
-If no values are available, replace <<descriptive information>> with 'N/A'.
+- If no values are available, replace <<descriptive information>> with 'N/A'.
 
-Delete all template comments after the completion of the document.  
+- Use <BR> tag for creation of multi-line cells (in case the length of text exceeds the width of page, it is wrapped automatically to multi-line cell).
+
+- Enclose each configuration parameter name with ** for highlighting the text as bold. 
+
+- Delete these template comments after the completion of the document.  
+
 -->
+
 # <<DPU name>> #
 ----------
 
@@ -32,7 +38,6 @@ Delete all template comments after the completion of the document.
 |---------------------------------|----------------------------------------|
 |<<configuration parameter name>> |<<configuration parameter description>> |
 
-<!--- use ** for bold for each configuration parameter name --> 
 
 ***
 
