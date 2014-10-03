@@ -18,7 +18,7 @@
 
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
-|**File or directory to extract:* |If directory is provided then all files and files in subdirectories are extracted. |
+|**File or directory to extract:** |If directory is provided then all files and files in subdirectories are extracted. |
 
 ***
 
