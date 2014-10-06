@@ -27,8 +27,8 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|filesinput |i |FilesDataUnit  |File name to be modified.  |
-|filesoutput|o |FilesDataUnit  |File name after modification. | 
+|filesInput |i |FilesDataUnit  |File name to be modified.  |
+|filesOutput|o |FilesDataUnit  |File name after modification. | 
 
 ***
 
