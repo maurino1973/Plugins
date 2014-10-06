@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.unifiedviews.plugins</groupId>
+		<artifactId>dpu-base-pom</artifactId>
+		<version>1.0.1</version>
+		<relativePath />
+	</parent>
+	<groupId>eu.unifiedviews.plugins</groupId>
+	<artifactId>uv-l-metadataToCkan</artifactId>
+	<name>L-MetadataToCKAN</name>
+	<description></description>
+	<packaging>bundle</packaging>
+	<version>1.3.2-SNAPSHOT</version>
+
+	<properties>
+		<dpu.package>eu.unifiedviews.plugins.loader.metadatatockan</dpu.package>
+		<dpu.mainClass>MetadataToCkan</dpu.mainClass>
+		<embed.transitive>false</embed.transitive>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>eu.comsode.libraries.jckan</groupId>
+			<artifactId>jckan</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.avalon.framework</groupId> -->
+<!-- 			<artifactId>avalon-framework-impl</artifactId> -->
+<!-- 			<version>4.3.1</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.avalon.logkit</groupId> -->
+<!-- 			<artifactId>avalon-logkit</artifactId> -->
+<!-- 			<version>2.2.1</version> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
