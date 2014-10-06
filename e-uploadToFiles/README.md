@@ -27,7 +27,7 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|filesOutput |o |FilesDataUnit |Downloads and saves a specified file in user.home  |
+|filesOutput |o |FilesDataUnit |File downloaded and saved in user.home  |
 
 ***
 
