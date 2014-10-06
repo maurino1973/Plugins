@@ -33,7 +33,7 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|input |i |FilesDataUnit |File uploaded to specified remote host using SCP.  |
+|input |i |FilesDataUnit |File/s to be uploaded to specified remote host using SCP.  |
 
 ***
 
