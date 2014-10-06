@@ -20,7 +20,7 @@
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
 |**Silk configuration file (button)** |Choose and upload the Silk configuration file. |
-|**Text area** |displays the content of uploaded configuration file. |
+|**Text area** |Displays the content of uploaded configuration file. |
 |**Minimum score for links considered as 'confirmed links' (0.0 - 1.0):** |Minimum score for the links to be considered as "confirmed". |
 |**Minimum score for links considered as 'to be verified links' (0.0 - 1.0):** |Minimum score for the links to be considered as "to be verified". |
 
