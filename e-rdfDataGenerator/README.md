@@ -1,11 +1,11 @@
-# e-rdfDataGenerator #
+# E-RdfDataGenerator #
 ----------
 
 ###General###
 
 |                              |                                                               |
 |------------------------------|---------------------------------------------------------------|
-|**Name:**                     |e-rdfDataGenerator                                             |
+|**Name:**                     |E-RdfDataGenerator                                             |
 |**Description:**              |Generates specified number of unique triples to RDF data. Usualy used for testing purposes.                                            |
 |                              |                                                               |
 |**DPU class name:**           |RdfDataGenerator     | 
