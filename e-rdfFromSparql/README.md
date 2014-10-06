@@ -19,7 +19,7 @@
 
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
-|**Core**| | 
+|**Core:**| | 
 |**SPARQL endpoint** |SPARQL endpoint URL |
 |**Name** |Username to connect to SPARQL enpoints. (if authorization is required) |
 |**Password** |Password for the username. (if authorization is required) |
@@ -28,13 +28,13 @@
 |**SPARQL Construct** |SPARQL CONSTRUCT query containing extraction criteria. |
 |**Output graph symbolic name** |Symbolic name of the output graph. |
 | | |
-|**SPARQL protocol**| |
+|**SPARQL protocol:**| |
 |**HTTP REQUEST Variant**|type of REQUEST variant for extracting RDF data from SPARQL endpoint.|
 |**Query param**|query parameter need for HTTP request need for extract from SPARQL endpoint. |
 |**Default graph param**|default-graph-uri |
 |**Named graph param**|named-graph-uri |
 | | |
-|**Details**| |
+|**Details:**| |
 |**Split the SPARQL construct query to subqueries (checkbox)**|defines if construct query could be split in more queries or not. |
 |**Every subquery contains at maximum (triples)**|Fill number - maximum of RDF triples at once. |
 |**Extraction fails if there is no triple extracted. (checkbox)**|specify whether the extraction fails if there is no triple. |
