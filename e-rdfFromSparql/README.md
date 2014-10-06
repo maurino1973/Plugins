@@ -30,7 +30,7 @@
 | | |
 |**SPARQL protocol:**| |
 |**HTTP REQUEST Variant**|type of REQUEST variant for extracting RDF data from SPARQL endpoint.|
-|**Query param**|query parameter needed for HTTP request need for extract from SPARQL endpoint. |
+|**Query param**|query parameter needed for HTTP request for extract from SPARQL endpoint. |
 |**Default graph param**|default-graph-uri |
 |**Named graph param**|named-graph-uri |
 | | |
