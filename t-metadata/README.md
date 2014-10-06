@@ -24,7 +24,7 @@
 |**Dataset URI:** |self-descriptive  |
 |**Distribution URI:** |self-descriptive  |
 |**Data dump URL:** |self-descriptive  |
-|**Media Type: (list)** |application/zip<BR>text/csv<BR>application/rdf+xml<BR>text/plain<BR>application/x-turtle  |
+|**Media Type: (list)** |- application/zip<BR>- text/csv<BR>- application/rdf+xml<BR>- text/plain<BR>- application/x-turtle  |
 |**Sparql Endpoint URI:** |self-descriptive  |
 |**Contact Point URL:** |self-descriptive  |
 |**Original language - RDF language tag:** |self-descriptive  |
@@ -35,7 +35,7 @@
 |**Dataset is RDF Data Cube (checkbox)** |self-descriptive  |
 |**Modified:(calendar)** |self-descriptive  |
 |**Always use current date instead (checkbox)** |self-descriptive  |
-|**Periodicity: (list)** |Monthly<BR>Annual<BR>Daily-business week<BR>Daily<BR>Minutely<BR>Quarterly<BR>Half Yearly, semester<BR>Weekly  |
+|**Periodicity: (list)** |- Monthly<BR>- Annual<BR>- Daily-business week<BR>- Daily<BR>- Minutely<BR>- Quarterly<BR>- Half Yearly, semester<BR>- Weekly  |
 |**Available licenses/Selected licenses** |self-descriptive  |
 |**Available example resources/Selected example resources** |self-descriptive  |
 |**Available sources/Selected sources** |self-descriptive  |
