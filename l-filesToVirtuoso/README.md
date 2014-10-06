@@ -38,7 +38,7 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|TODO: provide name, Dataunit and Description of input |i |  |  |
+|TODO: provide Name, Dataunit and Description of input |i |  |  |
 
 ***
 
