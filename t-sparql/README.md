@@ -19,7 +19,7 @@
 
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
-|**Add query tab (button):** |Adds new tab where query can be created (if more than one query is created, queries are executed from top to bottom. |
+|**Add query tab (button):** |Adds new tab where query can be created (if more than one query is created, queries are executed from top to bottom). |
 |**Query**|Tab (text area) dedicated for SPARQL query.  | 
 |**Output graph symbolic name** |self-descriptive |
 
