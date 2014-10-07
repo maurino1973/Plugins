@@ -6,7 +6,7 @@
 |                              |                                                  |
 |------------------------------|--------------------------------------------------|
 |**Name:**                     |T-UnZipper                                        |
-|**Description:**              |UnZip input file into files based on zip content. |
+|**Description:**              |UnZips input file into files based on zip content. |
 |                              |                      |
 |**DPU class name:**           |UnZipper              | 
 |**Configuration class name:** |UnZipperConfig_V1     |
@@ -26,8 +26,8 @@
 
 |Name    |Type           |DataUnit      |Description            |
 |--------|---------------|--------------|-----------------------|
-|input   |i              |FilesDataUnit |file to unzip          |
-|output  |o              |FilesDataUnit |list of unzipped files |
+|input   |i              |FilesDataUnit |File to unzip.          |
+|output  |o              |FilesDataUnit |List of unzipped files. |
 
 ***
 
