@@ -28,7 +28,7 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|output |o |RDFDataUnit |TODO: provide description |
+|output |o |RDFDataUnit |RDF data containing unique triples. |
 
 
 ***
