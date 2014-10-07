@@ -26,7 +26,7 @@
 |**Directory to load path:**|Path to directory to be loaded. |
 |**Include subdirectories:**|Boolean value setting (accepts 'true' or 'false'). |
 |**File name pattern:**|A pattern for file names to be included. | 
-|**Target Graph:**|TODO: provide description |
+|**Target Graph:**|Target graph URI. |
 |**Update status interval (s):**|Time period between status updates (in seconds). |
 |**Thread count:**|TODO: provide description |
 |**Skip file on error (checkbox):**|Do not stop the pipeline when error occurs (if checked). |
