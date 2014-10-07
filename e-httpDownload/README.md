@@ -29,7 +29,7 @@
 
 |Name         |Type           |DataUnit     |Description             |
 |-------------|---------------|-------------|------------------------|
-|filesOutput  |o              |FilesDataUnit|name of downloaded file |
+|filesOutput  |o              |FilesDataUnit|Name of downloaded file. |
 
 ***
 
