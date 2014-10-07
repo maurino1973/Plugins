@@ -6,7 +6,7 @@
 |                              |                                             |
 |------------------------------|---------------------------------------------|
 |**Name:**                     |T-Zipper                                     |
-|**Description:**              |Zip input files into zip file of given name. |
+|**Description:**              |Zips input files into zip file of given name. |
 |                              |                                             |
 |**DPU class name:**           |Zipper                                       | 
 |**Configuration class name:** |ZipperConfig_V1                              |
@@ -26,8 +26,8 @@
 
 |Name    |Type           |DataUnit     |Description          |
 |--------|---------------|-------------|---------------------|
-|input   |i              |FilesDataUnit|list of files to zip |
-|output  |o              |FilesDataUnit|name of zip file     |   
+|input   |i              |FilesDataUnit|List of files to zip. |
+|output  |o              |FilesDataUnit|Name of zip file.     |   
 
 ### Version history ###
 
