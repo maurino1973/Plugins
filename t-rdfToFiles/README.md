@@ -19,7 +19,7 @@
 
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
-|**RDF format (list):** |Output file format:<BR>- Turtle<BR>-RDF/XML<BR>-N-Triples<BR>- N3<BR>- RDFa  |
+|**RDF format (list):** |Output file format:<BR>- Turtle<BR>- RDF/XML<BR>- N-Triples<BR>- N3<BR>- RDFa  |
 |**Generate graph file (checkbox):** |Is graph file desired? |
 |**Output graph name:** |Name of the output graph (if graph file is desired).  |
 |**File path/name without extension:**|self-descriptive |
