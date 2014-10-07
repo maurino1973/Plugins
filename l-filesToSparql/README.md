@@ -31,7 +31,7 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|filesInput |i |FilesDataUnit  |file containing RDF data  |
+|filesInput |i |FilesDataUnit  |File containing RDF data.  |
 
 ***
 
