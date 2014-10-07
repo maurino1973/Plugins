@@ -22,7 +22,7 @@
 |**Query endpoint URL:** |TODO: provide description  |
 |**Update endpoint URL:** |TODO: provide description |
 |**Commit size (0 = one file, one transaction, 1 = autocommit connection, n = commit every n triples):** |self-descriptive |
-|**Skip file on error (checkbox)**|Do not stop the pipeline when error occurs (if checked). |
+|**Skip file on error (checkbox)**|Do not stop the pipeline execution if error occurs. |
 |**Target contexts:** |TODO: provide description  |
 
 ***
