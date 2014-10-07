@@ -28,8 +28,8 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|filesInput |i |FilesDataUnit  |TODO: provide description  |
-|rdfOutput|o |RDFDataUnit  |TODO: provide description | 
+|filesInput |i |FilesDataUnit  |Input file containing data.   |
+|rdfOutput|o |RDFDataUnit  |RDF data extracted. | 
 
 ***
 
