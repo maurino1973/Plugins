@@ -52,8 +52,8 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|data |i |RDFDataUnit  |data to be described   |
-|metadata|o |RDFDataUnit  |descriptive data  | 
+|data |i |RDFDataUnit  |Data to be described.   |
+|metadata|o |RDFDataUnit  |Descriptive data.  | 
 
 ***
 
