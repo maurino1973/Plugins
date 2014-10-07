@@ -20,7 +20,7 @@
 |Parameter                        |Description                             |                                                        
 |---------------------------------|----------------------------------------|
 |**Core:**| | 
-|**SPARQL endpoint** |SPARQL endpoint URL |
+|**SPARQL endpoint** |SPARQL endpoint URL. |
 |**Name** |Username to connect to SPARQL enpoints (if authorization is required). |
 |**Password** |Password for the username (if authorization is required). |
 |**Default Graph** |Default graph parameter needed for HTTP request for extract from SPARQL endpoint. |
