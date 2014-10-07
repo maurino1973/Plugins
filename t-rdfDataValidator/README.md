@@ -28,7 +28,7 @@
 
 |Name                |Type       |DataUnit                         |Description                        |
 |--------------------|-----------|---------------------------------|-----------------------------------|
-|input |i |RDFDataUnit  |RDF data repository with data to be validated  |
+|input |i |RDFDataUnit  |RDF data repository with data to be validated.  |
 |Validated_Data |o (optional) |RDFDataUnit  |RDF data repository with only validated triples get from input. | 
 |Report|o |RDFDataUnit |RDF repository report about invalid data described as RDF triples. | 
 
