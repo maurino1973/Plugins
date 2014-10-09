@@ -20,7 +20,7 @@
 |------------------------------------------------|-------------------------------------------------------------------------|
 |**Choose the input type:**                      |Choose the file type of the input type:<BR>- CVS<BR>- DBF                |
 |**Resource URI base***                          |Specifies base URI of the resource.                                      |
-|**Key column**                                  |TODO: provide description |
+|**Key column**                                  |column in the input file which is used when URI for the resource is created if not specified, row number is used. |
 |**Encoding***                                   |Specify character encoding of the input file. | 
 |**Quote char (for CSV)**         		 |Define a character for quoting (if no character is provided '\"' will be used by default). |
 |**Delimiter char (for CSV)**			 |Define value delimiter character (if no character is provided ',' will be used by default). |
