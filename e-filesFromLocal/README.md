@@ -6,7 +6,7 @@
 |                              |                                                               |
 |------------------------------|---------------------------------------------------------------|
 |**Name:**                     |E-FilesFromLocal                                               |
-|**Description:**              |Extract local file or directory.                               |
+|**Description:**              |Extracts local file or directory.                               |
 |                              |                                                               |
 |**DPU class name:**           |FilesFromLocal                                                 | 
 |**Configuration class name:** |FilesFromLocalConfig_V1                                        |
