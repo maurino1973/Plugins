@@ -2,7 +2,6 @@ package eu.unifiedviews.plugins.transformer.filestordft;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Iterator;
 
 import org.openrdf.repository.RepositoryConnection;
@@ -13,6 +12,7 @@ import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.ParseErrorLogger;
+import org.openrdf.model.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +29,7 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
+import java.util.Date;
 
 @DPU.AsTransformer
 public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements ConfigDialogProvider<FilesToRDFConfig_V1> {
@@ -40,6 +41,11 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
 
     @DataUnit.AsOutput(name = "rdfOutput")
     public WritableRDFDataUnit rdfOutput;
+
+    /**
+     * True if at least one file has been skipped during conversion.
+     */
+    private boolean fileSkipped = false;
 
     public FilesToRDF() {
         super(FilesToRDFConfig_V1.class);
@@ -62,25 +68,48 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
             return;
         }
 
+        final URI outputGraphUri;
+        if (config.getOutputNaming().equals(FilesToRDFConfig_V1.USE_FIXED_SYMBOLIC_NAME)) {
+            // Use given value from config as output graph name.
+            try {
+                String value = config.getOutputSymbolicName();
+                if (value == null || value.isEmpty()) {
+                    Date currentTime = new Date();
+                    value = "FilesToRDF/generated_" + Long.toString(currentTime.getTime());
+                }
+                LOG.info("Output symbolic name: {}", value);
+                outputGraphUri = rdfOutput.addNewDataGraph(value);
+            } catch (DataUnitException ex) {
+                dpuContext.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't create output graph.", ex);
+                return;
+            }
+        } else {
+            outputGraphUri = null;
+        }
+
         try {
 
             if (!filesIteration.hasNext()) {
                 return;
             }
+            // If true then next file is processed.
+            boolean shouldContinue = true;
 
-            while (filesIteration.hasNext()) {
+            while (filesIteration.hasNext() && !dpuContext.canceled() && shouldContinue) {
                 connection = rdfOutput.getConnection();
                 FilesDataUnit.Entry entry = filesIteration.next();
 
                 RDFInserter rdfInserter = new CancellableCommitSizeInserter(connection, config.getCommitSize(), dpuContext);
-                rdfInserter.enforceContext(rdfOutput.addNewDataGraph(entry.getSymbolicName()));
+                // Set output graph name.
+                if (outputGraphUri == null) {
+                    rdfInserter.enforceContext(rdfOutput.addNewDataGraph(entry.getSymbolicName()));
+                } else {
+                    rdfInserter.enforceContext(outputGraphUri);
+                }
 
                 ParseErrorListenerEnabledRDFLoader loader = new ParseErrorListenerEnabledRDFLoader(connection.getParserConfig(), connection.getValueFactory());
                 try {
-                    if (dpuContext.isDebugging()) {
-                        LOG.debug("Starting extraction of file " + entry.getSymbolicName() + " path URI " + entry.getFileURIString());
-                    }
-//                    ParseErrorCollector parseErrorCollector= new ParseErrorCollector();
+                    LOG.debug("Starting extraction of file on '{}' with uri: '{}'", entry.getSymbolicName(), entry.getFileURIString());
 
                     RDFFormat format;
                     String inputVirtualPath = inputVirtualPathHelper.getVirtualPath(entry.getSymbolicName());
@@ -89,27 +118,36 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
                     } else {
                         format = Rio.getParserFormatForFileName(entry.getSymbolicName());
                     }
-                    loader.load(new File(URI.create(entry.getFileURIString())), null, format, rdfInserter, new ParseErrorLogger());
+                    loader.load(new File(java.net.URI.create(entry.getFileURIString())), null, format, rdfInserter, new ParseErrorLogger());
 
-                    if (dpuContext.isDebugging()) {
-                        LOG.debug("Finished extraction of file " + entry.getSymbolicName() + " path URI " + entry.getFileURIString());
-                    }
+                    LOG.debug("Finished extraction of file " + entry.getSymbolicName() + " path URI " + entry.getFileURIString());
                 } catch (RDFHandlerException | RDFParseException | IOException ex) {
-                    dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when extracting.",
-                            "Symbolic name " + entry.getSymbolicName() + " path URI " + entry.getFileURIString(), ex);
+                    // Problem with a single file, decide what next based on configuration.
+                    switch (config.getFatalErrorHandling()) {
+                        case FilesToRDFConfig_V1.SKIP_CONTINUE_NEXT_FILE_ERROR_HANDLING:
+                            LOG.error("Symbolic name '{}' with path '{}'", entry.getSymbolicName(), entry.getFileURIString());
+                            fileSkipped = true;
+                            break;
+                        case FilesToRDFConfig_V1.STOP_EXTRACTION_ERROR_HANDLING:
+                        default:
+                            dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when extracting.", "Symbolic name " + entry.getSymbolicName() + " path URI " + entry.getFileURIString(), ex);
+                            // And we need to stop the execution, as we got finally blocks we can just jump out.
+                            shouldContinue = false;
+                            break;
+                    }
                 } finally {
-                    if (connection != null) {
-                        try {
-                            connection.close();
-                        } catch (RepositoryException ex) {
-                            dpuContext.sendMessage(DPUContext.MessageType.WARNING, ex.getMessage(), ex.fillInStackTrace().toString());
-                        }
+                    // If we get here, null pointer exception would already been thrown, so connection != null.
+                    try {
+                        connection.close();
+                    } catch (RepositoryException ex) {
+                        dpuContext.sendMessage(DPUContext.MessageType.WARNING, ex.getMessage(), ex.fillInStackTrace().toString());
                     }
                 }
             }
         } catch (DataUnitException ex) {
             dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when extracting.", "", ex);
         } finally {
+            // This close connection if throws methods before inner try-catch block.
             if (connection != null) {
                 try {
                     connection.close();
@@ -122,6 +160,10 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
             } catch (DataUnitException ex) {
                 LOG.warn("Error in close", ex);
             }
+        }
+        // Publish messsage.
+        if (fileSkipped) {
+            dpuContext.sendMessage(DPUContext.MessageType.WARNING, "Some files has been skipped during conversion.", "See logs for more details.");
         }
     }
 
