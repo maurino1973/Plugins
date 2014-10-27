@@ -21,6 +21,14 @@
 		<dpu.package>eu.unifiedviews.plugins.transformer.xslt</dpu.package>
 		<dpu.mainClass>XSLT</dpu.mainClass>
 	</properties>
+        <repositories>
+                <repository>
+                        <id>maven.eea.sk</id>
+                        <name>maven.eea.sk-public</name>
+                        <url>http://maven.eea.sk/artifactory/public/</url>
+                </repository>
+        </repositories>
+
 
 	<dependencies>
 		<dependency>
@@ -51,4 +59,5 @@
 		</dependency>
 	</dependencies>
 </project>
+
 
