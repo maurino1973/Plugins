@@ -1,5 +1,16 @@
 package eu.unifiedviews.plugins.transformer.zipper;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -7,20 +18,11 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 /**
  * @author Škoda Petr
@@ -57,15 +59,15 @@ public class Zipper extends ConfigurableBase<ZipperConfig_V1> implements ConfigD
     @Override
     public void execute(DPUContext context) throws DPUException {
         this.context = context;
-        final FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = inFilesData.getIteration();
+            filesIteration = FilesHelper.getFiles(inFilesData).iterator();
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
         }
         //
-        // Prepare zip file 
+        // Prepare zip file
         //
         final String zipSymbolicName;
         final String zipFileUri;
@@ -74,31 +76,26 @@ public class Zipper extends ConfigurableBase<ZipperConfig_V1> implements ConfigD
             zipSymbolicName = config.getZipFile();
             zipFileUri = outFilesData.addNewFile(zipSymbolicName);
             zipFile = new File(java.net.URI.create(zipFileUri));
-            // add metadata 
+            // add metadata
             VirtualPathHelpers.setVirtualPath(outFilesData, zipSymbolicName, config.getZipFile());
             //
             // Create zip file
-            //        
+            //
             zipFiles(zipFile, zipSymbolicName, filesIteration);
         } catch (DataUnitException ex) {
             throw new DPUException(ex);
         } finally {
-            try {
-                filesIteration.close();
-            } catch (DataUnitException ex) {
-                throw new DPUException(ex);
-            }
         }
     }
 
     /**
      * Pack files in given iterator into zip file and add metadata.
-     * 
+     *
      * @param zipFile
      * @param zipSymbolicName
      * @param filesIteration
      */
-    private void zipFiles(File zipFile, String zipSymbolicName, FilesDataUnit.Iteration filesIteration) {
+    private void zipFiles(File zipFile, String zipSymbolicName, Iterator<FilesDataUnit.Entry> filesIteration) {
         final byte[] buffer = new byte[8196];
 
         // used to publish the error mesage only for the first time
@@ -128,7 +125,7 @@ public class Zipper extends ConfigurableBase<ZipperConfig_V1> implements ConfigD
 
     /**
      * Add single file into stream as zip entry.
-     * 
+     *
      * @param zos
      * @param buffer
      * @param entry
@@ -150,7 +147,7 @@ public class Zipper extends ConfigurableBase<ZipperConfig_V1> implements ConfigD
 
         final File sourceFile = new File(java.net.URI.create(entry.getFileURIString()));
         //
-        // Do the action .. 
+        // Do the action ..
         //
         try (FileInputStream in = new FileInputStream(sourceFile)) {
             final ZipEntry ze = new ZipEntry(virtualPath);

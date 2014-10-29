@@ -2,34 +2,34 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
 		<groupId>eu.unifiedviews.plugins</groupId>
 		<artifactId>dpu-base-pom</artifactId>
-		<version>1.0.0</version>
-		<relativePath>../dpu-base-pom.xml</relativePath>
+		<version>1.0.1</version>
+		<relativePath />
 	</parent>
 
-    <groupId>eu.unifiedviews.plugins</groupId>
-    <artifactId>uv-e-uploadToFiles</artifactId>
+	<groupId>eu.unifiedviews.plugins</groupId>
+	<artifactId>uv-e-uploadToFiles</artifactId>
 	<name>E-UploadToFiles</name>
-    <description>Downloads files from client during configuration. Then they are used during execution. Files are saved to directory specified in user.home system property.</description>
-    <version>1.3.0</version>
-    <packaging>bundle</packaging>
+	<version>1.3.2-SNAPSHOT</version>
+	<description>Downloads files from client during configuration. Then they are used during execution. Files are saved to directory specified in user.home system property.</description>
+	<packaging>bundle</packaging>
 
-    <properties>
-        <dpu.package>eu.unifiedviews.plugins.extractor.uploadtofiles</dpu.package>
-        <dpu.mainClass>UploadToFiles</dpu.mainClass>
-    </properties>
-    
-    <repositories>
+	<properties>
+		<dpu.package>eu.unifiedviews.plugins.extractor.uploadtofiles</dpu.package>
+		<dpu.mainClass>UploadToFiles</dpu.mainClass>
+	</properties>
+
+	<repositories>
 		<repository>
 			<id>vaadin-addons</id>
 			<url>http://maven.vaadin.com/vaadin-addons</url>
 		</repository>
-    </repositories>
+	</repositories>
 
-    <dependencies>
+	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -48,5 +48,5 @@
 		   <version>1.8</version>
 		   <scope>provided</scope>
 		</dependency>
-    </dependencies>
+	</dependencies>
 </project>

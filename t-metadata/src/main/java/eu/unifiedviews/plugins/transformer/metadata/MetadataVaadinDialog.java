@@ -21,6 +21,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import eu.unifiedviews.dpu.config.DPUConfigException;
 import eu.unifiedviews.helpers.dpu.config.BaseConfigDialog;
+import java.util.Arrays;
 
 public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
@@ -42,13 +43,17 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
     private VerticalLayout mainLayout;
 
+    private TextField tfComsodeDatasetId;
+
     private TextField txtOutSymbolicName;
 
-    private TextField tfTitleCs;
+    private TextField tfLanguage;
+
+    private TextField tfTitle;
 
     private TextField tfTitleEn;
 
-    private TextField tfDescCs;
+    private TextField tfDesc;
 
     private TextField tfDescEn;
 
@@ -133,6 +138,12 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         txtOutSymbolicName.setWidth("100%");
         mainLayout.addComponent(txtOutSymbolicName);
 
+        tfComsodeDatasetId = new TextField();
+        tfComsodeDatasetId.setCaption("COMSODE Dataset ID (will be used as part of the URI)");
+        tfComsodeDatasetId.setWidth("100%");
+        tfComsodeDatasetId.setInputPrompt("MICR_3");
+        mainLayout.addComponent(tfComsodeDatasetId);
+
         tfDatasetUri = new TextField();
         tfDatasetUri.setCaption("Dataset URI:");
         tfDatasetUri.setWidth("100%");
@@ -168,23 +179,29 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         tfContactPoint.setWidth("100%");
         mainLayout.addComponent(tfContactPoint);
 
-        tfTitleCs = new TextField();
-        tfTitleCs.setCaption("Title (cs):");
-        tfTitleCs.setWidth("100%");
-        mainLayout.addComponent(tfTitleCs);
+        tfLanguage = new TextField();
+        tfLanguage.setCaption("Original language - RDF language tag:");
+        tfLanguage.setInputPrompt("cs|sk|it");
+        tfLanguage.setWidth("100%");
+        mainLayout.addComponent(tfLanguage);
+
+        tfTitle = new TextField();
+        tfTitle.setCaption("Title original language:");
+        tfTitle.setWidth("100%");
+        mainLayout.addComponent(tfTitle);
 
         tfTitleEn = new TextField();
-        tfTitleEn.setCaption("Title (en):");
+        tfTitleEn.setCaption("Title in English:");
         tfTitleEn.setWidth("100%");
         mainLayout.addComponent(tfTitleEn);
 
-        tfDescCs = new TextField();
-        tfDescCs.setCaption("Description (cs):");
-        tfDescCs.setWidth("100%");
-        mainLayout.addComponent(tfDescCs);
+        tfDesc = new TextField();
+        tfDesc.setCaption("Description original language:");
+        tfDesc.setWidth("100%");
+        mainLayout.addComponent(tfDesc);
 
         tfDescEn = new TextField();
-        tfDescEn.setCaption("Description (en):");
+        tfDescEn.setCaption("Description in English:");
         tfDescEn.setWidth("100%");
         mainLayout.addComponent(tfDescEn);
 
@@ -253,6 +270,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
         tcsLanguages = new TwinColSelect();
         tcsLanguages.setWidth("97%");
+        tcsLanguages.setNewItemsAllowed(true);
         tcsLanguages.setLeftColumnCaption("Available languages");
         tcsLanguages.setRightColumnCaption("Selected languages");
         mainLayout.addComponent(tcsLanguages);
@@ -276,15 +294,18 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
     @Override
     public void setConfiguration(MetadataConfig_V1 conf) throws DPUConfigException {
+        //
         txtOutSymbolicName.setValue(conf.getOutputGraphName());
+        tfComsodeDatasetId.setValue(conf.getComsodeDatasetId());
         tfDatasetUri.setValue(conf.getDatasetURI().toString());
         tfDistributionUri.setValue(conf.getDistroURI().toString());
         tfDataDumpUrl.setValue(conf.getDataDump().toString());
         tfSparqlEndpointUrl.setValue(conf.getSparqlEndpoint().toString());
         tfContactPoint.setValue(conf.getContactPoint().toString());
-        tfTitleCs.setValue(conf.getTitle_cs());
+        tfLanguage.setValue(conf.getLanguage_cs());
+        tfTitle.setValue(conf.getTitle_cs());
         tfTitleEn.setValue(conf.getTitle_en());
-        tfDescCs.setValue(conf.getDesc_cs());
+        tfDesc.setValue(conf.getDesc_cs());
         tfDescEn.setValue(conf.getDesc_en());
         chkNow.setValue(conf.isUseNow());
         chkQb.setValue(conf.isIsQb());
@@ -311,6 +332,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         }
         tcsKeywords.setValue(conf.getKeywords());
 
+        fillLeftDefault(conf);
     }
 
     private void setTcsConfig(LinkedList<String> list, LinkedList<String> possibleList,
@@ -358,9 +380,9 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
     public MetadataConfig_V1 getConfiguration() throws DPUConfigException {
         MetadataConfig_V1 conf = new MetadataConfig_V1();
 
-        conf.setTitle_cs(tfTitleCs.getValue());
+        conf.setTitle_cs(tfTitle.getValue());
         conf.setTitle_en(tfTitleEn.getValue());
-        conf.setDesc_cs(tfDescCs.getValue());
+        conf.setDesc_cs(tfDesc.getValue());
         conf.setDesc_en(tfDescEn.getValue());
         conf.setLicenses(new LinkedList<String>());
         conf.setUseNow((boolean) chkNow.getValue());
@@ -370,11 +392,12 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
         try {
             conf.setOutputGraphName((new URL(txtOutSymbolicName.getValue())).toString());
-
+            conf.setComsodeDatasetId(tfComsodeDatasetId.getValue());
             conf.setDatasetURI((new URL(tfDatasetUri.getValue())).toString());
             conf.setDistroURI((new URL(tfDistributionUri.getValue())).toString());
             conf.setDataDump((new URL(tfDataDumpUrl.getValue())).toString());
             conf.setSparqlEndpoint((new URL(tfSparqlEndpointUrl.getValue())).toString());
+            conf.setLanguage_cs(tfLanguage.getValue());
             conf.setContactPoint((new URL(tfContactPoint.getValue())).toString());
             conf.setPeriodicity((new URL((String) cbPeriodicity.getValue())).toString());
 
@@ -398,4 +421,43 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
 
         return conf;
     }
+
+    private void fillLeftDefault(MetadataConfig_V1 conf) {
+        // alwayes presented
+        fillLeftDefault(Arrays.asList("http://opendatacommons.org/licenses/pddl/1-0/", "http://creativecommons.org/licenses/by/3.0/lu/"),
+                tcsLicenses);
+        fillLeftDefault(Arrays.asList("http://opendata.cz"),
+                tcsPublishers);
+        // default
+        if (conf.getPossibleSources().isEmpty()) {
+            fillLeftDefault(Arrays.asList("http://linked.opendata.cz"),
+                    tcsSources);
+        }
+        if (conf.getPossibleAuthors().isEmpty()) {
+            fillLeftDefault(Arrays.asList("http://purl.org/klimek#me", "http://opendata.cz/necasky#me", "http://mynarz.net/#jindrich"),
+                    tcsAuthors);
+        }
+        if (conf.getPossibleThemes().isEmpty()) {
+            fillLeftDefault(Arrays.asList("http://dbpedia.org/resource/EHealth"),
+                    tcsThemes);
+        }
+        if (conf.getPossibleLanguages().isEmpty()) {
+            fillLeftDefault(Arrays.asList("http://id.loc.gov/vocabulary/iso639-1/cs", "http://id.loc.gov/vocabulary/iso639-1/en", "http://id.loc.gov/vocabulary/iso639-1/it", "http://id.loc.gov/vocabulary/iso639-1/sk"),
+                    tcsLanguages);
+        }
+    }
+
+    /**
+     * @param list
+     * @param tcs
+     */
+    private void fillLeftDefault(List<String> list, TwinColSelect tcs) {
+        for (String item : list) {
+            if (tcs.getItem(item) == null) {
+                // not presented -> add
+                tcs.addItem(item);
+            }
+        }
+    }
+
 }

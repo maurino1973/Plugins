@@ -2,7 +2,11 @@ package eu.unifiedviews.plugins.extractor.httpdownload;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,91 +17,79 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
-/**
- * This DPU will be removed shortly
- * 
- * @author Škoda Petr
- */
 @DPU.AsExtractor
-public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1>
-        implements ConfigDialogProvider<HttpDownloadConfig_V1> {
+public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implements ConfigDialogProvider<HttpDownloadConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpDownload.class);
 
-    @DataUnit.AsOutput(name = "output")
-    public WritableFilesDataUnit output;
+    private HttpDownloadConfig_V2 configInternal;
+
+    @DataUnit.AsOutput(name = "filesOutput")
+    public WritableFilesDataUnit filesOutput;
 
     public HttpDownload() {
         super(HttpDownloadConfig_V1.class);
     }
 
     @Override
-    public void execute(DPUContext context)
-            throws DPUException {
-        //
-        // get url
-        //
-        final URL url = config.getURL();
-        if (url == null) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Source URL not specified.");
-            return;
-        }
-        //
-        // prepare output file and metadata
-        // 
-        final String outSymName;
-        final String outUri;
-        try {
-            outSymName = config.getTarget();
-            outUri = output.addNewFile(outSymName);
-
-            VirtualPathHelpers.setVirtualPath(output, outSymName, config.getTarget());
-        } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Problem with Dataunit.", "Can't create output file.", ex);
-            return;
-        }
-        final File outFile = new File(java.net.URI.create(outUri));
-        //
-        // download
-        //
-        try {
-            FileUtils.copyURLToFile(url, outFile);
-            // ok we have downloaded the file .. 
-            return;
-        } catch (IOException ex) {
-            LOG.error("Download failed.", ex);
+    public void execute(DPUContext dpuContext) throws DPUException, InterruptedException {
+        if (configInternal == null) {
+            configInternal = migrateConfig(config);
         }
 
-        // try again ?
-        int retryCount = config.getRetryCount();
-        while (retryCount != 0 && !context.canceled()) {
-            // sleep for a while
-            try {
-                Thread.sleep(config.getRetryDelay());
-            } catch (InterruptedException ex) {
+        Map<String, String> symbolicNameToURIMap = configInternal.getSymbolicNameToURIMap();
+        Map<String, String> symbolicNameToVirtualPathMap = configInternal.getSymbolicNameToVirtualPathMap();
+
+        int connectionTimeout = configInternal.getConnectionTimeout();
+        int readTimeout = configInternal.getReadTimeout();
+        String shortMessage = this.getClass().getSimpleName() + " starting.";
+        String longMessage = String.format("Configuration: files to download: %d, connectionTimeout: %d, readTimeout: %d", symbolicNameToURIMap.size(), connectionTimeout, readTimeout);
+        dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
+        LOG.info(shortMessage + " " + longMessage);
+
+        boolean shouldContinue = !dpuContext.canceled();
+        VirtualPathHelper virtualPathHelper = VirtualPathHelpers.create(filesOutput);
+        try {
+            for (String symbolicName : symbolicNameToURIMap.keySet()) {
+                if (!shouldContinue) {
+                    break;
+                }
+
+                String downloadedFilename = null;
+                File downloadedFile = null;
+                String downloadFromLocation = null;
+                try {
+                    downloadedFilename = filesOutput.addNewFile(symbolicName);
+                    downloadedFile = new File(URI.create(downloadedFilename));
+                    downloadFromLocation = symbolicNameToURIMap.get(symbolicName);
+                    URL downloadFromLocationURL = new URL(downloadFromLocation);
+                    FileUtils.copyURLToFile(downloadFromLocationURL, downloadedFile, connectionTimeout, readTimeout);
+                    if (dpuContext.isDebugging()) {
+                        LOG.debug("Downloaded " + symbolicName + " from " + downloadFromLocation + " to " + downloadedFilename);
+                    }
+                    if (symbolicNameToVirtualPathMap.containsKey(symbolicName)) {
+                        virtualPathHelper.setVirtualPath(symbolicName, symbolicNameToVirtualPathMap.get(symbolicName));
+                    } else {
+                        virtualPathHelper.setVirtualPath(symbolicName, downloadFromLocationURL.getPath());
+                    }
+                } catch (IOException | DataUnitException ex) {
+                    throw new DPUException("Error when downloading. Symbolic name " + symbolicName + " from location " + downloadFromLocation + " could not be saved to " + downloadedFilename, ex);
+                }
+                shouldContinue = !dpuContext.canceled();
             }
-            // try to download
+        } finally {
             try {
-                FileUtils.copyURLToFile(url, outFile);
-                return;
-            } catch (IOException ex) {
-                LOG.error("Download failed - {}/{}", ex, retryCount,
-                        config.getRetryCount());
-            }
-            // update retry counter
-            if (retryCount > 0) {
-                retryCount--;
+                virtualPathHelper.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close", ex);
             }
         }
-        context.sendMessage(DPUContext.MessageType.ERROR,
-                "Failed to download file.");
     }
 
     @Override
@@ -105,4 +97,15 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1>
         return new HttpDownloadVaadinDialog();
     }
 
+    private HttpDownloadConfig_V2 migrateConfig(HttpDownloadConfig_V1 oldConfig) throws DPUException {
+        HttpDownloadConfig_V2 resultConfig = new HttpDownloadConfig_V2();
+        Map<String, String> symbolicNameToURIMap = new LinkedHashMap<>();
+        Map<String, String> symbolicNameToVirtualPathMap = new LinkedHashMap<>();
+        String oldConfigSymbolicName = oldConfig.getTarget();
+        symbolicNameToURIMap.put(oldConfigSymbolicName, oldConfig.getURL().toString());
+        symbolicNameToVirtualPathMap.put(oldConfigSymbolicName, oldConfigSymbolicName);
+        resultConfig.setSymbolicNameToURIMap(symbolicNameToURIMap);
+        resultConfig.setSymbolicNameToVirtualPathMap(symbolicNameToVirtualPathMap);
+        return resultConfig;
+    }
 }

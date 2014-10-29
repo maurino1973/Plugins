@@ -11,6 +11,7 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -28,25 +29,28 @@ public class UploadToFiles extends ConfigurableBase<UploadToFilesConfig_V1> impl
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException, InterruptedException {
-        Map<String, String> symbolicNameToURIMap = config.getSymbolicNameToURIMap();
+        final Map<String, String> symbolicNameToURIMap = config.getSymbolicNameToURIMap();
+        final Map<String, String> symbolicNameToVirtualPathMap = config.getSymbolicNameToVirtualPathMap();
         String shortMessage = this.getClass().getSimpleName() + " starting.";
         String longMessage = String.format("Configuration: files providing: %d", symbolicNameToURIMap.size());
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
         LOG.info(shortMessage + " " + longMessage);
-        
+
         boolean shouldContinue = !dpuContext.canceled();
         for (String symbolicName : symbolicNameToURIMap.keySet()) {
             if (!shouldContinue) {
                 break;
             }
-            
+
             try {
                 filesOutput.addExistingFile(symbolicName, symbolicNameToURIMap.get(symbolicName));
+                VirtualPathHelpers.setVirtualPath(filesOutput, symbolicName, symbolicNameToVirtualPathMap.get(symbolicName));
                 if (dpuContext.isDebugging()) {
-                    LOG.debug("Providing " + symbolicName + " from " + symbolicNameToURIMap.get(symbolicName));
+                    LOG.debug("Providing " + symbolicName + " from " + symbolicNameToURIMap.get(symbolicName) 
+                    		+ " with virtual path " + symbolicNameToVirtualPathMap.get(symbolicName));
                 }
             } catch (DataUnitException ex) {
-                dpuContext.sendMessage(DPUContext.MessageType.ERROR, "Error when downloading.", "Symbolic name " + symbolicName + " from location ", ex);
+                throw new DPUException("Error when providing: Symbolic name " + symbolicName + " from location " + symbolicNameToURIMap.get(symbolicName), ex);
             }
         }
     }

@@ -24,7 +24,7 @@ public class XSLTVaadinDialog extends
         BaseConfigDialog<XSLTConfig_V1> {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 63148374398039L;
 
@@ -32,6 +32,8 @@ public class XSLTVaadinDialog extends
             .getLogger(XSLTVaadinDialog.class);
 
     private static final String SKIP_ON_ERROR_LABEL = "Skip file on error";
+
+    private static final String OUTPUT_FILE_EXTENSTION_LABEL = "Output file extension";
 
     private Label lFileName;
 
@@ -41,8 +43,9 @@ public class XSLTVaadinDialog extends
 
     private UploadInfoWindow uploadInfoWindow;
 
-    private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(
-            false);
+    private ObjectProperty<Boolean> skipOnError = new ObjectProperty<Boolean>(false);
+
+    private ObjectProperty<String> outputFileExtension = new ObjectProperty<String>("");
 
     // TODO refactor
     static int fl = 0;
@@ -69,6 +72,8 @@ public class XSLTVaadinDialog extends
 
         mainLayout.addComponent(new CheckBox(SKIP_ON_ERROR_LABEL, skipOnError));
 
+        mainLayout.addComponent(new TextField(OUTPUT_FILE_EXTENSTION_LABEL, outputFileExtension));
+
         // top-level component properties
         setWidth("100%");
         setHeight("100%");
@@ -83,7 +88,7 @@ public class XSLTVaadinDialog extends
         // Upload started event listener
         fileUpload.addStartedListener(new Upload.StartedListener() {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = -4167203924388153623L;
 
@@ -100,8 +105,8 @@ public class XSLTVaadinDialog extends
         // Upload received event listener.
         fileUpload.addFinishedListener(new Upload.FinishedListener() {
             /**
-                     * 
-                     */
+             *
+             */
             private static final long serialVersionUID = -7276225240612908058L;
 
             @Override
@@ -196,6 +201,7 @@ public class XSLTVaadinDialog extends
             lFileName.setValue(conf.getXslTemplateFileNameShownInDialog());
         }
         skipOnError.setValue(conf.isSkipOnError());
+        outputFileExtension.setValue(conf.getOutputFileExtension());
     }
 
     @Override
@@ -217,6 +223,10 @@ public class XSLTVaadinDialog extends
         conf.setXslTemplate(taXSLTemplate.getValue());
         conf.setXslTemplateFileNameShownInDialog(lFileName.getValue().trim());
         conf.setSkipOnError(skipOnError.getValue());
+        if (!outputFileExtension.getValue().startsWith(".")) {
+            throw new DPUConfigException(OUTPUT_FILE_EXTENSTION_LABEL + " should start with \".\" (e.g. \".xml\", \".ttl\")");
+        }
+        conf.setOutputFileExtension(outputFileExtension.getValue());
         return conf;
 
     }
@@ -266,7 +276,7 @@ class FileUploadReceiver implements Upload.Receiver {
 
 /**
  * Dialog for uploading status. Appear automatically after file upload start.
- * 
+ *
  * @author tknap
  */
 class UploadInfoWindow extends Window implements Upload.StartedListener,
@@ -288,7 +298,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
 
     /**
      * Basic constructor
-     * 
+     *
      * @param upload
      *            . Upload component
      */
@@ -388,7 +398,7 @@ class UploadInfoWindow extends Window implements Upload.StartedListener,
     public void updateProgress(final long readBytes, final long contentLength) {
         // this method gets called several times during the update
         pi.setValue(new Float(readBytes / (float) contentLength));
-        textualProgress.setValue("Processed " + (readBytes / 1024)
-                + " k bytes of " + (contentLength / 1024) + " k");
+        textualProgress.setValue("Processed " + readBytes / 1024
+                + " k bytes of " + contentLength / 1024 + " k");
     }
 }

@@ -3,10 +3,12 @@ package eu.unifiedviews.plugins.transformer.filestordft;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Iterator;
 
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.util.RDFInserter;
+import org.openrdf.rio.RDFFormat;
 import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.Rio;
@@ -21,6 +23,9 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
+import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
@@ -47,10 +52,17 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
         LOG.info(shortMessage + " " + longMessage);
 
-
+        VirtualPathHelper inputVirtualPathHelper = VirtualPathHelpers.create(filesInput);
         RepositoryConnection connection = null;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            FilesDataUnit.Iteration filesIteration = filesInput.getIteration();
+            filesIteration = FilesHelper.getFiles(filesInput).iterator();
+        } catch (DataUnitException ex) {
+            dpuContext.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
+            return;
+        }
+
+        try {
 
             if (!filesIteration.hasNext()) {
                 return;
@@ -69,8 +81,15 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
                         LOG.debug("Starting extraction of file " + entry.getSymbolicName() + " path URI " + entry.getFileURIString());
                     }
 //                    ParseErrorCollector parseErrorCollector= new ParseErrorCollector();
-                    
-                    loader.load(new File(URI.create(entry.getFileURIString())), null, Rio.getParserFormatForFileName(entry.getSymbolicName()), rdfInserter, new ParseErrorLogger());
+
+                    RDFFormat format;
+                    String inputVirtualPath = inputVirtualPathHelper.getVirtualPath(entry.getSymbolicName());
+                    if (inputVirtualPath != null) {
+                        format = Rio.getParserFormatForFileName(inputVirtualPath);
+                    } else {
+                        format = Rio.getParserFormatForFileName(entry.getSymbolicName());
+                    }
+                    loader.load(new File(URI.create(entry.getFileURIString())), null, format, rdfInserter, new ParseErrorLogger());
 
                     if (dpuContext.isDebugging()) {
                         LOG.debug("Finished extraction of file " + entry.getSymbolicName() + " path URI " + entry.getFileURIString());
@@ -97,6 +116,11 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
                 } catch (RepositoryException ex) {
                     dpuContext.sendMessage(DPUContext.MessageType.WARNING, ex.getMessage(), ex.fillInStackTrace().toString());
                 }
+            }
+            try {
+                inputVirtualPathHelper.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close", ex);
             }
         }
     }

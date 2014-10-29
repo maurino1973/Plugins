@@ -6,10 +6,9 @@
 	<parent>
 		<groupId>eu.unifiedviews.plugins</groupId>
 		<artifactId>dpu-base-pom</artifactId>
-		<version>1.3.1-SNAPSHOT</version>
+		<version>1.0.1</version>
 		<relativePath />
 	</parent>
-	<packaging>bundle</packaging>
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<!-- TODO 1: fill the DPU artifactId, without special characters, use '_' 
 		instead of whitespaces -->
@@ -25,6 +24,15 @@
 	<!-- TODO 3: fill module description, the description will be visible to 
 		the user -->
 	<description>Extract local file or directory.</description>
+	<packaging>bundle</packaging>
+        <repositories>
+                <repository>
+                        <id>maven.eea.sk</id>
+                        <name>maven.eea.sk-public</name>
+                        <url>http://maven.eea.sk/artifactory/public/</url>
+                </repository>
+        </repositories>
+
 
 	<properties>
 		<!-- TODO 4: fill the name of root package -->
