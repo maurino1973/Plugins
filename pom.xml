@@ -12,8 +12,6 @@
 		<!-- EXTRACTORS -->
 		<module>e-filesFromLocal</module>
 		<module>e-rdfFromSparql</module>
-		<module>e-rdfDataGenerator</module>
-		<module>e-silkLinker</module>
 		<module>e-httpDownload</module>
 		<module>e-uploadToFiles</module>
 
@@ -23,7 +21,6 @@
 		<module>t-xslt</module>
 		<module>t-filesRenamer</module>
 		<module>t-filesFilter</module>
-		<module>t-rdfDataValidator</module>
 		<module>t-filesToRdf</module>
 		<module>t-rdfToFiles</module>
 		<module>t-zipper</module>
