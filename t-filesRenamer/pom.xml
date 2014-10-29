@@ -12,10 +12,17 @@
 	
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-t-filesRenamer</artifactId>
-    <name>T-FilesRenamer</name>
+	<name>T-FilesRenamer</name>
 	<description>Rename files</description>
-	<version>1.3.2-SNAPSHOT</version>
+	<version>1.4.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
+        <repositories>
+                <repository>
+                        <id>maven.eea.sk</id>
+                        <name>maven.eea.sk-public</name>
+                        <url>http://maven.eea.sk/artifactory/public/</url>
+                </repository>
+        </repositories>
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.transformer.filesrenamer</dpu.package>
