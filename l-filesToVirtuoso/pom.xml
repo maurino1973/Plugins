@@ -21,6 +21,10 @@
                         <name>maven.eea.sk-public</name>
                         <url>http://maven.eea.sk/artifactory/public/</url>
                 </repository>
+		<repository>
+			<id>cz.cuni.mff.ms.xrg.odcl</id>
+			<url>http://gd.projekty.ms.mff.cuni.cz:9123/nexus/content/groups/public/</url>
+		</repository>
         </repositories>
 
 
@@ -28,12 +32,6 @@
 		<dpu.package>eu.unifiedviews.plugins.loader.filestovirtuoso</dpu.package>
 		<dpu.mainClass>VirtuosoLoader</dpu.mainClass>
 	</properties>
-	<repositories>
-		<repository>
-			<id>cz.cuni.mff.ms.xrg.odcl</id>
-			<url>http://gd.projekty.ms.mff.cuni.cz:9123/nexus/content/groups/public/</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
