@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.unifiedviews.plugins</groupId>
+		<artifactId>dpu-base-pom</artifactId>
+		<version>1.0.1</version>
+		<relativePath/>
+	</parent>
+	
+	<groupId>eu.unifiedviews.plugins</groupId>
+	<artifactId>uv-e-silkLinker</artifactId>
+	<name>E-SilkLinker</name>
+	<description>Creates links between RDF resources based on the Silk Link Specification Language (LSL),
+        https://www.assembla.com/spaces/silk/wiki/Link_Specification_Language.
+        The script may be uploaded/adjusted in the DPU configuration. Output section of such script is always ignored,
+        output is written to two output data units of the DPU - "links_confirmed", "links_to_be_verified".
+        DPU configuration may also specify thresholds for the two outputs created. Uses 2.5.3 version of Silk. Not
+        supporting cancelation of DPU.
+	</description>
+	<version>1.4.0-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+        <repositories>
+                <repository>
+                        <id>maven.eea.sk</id>
+                        <name>maven.eea.sk-public</name>
+                        <url>http://maven.eea.sk/artifactory/public/</url>
+                </repository>
+        </repositories>
+
+	<properties>
+		<dpu.package>eu.unifiedviews.plugins.extractor.silklinker</dpu.package>
+		<dpu.mainClass>SilkLinker</dpu.mainClass>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>de.fuberlin.wiwiss.silk</groupId>
+			<artifactId>silk-singlemachine</artifactId>
+			<version>2.5.3</version>
+			<type>jar</type>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>de.fuberlin.wiwiss.silk</groupId>
+			<artifactId>silk-core</artifactId>
+			<version>2.5.3</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.tycho</groupId>
+			<artifactId>org.eclipse.osgi</artifactId>
+			<version>3.9.0.v20130305-2200</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>
