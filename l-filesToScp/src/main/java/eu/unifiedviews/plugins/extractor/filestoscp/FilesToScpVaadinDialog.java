@@ -27,14 +27,12 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1
 	}
 
 	private void buildLayout() {
-		mainLayout = new VerticalLayout();
+		setSizeFull();
+
+        mainLayout = new VerticalLayout();
 		mainLayout.setSpacing(true);
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("-1px");
-
-		// top-level component properties
-		setWidth("100%");
-		setHeight("100%");
 
 		txtHost = new TextField();
 		txtHost.setWidth("100%");
@@ -79,11 +77,13 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1
 		chbSoftFail.setCaption("Soft failure");
 		mainLayout.addComponent(chbSoftFail);
 
-		mainLayout.addComponent(new Label(
-				"If 'Soft failure' is checked and upload failed, "
-				+ "then pipeline continue, otherwise the pipeline is stopped."));
+		mainLayout.addComponent(new Label("If 'Soft failure' is checked and upload failed, then pipeline continue, otherwise the pipeline is stopped."));
 
-		setCompositionRoot(mainLayout);
+        Panel panel = new Panel();
+        panel.setSizeFull();
+        panel.setContent(mainLayout);
+        
+		setCompositionRoot(panel);
 	}
 
 	@Override
