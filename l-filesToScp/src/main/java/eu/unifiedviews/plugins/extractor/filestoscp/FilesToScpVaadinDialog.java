@@ -31,14 +31,12 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1
     }
 
     private void buildLayout() {
+        setSizeFull();
+
         mainLayout = new VerticalLayout();
         mainLayout.setSpacing(true);
         mainLayout.setWidth("100%");
         mainLayout.setHeight("-1px");
-
-        // top-level component properties
-        setWidth("100%");
-        setHeight("100%");
 
         txtHost = new TextField();
         txtHost.setWidth("100%");
@@ -83,11 +81,13 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1
         chbSoftFail.setCaption("Soft failure");
         mainLayout.addComponent(chbSoftFail);
 
-        mainLayout.addComponent(new Label(
-                "If 'Soft failure' is checked and upload failed, "
-                        + "then pipeline continue, otherwise the pipeline is stopped."));
+        mainLayout.addComponent(new Label("If 'Soft failure' is checked and upload failed, then pipeline continue, otherwise the pipeline is stopped."));
 
-        setCompositionRoot(mainLayout);
+        Panel panel = new Panel();
+        panel.setSizeFull();
+        panel.setContent(mainLayout);
+
+        setCompositionRoot(panel);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1
     @Override
     protected FilesToScpConfig_V1 getConfiguration() throws DPUConfigException {
         if (!txtHost.isValid()) {
-            throw new DPUConfigException("Destination host must be specified!");
+            throw new DPUConfigException("Output file name must be specified!");
         }
 
         FilesToScpConfig_V1 cnf = new FilesToScpConfig_V1();
