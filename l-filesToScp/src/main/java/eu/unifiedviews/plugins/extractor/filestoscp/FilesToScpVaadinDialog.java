@@ -103,7 +103,7 @@ public class FilesToScpVaadinDialog extends BaseConfigDialog<FilesToScpConfig_V1
     @Override
     protected FilesToScpConfig_V1 getConfiguration() throws DPUConfigException {
         if (!txtHost.isValid()) {
-            throw new DPUConfigException("Output file name must be specified!");
+            throw new DPUConfigException("Destination host must be specified!");
         }
 
         FilesToScpConfig_V1 cnf = new FilesToScpConfig_V1();
