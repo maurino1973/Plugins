@@ -1,56 +1,57 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>eu.unifiedviews.plugins</groupId>
-		<artifactId>dpu-base-pom</artifactId>
-		<version>1.0.1</version>
-		<relativePath/>
-	</parent>
-	<groupId>eu.unifiedviews.plugins</groupId>
-	<artifactId>uv-l-filesToVirtuoso</artifactId>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+    xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.unifiedviews.plugins</groupId>
+        <artifactId>dpu-base-pom</artifactId>
+        <version>1.0.1</version>
+        <relativePath/>
+    </parent>
+    <groupId>eu.unifiedviews.plugins</groupId>
+    <artifactId>uv-l-filesToVirtuoso</artifactId>
     <name>L-FilesToVirtuoso</name>
-	<description>VirtuosoLoader issues Virtuoso internal functions to load directory of RDF data.</description>
-	<version>1.4.0-SNAPSHOT</version>
-	<packaging>bundle</packaging>
-        <repositories>
-                <repository>
-                        <id>maven.eea.sk</id>
-                        <name>maven.eea.sk-public</name>
-                        <url>http://maven.eea.sk/artifactory/public/</url>
-                </repository>
-		<repository>
-			<id>cz.cuni.mff.ms.xrg.odcl</id>
-			<url>http://gd.projekty.ms.mff.cuni.cz:9123/nexus/content/groups/public/</url>
-		</repository>
-        </repositories>
+    <description>VirtuosoLoader issues Virtuoso internal functions to load directory of RDF data.</description>
+    <version>1.4.1-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    
+    <repositories>
+        <repository>
+            <id>maven.eea.sk</id>
+            <name>maven.eea.sk-public</name>
+            <url>http://maven.eea.sk/artifactory/public/</url>
+        </repository>
+        <repository>
+            <id>cz.cuni.mff.ms.xrg.odcl</id>
+            <url>http://gd.projekty.ms.mff.cuni.cz:9123/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
 
-	<properties>
-		<dpu.package>eu.unifiedviews.plugins.loader.filestovirtuoso</dpu.package>
-		<dpu.mainClass>VirtuosoLoader</dpu.mainClass>
-	</properties>
+    <properties>
+        <dpu.package>eu.unifiedviews.plugins.loader.filestovirtuoso</dpu.package>
+        <dpu.mainClass>VirtuosoLoader</dpu.mainClass>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.openlinksw</groupId>
-			<artifactId>virt_sesame2</artifactId>
-			<version>2.7</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>com.openlinksw</groupId>
+            <artifactId>virt_sesame2</artifactId>
+            <version>2.7</version>
+        </dependency>
 
-		<dependency>
-			<groupId>com.openlinksw</groupId>
-			<artifactId>virtjdbc</artifactId>
-			<version>4.1</version>
-		</dependency>
+        <dependency>
+            <groupId>com.openlinksw</groupId>
+            <artifactId>virtjdbc</artifactId>
+            <version>4.1</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.0</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
