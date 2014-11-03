@@ -40,7 +40,7 @@ public class FilesToLocalFS extends
 
     @Override
     public void execute(DPUContext dpuContext) throws DPUException,
-    InterruptedException {
+            InterruptedException {
         String shortMessage = this.getClass().getSimpleName() + " starting.";
         String longMessage = String.valueOf(config);
         dpuContext.sendMessage(DPUContext.MessageType.INFO, shortMessage, longMessage);
@@ -81,7 +81,6 @@ public class FilesToLocalFS extends
                     }
                     File outputFile = new File(destinationAbsolutePath + File.separator
                             + outputRelativePath);
-                    outputFile.mkdirs();
 
                     Path outputPath = outputFile.toPath();
                     try {
@@ -100,16 +99,16 @@ public class FilesToLocalFS extends
                     } catch (IOException ex) {
                         dpuContext.sendMessage(
                                 config.isSkipOnError() ? DPUContext.MessageType.WARNING : DPUContext.MessageType.ERROR,
-                                        "Error processing " + appendNumber(index) + " file",
-                                        String.valueOf(entry),
-                                        ex);
+                                "Error processing " + appendNumber(index) + " file",
+                                String.valueOf(entry),
+                                ex);
                     }
                 } catch (DataUnitException ex) {
                     dpuContext.sendMessage(
                             config.isSkipOnError() ? DPUContext.MessageType.WARNING : DPUContext.MessageType.ERROR,
-                                    "DataUnit exception.",
-                                    "",
-                                    ex);
+                            "DataUnit exception.",
+                            "",
+                            ex);
                 }
 
                 shouldContinue = !dpuContext.canceled();

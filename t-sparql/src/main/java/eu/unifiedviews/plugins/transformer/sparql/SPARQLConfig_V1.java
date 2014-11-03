@@ -23,6 +23,7 @@ public class SPARQLConfig_V1 {
 
     public SPARQLConfig_V1() {
         this.queryPairs = new LinkedList<>();
+        this.queryPairs.add(new SPARQLQueryPair("CONSTRUCT { ?s ?p ?o } WHERE {?s ?p ?o }", true));
     }
 
     public SPARQLConfig_V1(String query, boolean isContructType) {

@@ -25,13 +25,13 @@
 		the user -->
 	<description>Extract local file or directory.</description>
 	<packaging>bundle</packaging>
-        <repositories>
-                <repository>
-                        <id>maven.eea.sk</id>
-                        <name>maven.eea.sk-public</name>
-                        <url>http://maven.eea.sk/artifactory/public/</url>
-                </repository>
-        </repositories>
+	<repositories>
+		<repository>
+			<id>maven.eea.sk</id>
+			<name>maven.eea.sk-public</name>
+			<url>http://maven.eea.sk/artifactory/public/</url>
+		</repository>
+	</repositories>
 
 
 	<properties>

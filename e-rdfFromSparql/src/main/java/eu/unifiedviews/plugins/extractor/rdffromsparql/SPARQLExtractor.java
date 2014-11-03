@@ -103,7 +103,9 @@ public class SPARQLExtractor {
     private String username;
 
     private String password;
+
     private RdfFromSparqlEndpointConfig_V1 config;
+
     /**
      * Create new instance of SPARQLExtractor with given parameters.
      *
@@ -124,7 +126,7 @@ public class SPARQLExtractor {
         this.context = context;
         this.endpointParams = endpointParams;
         this.config = config;
-        
+
         setRetryConnectionSize(retrySize);
         setRetryConnectionTime(retryTime);
     }
@@ -139,7 +141,7 @@ public class SPARQLExtractor {
      * endpoint.
      */
     public SPARQLExtractor(WritableRDFDataUnit dataUnit, DPUContext context,
-            ExtractorEndpointParams endpointParams,RdfFromSparqlEndpointConfig_V1 config) {
+            ExtractorEndpointParams endpointParams, RdfFromSparqlEndpointConfig_V1 config) {
         this.outputDataUnit = dataUnit;
         this.context = context;
         this.endpointParams = endpointParams;
@@ -498,7 +500,7 @@ public class SPARQLExtractor {
 
         int retryCount = 0;
 
-        while (true) {
+        while (!context.canceled()) {
             try {
 
                 httpConnection = (HttpURLConnection) call.openConnection();
@@ -529,7 +531,7 @@ public class SPARQLExtractor {
 
                     throw new InsertPartException(
                             errorMessage + "\n\n" + "URL endpoint: " + endpointURL
-                            .toString() + " POST content: " + parameters);
+                                    .toString() + " POST content: " + parameters);
                 } else {
 
                     InputStreamReader inputStreamReader = new InputStreamReader(
@@ -562,6 +564,7 @@ public class SPARQLExtractor {
 
             }
         }
+        throw new DPUException("Cancelled");
     }
 
     private void setPOSTConnection(HttpURLConnection httpConnection,
@@ -610,20 +613,20 @@ public class SPARQLExtractor {
                         new InputStreamReader(
                                 errorStream, Charset.forName(encode)))) {
 
-                            StringBuilder inputStringBuilder = new StringBuilder();
-                            String line = reader.readLine();
-                            while (line != null) {
-                                inputStringBuilder.append(line);
-                                inputStringBuilder.append('\n');
-                                line = reader.readLine();
-                            }
+                    StringBuilder inputStringBuilder = new StringBuilder();
+                    String line = reader.readLine();
+                    while (line != null) {
+                        inputStringBuilder.append(line);
+                        inputStringBuilder.append('\n');
+                        line = reader.readLine();
+                    }
 
-                            String cause = ". Caused by " + inputStringBuilder
-                                    .toString();
+                    String cause = ". Caused by " + inputStringBuilder
+                            .toString();
 
-                            message.append(cause);
+                    message.append(cause);
 
-                        }
+                }
             }
 
         }
@@ -677,7 +680,7 @@ public class SPARQLExtractor {
 
         int retryCount = 0;
 
-        while (true) {
+        while (!context.canceled()) {
             try {
                 httpConnection = (HttpURLConnection) call.openConnection();
 
@@ -705,7 +708,7 @@ public class SPARQLExtractor {
 
                     throw new InsertPartException(
                             errorMessage + "\n\n" + "URL endpoint: " + endpointURL
-                            .toString() + " POST content: " + parameters);
+                                    .toString() + " POST content: " + parameters);
                 } else {
 
                     InputStreamReader inputStreamReader = new InputStreamReader(
@@ -738,6 +741,7 @@ public class SPARQLExtractor {
 
             }
         }
+        throw new DPUException("Cancelled");
     }
 
     private boolean retryConnectionAgain(int retryCount, String targetEndpoint) {
@@ -837,7 +841,7 @@ public class SPARQLExtractor {
 
         int retryCount = 0;
 
-        while (true) {
+        while (!context.canceled()) {
             try {
                 httpConnection = (HttpURLConnection) call.openConnection();
 
@@ -865,7 +869,7 @@ public class SPARQLExtractor {
 
                     throw new InsertPartException(
                             errorMessage + "\n\n" + "URL endpoint: " + endpointURL
-                            .toString() + " POST direct query: " + query);
+                                    .toString() + " POST direct query: " + query);
                 } else {
 
                     InputStreamReader inputStreamReader = new InputStreamReader(
@@ -898,6 +902,7 @@ public class SPARQLExtractor {
 
             }
         }
+        throw new DPUException("Cancelled");
     }
 
     private boolean hasInfinityRetryConnection() {
