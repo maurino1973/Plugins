@@ -172,6 +172,8 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         tfSparqlEndpointUrl = new TextField();
         tfSparqlEndpointUrl.setCaption("Sparql Endpoint URI:");
         tfSparqlEndpointUrl.setWidth("100%");
+        tfSparqlEndpointUrl.setNullRepresentation("");
+        tfSparqlEndpointUrl.setNullSettingAllowed(true);
         mainLayout.addComponent(tfSparqlEndpointUrl);
 
         tfContactPoint = new TextField();
@@ -297,11 +299,11 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         //
         txtOutSymbolicName.setValue(conf.getOutputGraphName());
         tfComsodeDatasetId.setValue(conf.getComsodeDatasetId());
-        tfDatasetUri.setValue(conf.getDatasetURI().toString());
-        tfDistributionUri.setValue(conf.getDistroURI().toString());
-        tfDataDumpUrl.setValue(conf.getDataDump().toString());
-        tfSparqlEndpointUrl.setValue(conf.getSparqlEndpoint().toString());
-        tfContactPoint.setValue(conf.getContactPoint().toString());
+        tfDatasetUri.setValue(conf.getDatasetURI());
+        tfDistributionUri.setValue(conf.getDistroURI());
+        tfDataDumpUrl.setValue(conf.getDataDump());
+        tfSparqlEndpointUrl.setValue(conf.getSparqlEndpoint());
+        tfContactPoint.setValue(conf.getContactPoint());
         tfLanguage.setValue(conf.getLanguage_cs());
         tfTitle.setValue(conf.getTitle_cs());
         tfTitleEn.setValue(conf.getTitle_en());
@@ -311,7 +313,7 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
         chkQb.setValue(conf.isIsQb());
         dfModified.setValue(conf.getModified());
         cbMime.setValue(conf.getMime());
-        cbPeriodicity.setValue(conf.getPeriodicity().toString());
+        cbPeriodicity.setValue(conf.getPeriodicity());
 
         setTcsConfig(conf.getSources(), conf.getPossibleSources(), tcsSources);
         setTcsConfig(conf.getAuthors(), conf.getPossibleAuthors(), tcsAuthors);
@@ -396,7 +398,11 @@ public class MetadataVaadinDialog extends BaseConfigDialog<MetadataConfig_V1> {
             conf.setDatasetURI((new URL(tfDatasetUri.getValue())).toString());
             conf.setDistroURI((new URL(tfDistributionUri.getValue())).toString());
             conf.setDataDump((new URL(tfDataDumpUrl.getValue())).toString());
-            conf.setSparqlEndpoint((new URL(tfSparqlEndpointUrl.getValue())).toString());
+            if (tfSparqlEndpointUrl.getValue() == null || tfSparqlEndpointUrl.getValue().isEmpty()) {
+                conf.setSparqlEndpoint(null);
+            } else {
+                conf.setSparqlEndpoint((new URL(tfSparqlEndpointUrl.getValue())).toString());
+            }
             conf.setLanguage_cs(tfLanguage.getValue());
             conf.setContactPoint((new URL(tfContactPoint.getValue())).toString());
             conf.setPeriodicity((new URL((String) cbPeriodicity.getValue())).toString());

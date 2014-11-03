@@ -42,7 +42,7 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
 
     private static final Logger LOG = LoggerFactory.getLogger(Metadata.class);
 
-    @DataUnit.AsInput(name = "data")
+    @DataUnit.AsInput(name = "data", optional = true)
     public RDFDataUnit inRdfData;
 
     @DataUnit.AsOutput(name = "metadata")
@@ -50,9 +50,9 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
 
     private DPUContext context;
 
-    private RepositoryConnection inConnection;
+    private RepositoryConnection inConnection = null;
 
-    private RepositoryConnection outConnection;
+    private RepositoryConnection outConnection = null;
 
     private URI outGraphURI;
 
@@ -74,16 +74,15 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
 
         try {
             // create wraps
-            inConnection = inRdfData.getConnection();
+            if (inRdfData != null) {
+                inConnection = inRdfData.getConnection();
+            }
             outConnection = outRdfData.getConnection();
-
             outGraphURI = outRdfData.addNewDataGraph(config.getOutputGraphName());
-
             // generate metadata
             generateMetadata();
         } catch (DataUnitException | RepositoryException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed", "", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "", ex);
         } finally {
             if (inConnection != null) {
                 try {
@@ -240,32 +239,35 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         outConnection.commit();
 
         // Now compute statistics on input data
-        context.sendMessage(DPUContext.MessageType.INFO, "Starting statistics computation");
+        
+        if (inRdfData != null) {
+            context.sendMessage(DPUContext.MessageType.INFO, "Starting statistics computation");
 
-        final DatasetImpl dataset = new DatasetImpl();
-        for (URI uri : RDFHelper.getGraphsURIArray(inRdfData)) {
-            dataset.addDefaultGraph(uri);
+            final DatasetImpl dataset = new DatasetImpl();
+            for (URI uri : RDFHelper.getGraphsURIArray(inRdfData)) {
+                dataset.addDefaultGraph(uri);
+            }
+
+            executeCountQuery("SELECT (COUNT (*) as ?count) WHERE {?s ?p ?o}", void_triples, datasetURI, dataset);
+            executeCountQuery("SELECT (COUNT (distinct ?s) as ?count) WHERE {?s a ?t}", void_entities, datasetURI, dataset);
+            executeCountQuery("SELECT (COUNT (distinct ?t) as ?count) WHERE {?s a ?t}", void_classes, datasetURI, dataset);
+            executeCountQuery("SELECT (COUNT (distinct ?p) as ?count) WHERE {?s ?p ?o}", void_properties, datasetURI, dataset);
+            executeCountQuery("SELECT (COUNT (distinct ?s) as ?count) WHERE {?s ?p ?o}", void_dSubjects, datasetURI, dataset);
+            executeCountQuery("SELECT (COUNT (distinct ?o) as ?count) WHERE {?s ?p ?o}", void_dObjects, datasetURI, dataset);
+
+            // done computing statistics
+
+            if (context.canceled()) {
+                context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
+            } else {
+                context.sendMessage(DPUContext.MessageType.INFO, "Statistics computation done");
+            }
         }
 
-        executeCountQuery("SELECT (COUNT (*) as ?count) WHERE {?s ?p ?o}", void_triples, datasetURI, dataset);
-        executeCountQuery("SELECT (COUNT (distinct ?s) as ?count) WHERE {?s a ?t}", void_entities, datasetURI, dataset);
-        executeCountQuery("SELECT (COUNT (distinct ?t) as ?count) WHERE {?s a ?t}", void_classes, datasetURI, dataset);
-        executeCountQuery("SELECT (COUNT (distinct ?p) as ?count) WHERE {?s ?p ?o}", void_properties, datasetURI, dataset);
-        executeCountQuery("SELECT (COUNT (distinct ?s) as ?count) WHERE {?s ?p ?o}", void_dSubjects, datasetURI, dataset);
-        executeCountQuery("SELECT (COUNT (distinct ?o) as ?count) WHERE {?s ?p ?o}", void_dObjects, datasetURI, dataset);
-
-        // done computing statistics
-
-        if (context.canceled()) {
-            context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
-        } else {
-            context.sendMessage(DPUContext.MessageType.INFO, "Statistics computation done");
-        }
     }
 
-    void executeCountQuery(String countQuery, URI property, URI datasetURI,
-            Dataset dataset) {
-        if (context.canceled()) {
+    void executeCountQuery(String countQuery, URI property, URI datasetURI, Dataset dataset) {
+        if (context.canceled() || inConnection == null) {
             // end now
             return;
         }
