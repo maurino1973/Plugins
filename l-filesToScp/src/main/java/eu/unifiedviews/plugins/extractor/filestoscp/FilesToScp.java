@@ -21,13 +21,13 @@ import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
 import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
-import java.util.Iterator;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 
+/**
+ *
+ * @author Škoda Petr
+ */
 @DPU.AsLoader
-public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
-        implements ConfigDialogProvider<FilesToScpConfig_V1> {
+public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1> implements ConfigDialogProvider<FilesToScpConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(FilesToScp.class);
 
@@ -39,19 +39,14 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
     }
 
     @Override
-    public void execute(DPUContext context)
-            throws DPUException {
+    public void execute(DPUContext context) throws DPUException {
         final FilesDataUnit.Iteration filesIteration;
         try {
             filesIteration = inFilesData.getIteration();
         } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed", "Can't get file iterator.", ex);
-            return;
+            throw new DPUException(ex);
         }
-        //
-        // preapre scop
-        //
+        // Prepare library.
         final SCP scp = new SCP(new SCPListenerPrintStream());
         scp.setPort(config.getPort());
         scp.setPassword(config.getPassword());
@@ -59,47 +54,31 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
         if (context.isDebugging()) {
             scp.setVerbose(true);
         }
-        // non recursion we copy ourselfs
+        // Non recursion we copy ourselfs.
         scp.setRecursive(true);
-        // prepare destination
-        String destinationBase = config.getUsername() + '@'
-                + config.getHostname() + ':' + config.getDestination();
+        // Pepare destination.
+        String destinationBase = config.getUsername() + '@' + config.getHostname() + ':' + config.getDestination();
         if (!destinationBase.endsWith("/")) {
             destinationBase += "/";
         }
 
         LOG.debug("Global destination: {}", destinationBase);
-        //
-        // prepare to one directory
-        //
+        // Prepare to one directory, so we can transfer all data at once.
         final File toUploadDir = new File(context.getWorkingDir(), "toUpload");
         toUploadDir.mkdirs();
         try {
             while (!context.canceled() && filesIteration.hasNext()) {
                 final FilesDataUnit.Entry entry = filesIteration.next();
-
-                final String relativePath = VirtualPathHelpers.getVirtualPath(inFilesData,
-                        entry.getSymbolicName());
-
+                final String relativePath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
                 // TODO We can try to use symbolicName here
                 if (relativePath == null) {
-                    context.sendMessage(DPUContext.MessageType.WARNING,
-                            "No virtual path set for: " + entry.getSymbolicName()
-                                    + ". File is ignored.");
+                    context.sendMessage(DPUContext.MessageType.WARNING, "No virtual path set for: " + entry.getSymbolicName() + ". File is ignored.");
                     continue;
                 }
-                FileUtils.copyFile(
-                        new File(java.net.URI.create(entry.getFileURIString())),
-                        new File(toUploadDir, relativePath));
+                FileUtils.copyFile(new File(java.net.URI.create(entry.getFileURIString())), new File(toUploadDir, relativePath));
             }
-        } catch (IOException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Can't prepare directory for upload.", "", ex);
-            return;
-        } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "Problem with dataunit.", "", ex);
-            return;
+        } catch (IOException | DataUnitException ex) {
+            throw new DPUException("Failed to prepare files before transfer.", ex);
         } finally {
             try {
                 filesIteration.close();
@@ -107,30 +86,22 @@ public class FilesToScp extends ConfigurableBase<FilesToScpConfig_V1>
                 LOG.warn("Error in close.", ex);
             }
         }
-        //
-        // upload
-        //
+        // Upload.
         final File[] files = toUploadDir.listFiles();
         try {
             for (File toUpload : files) {
                 final String destination = destinationBase;
-                LOG.debug("Uploading '{}' to '{}'",
-                        toUpload.toString(), destination);
+                LOG.debug("Uploading '{}' to '{}'", toUpload.toString(), destination);
                 upload(scp, toUpload.toString(), destination);
             }
         } catch (SCPPException ex) {
             if (config.isSoftFail()) {
-                context.sendMessage(DPUContext.MessageType.WARNING,
-                        "Failed to upload file/directory", "", ex);
-                // ok continue
+                context.sendMessage(DPUContext.MessageType.WARNING, "Failed to upload file/directory", "", ex);
             } else {
-                context.sendMessage(DPUContext.MessageType.ERROR,
-                        "Failed to upload file/directory", "", ex);
+                throw new DPUException("Upload failed.", ex);
             }
         }
-        //
-        // delete working directory
-        //
+        // TODO Delte forking directory
     }
 
     @Override

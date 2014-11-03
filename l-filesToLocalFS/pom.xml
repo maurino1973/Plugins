@@ -7,15 +7,23 @@
 		<groupId>eu.unifiedviews.plugins</groupId>
 		<artifactId>dpu-base-pom</artifactId>
 		<version>1.0.1</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
 
 	<groupId>eu.unifiedviews.plugins</groupId>
 	<artifactId>uv-l-filesToLocalFS</artifactId>
-    <name>L-FilesToLocalFS</name>
+	<name>L-FilesToLocalFS</name>
 	<description>Loads files to the specified local host directory.</description>
-	<version>1.3.1</version>
+	<version>1.4.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
+
+	<repositories>
+		<repository>
+			<id>maven.eea.sk</id>
+			<name>maven.eea.sk-public</name>
+			<url>http://maven.eea.sk/artifactory/public/</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<dpu.package>eu.unifiedviews.plugins.loader.filestolocalfs</dpu.package>

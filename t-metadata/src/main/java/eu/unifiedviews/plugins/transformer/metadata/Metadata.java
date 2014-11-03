@@ -144,25 +144,38 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
 
         outConnection.add(datasetURI, RDF.TYPE, void_datasetClass, outGraphURI);
         outConnection.add(datasetURI, RDF.TYPE, dcat_datasetClass, outGraphURI);
+        if (config.getComsodeDatasetId() != null && !config.getComsodeDatasetId().isEmpty()) {
+            outConnection.add(datasetURI,
+                    valueFactory.createURI("http://comsode.eu/ontology/dataset"),
+                    valueFactory.createURI("http://comsode.eu/resource/dataset/" + config.getComsodeDatasetId()),
+                    outGraphURI);
+        }
+
         if (config.isIsQb()) {
             outConnection.add(datasetURI, RDF.TYPE, qb_DataSet, outGraphURI);
         }
-        if (config.getDesc_cs() != null) {
-            outConnection.add(datasetURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_cs(), "cs"), outGraphURI);
+        if (config.getDesc_cs() != null && !config.getDesc_cs().isEmpty()) {
+            outConnection.add(datasetURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_cs(), config.getLanguage_cs()), outGraphURI);
+            outConnection.add(distroURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_cs(), config.getLanguage_cs()), outGraphURI);
         }
-        if (config.getDesc_en() != null) {
+        if (config.getDesc_en() != null && !config.getDesc_en().isEmpty()) {
             outConnection.add(datasetURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_en(), "en"), outGraphURI);
+            outConnection.add(distroURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_en(), "en"), outGraphURI);
         }
-        if (config.getTitle_cs() != null) {
-            outConnection.add(datasetURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_cs(), "cs"), outGraphURI);
+        if (config.getTitle_cs() != null && !config.getTitle_cs().isEmpty()) {
+            outConnection.add(datasetURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_cs(), config.getLanguage_cs()), outGraphURI);
+            outConnection.add(distroURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_cs(), config.getLanguage_cs()), outGraphURI);
         }
-        if (config.getTitle_en() != null) {
+        if (config.getTitle_en() != null && !config.getTitle_en().isEmpty()) {
             outConnection.add(datasetURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_en(), "en"), outGraphURI);
+            outConnection.add(distroURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_en(), "en"), outGraphURI);
         }
-        if (config.getDataDump() != null) {
+        if (config.getDataDump() != null && !config.getDataDump().isEmpty()) {
             outConnection.add(datasetURI, valueFactory.createURI(ns_void + "dataDump"), valueFactory.createURI(config.getDataDump().toString()), outGraphURI);
+            outConnection.add(distroURI, dcat_downloadURL, valueFactory.createURI(config.getDataDump().toString()), outGraphURI);
+            outConnection.add(distroURI, dcat_mediaType, valueFactory.createLiteral(config.getMime()), outGraphURI);
         }
-        if (config.getSparqlEndpoint() != null) {
+        if (config.getSparqlEndpoint() != null && !config.getSparqlEndpoint().isEmpty()) {
             outConnection.add(datasetURI, valueFactory.createURI(ns_void + "sparqlEndpoint"), valueFactory.createURI(config.getSparqlEndpoint().toString()), outGraphURI);
         }
 
@@ -206,27 +219,15 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         outConnection.add(datasetURI, dcat_distribution, distroURI, outGraphURI);
         outConnection.commit();
 
+        if (context.canceled()) {
+            context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
+            return;
+        }
+
         // DCAT Distribution
         outConnection.begin();
         outConnection.add(distroURI, RDF.TYPE, dcat_distroClass, outGraphURI);
-        if (config.getDesc_cs() != null) {
-            outConnection.add(distroURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_cs(), "cs"), outGraphURI);
-        }
-        if (config.getDesc_en() != null) {
-            outConnection.add(distroURI, DCTERMS.DESCRIPTION, valueFactory.createLiteral(config.getDesc_en(), "en"), outGraphURI);
-        }
-        if (config.getTitle_cs() != null) {
-            outConnection.add(distroURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_cs(), "cs"), outGraphURI);
-        }
-        if (config.getTitle_en() != null) {
-            outConnection.add(distroURI, DCTERMS.TITLE, valueFactory.createLiteral(config.getTitle_en(), "en"), outGraphURI);
-        }
-        if (config.getDataDump() != null) {
-            outConnection.add(distroURI, dcat_downloadURL, valueFactory.createURI(config.getDataDump().toString()), outGraphURI);
-        }
-        if (config.getDataDump() != null) {
-            outConnection.add(distroURI, dcat_mediaType, valueFactory.createLiteral(config.getMime()), outGraphURI);
-        }
+
         for (String u : config.getLicenses()) {
             outConnection.add(distroURI, DCTERMS.LICENSE, valueFactory.createURI(u), outGraphURI);
         }
@@ -252,12 +253,23 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         executeCountQuery("SELECT (COUNT (distinct ?p) as ?count) WHERE {?s ?p ?o}", void_properties, datasetURI, dataset);
         executeCountQuery("SELECT (COUNT (distinct ?s) as ?count) WHERE {?s ?p ?o}", void_dSubjects, datasetURI, dataset);
         executeCountQuery("SELECT (COUNT (distinct ?o) as ?count) WHERE {?s ?p ?o}", void_dObjects, datasetURI, dataset);
-        context.sendMessage(DPUContext.MessageType.INFO, "Statistics computation done");
-        // Done computing statistics
+
+        // done computing statistics
+
+        if (context.canceled()) {
+            context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
+        } else {
+            context.sendMessage(DPUContext.MessageType.INFO, "Statistics computation done");
+        }
     }
 
     void executeCountQuery(String countQuery, URI property, URI datasetURI,
             Dataset dataset) {
+        if (context.canceled()) {
+            // end now
+            return;
+        }
+
         final ValueFactory valueFactory = inConnection.getValueFactory();
         URI xsd_integer = valueFactory.createURI("http://www.w3.org/2001/XMLSchema#integer");
         try {
@@ -274,6 +286,7 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         } catch (QueryEvaluationException | RepositoryException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "Query failed", "", ex);
         }
+
     }
 
 }

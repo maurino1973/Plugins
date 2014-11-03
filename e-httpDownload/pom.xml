@@ -1,31 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>eu.unifiedviews.plugins</groupId>
-        <artifactId>dpu-base-pom</artifactId>
-        <version>1.0.1</version>
-        <relativePath/>
-    </parent>    
-    <groupId>eu.unifiedviews.plugins</groupId>
-    <artifactId>uv-e-httpDownload</artifactId>
-    <name>E-HttpDownload</name>
-    <description>Download a single file from given URL and save it with given virtualPath.</description>
-    <version>1.3.1</version>
-    <packaging>bundle</packaging>
-	
-    <properties>    
-        <dpu.package>eu.unifiedviews.plugins.extractor.httpdownload</dpu.package>
-        <dpu.mainClass>HttpDownload</dpu.mainClass>
-    </properties>
-	
-    <dependencies>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-            <scope>provided</scope>
-        </dependency>        
-    </dependencies>
-	
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.unifiedviews.plugins</groupId>
+		<artifactId>dpu-base-pom</artifactId>
+		<version>1.0.1</version>
+		<relativePath />
+	</parent>
+
+	<groupId>eu.unifiedviews.plugins</groupId>
+	<artifactId>uv-e-httpDownload</artifactId>
+	<name>E-HttpDownload</name>
+	<description>Downloads list of files (in form of URIs) given in a configuration and saves them to output.</description>
+	<version>1.4.0</version>
+	<packaging>bundle</packaging>
+	<repositories>
+		<repository>
+			<id>maven.eea.sk</id>
+			<name>maven.eea.sk-public</name>
+			<url>http://maven.eea.sk/artifactory/public/</url>
+		</repository>
+	</repositories>
+
+	<properties>
+		<dpu.package>eu.unifiedviews.plugins.extractor.httpdownload</dpu.package>
+		<dpu.mainClass>HttpDownload</dpu.mainClass>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 </project>

@@ -8,7 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openrdf.model.URI;
-import org.openrdf.query.*;
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryEvaluationException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.TupleQuery;
+import org.openrdf.query.TupleQueryResultHandlerException;
 import org.openrdf.query.impl.DatasetImpl;
 import org.openrdf.query.resultio.TupleQueryResultWriter;
 import org.openrdf.query.resultio.text.csv.SPARQLResultsCSVWriterFactory;
@@ -60,9 +64,8 @@ public class SparqlSelect extends ConfigurableBase<SparqlSelectConfig> implement
         final String outSymbolicName;
         final String outFileUri;
         try {
-            outSymbolicName = outFilesData.getBaseFileURIString() + config.getTargetPath();
+            outSymbolicName = config.getTargetPath();
             outFileUri = outFilesData.addNewFile(outSymbolicName);
-            outFilesData.addExistingFile(outSymbolicName, outFileUri);
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "Problem with DataUnit", "Can't add new file.", ex);
             return;
@@ -131,7 +134,7 @@ public class SparqlSelect extends ConfigurableBase<SparqlSelectConfig> implement
 
     /**
      * Return map of all input graphs.
-     * 
+     *
      * @return
      */
     private Map<String, URI> getGraphs() throws DataUnitException {

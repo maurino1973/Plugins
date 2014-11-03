@@ -25,9 +25,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
     private TextField txtOutGraphName;
 
-    private TextField txtSingleFileSymbolicName;
-
-    private Panel panelMultipleGraphs;
+    private TextField txtSingleFileOutputSymbolicName;
 
     public RdfToFilesVaadinDialog() {
         super(RdfToFilesConfig_V1.class);
@@ -46,19 +44,10 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
         checkMergeGraphs = new CheckBox("Merge graphs:");
         mainLayout.addComponent(checkMergeGraphs);
-        // TODO Remove
         checkMergeGraphs.setEnabled(false);
 
         buildPanelSingleGraph();
         mainLayout.addComponent(panelSingleGraph);
-
-        checkMergeGraphs.addValueChangeListener(new Property.ValueChangeListener() {
-
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-
-            }
-        });
 
         setCompositionRoot(mainLayout);
     }
@@ -71,14 +60,11 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
         selectRdfFormat = new NativeSelect("RDF format:");
         for (RDFFormat item : RDFFormat.values()) {
-            if (item.supportsContexts()) {
-                // work with quads
-                continue;
-            }
-            selectRdfFormat.addItem(item.getName());
+            selectRdfFormat.addItem(item);
             selectRdfFormat.setItemCaption(item, item.getName());
         }
         selectRdfFormat.setNullSelectionAllowed(false);
+        selectRdfFormat.setImmediate(true);
         mainLayout.addComponent(selectRdfFormat);
 
         checkGenGraphFile = new CheckBox("Generate graph file:");
@@ -88,6 +74,13 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
         txtOutGraphName.setWidth("100%");
         mainLayout.addComponent(txtOutGraphName);
 
+        txtSingleFileOutputSymbolicName = new TextField("File path/name without extension:");
+        txtSingleFileOutputSymbolicName.setWidth("100%");
+        mainLayout.addComponent(txtSingleFileOutputSymbolicName);
+
+        panelSingleGraph = new Panel();
+        panelSingleGraph.setContent(layout);
+
         checkGenGraphFile.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -95,17 +88,26 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
             }
         });
 
-        txtSingleFileSymbolicName = new TextField("File path/name without extension:");
-        txtSingleFileSymbolicName.setWidth("100%");
-        mainLayout.addComponent(txtSingleFileSymbolicName);
-
-        panelSingleGraph = new Panel();
-        panelSingleGraph.setContent(layout);
+        selectRdfFormat.addValueChangeListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                final RDFFormat format = (RDFFormat) event.getProperty().getValue();
+                if (format.supportsContexts()) {
+                    // graph will be exported as a part of output file
+                    // we wil force user to specify graph
+                    checkGenGraphFile.setValue(true);
+                    checkGenGraphFile.setEnabled(false);
+                } else {
+                    // enable standalone graph file
+                    checkGenGraphFile.setEnabled(true);
+                }
+            }
+        });
     }
 
     @Override
     protected void setConfiguration(RdfToFilesConfig_V1 c) throws DPUConfigException {
-        selectRdfFormat.setValue(c.getRdfFileFormat());
+        selectRdfFormat.setValue(RDFFormat.valueOf(c.getRdfFileFormat()));
         checkMergeGraphs.setValue(c.isMergeGraphs());
         if (c.isMergeGraphs()) {
             // single graph
@@ -119,7 +121,7 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
 
             if (!c.getGraphToFileInfo().isEmpty()) {
                 final RdfToFilesConfig_V1.GraphToFileInfo info = c.getGraphToFileInfo().get(0);
-                txtSingleFileSymbolicName.setValue(info.getOutFileName());
+                txtSingleFileOutputSymbolicName.setValue(info.getOutFileName());
                 if (c.getGraphToFileInfo().size() > 1) {
                     LOG.warn("GraphToFileInfo.size() > 1, but were expected equal to 1.");
                 }
@@ -135,22 +137,31 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
     protected RdfToFilesConfig_V1 getConfiguration() throws DPUConfigException {
         RdfToFilesConfig_V1 cnf = new RdfToFilesConfig_V1();
 
-        cnf.setRdfFileFormat((String) selectRdfFormat.getValue());
+        final RDFFormat format = (RDFFormat) selectRdfFormat.getValue();
+
+        cnf.setRdfFileFormat(format.getName());
         cnf.setMergeGraphs(checkMergeGraphs.getValue());
 
         if (cnf.isMergeGraphs()) {
             // single graph
             cnf.setGenGraphFile(checkGenGraphFile.getValue());
-            if (cnf.isGenGraphFile()) {
-                cnf.setOutGraphName(txtOutGraphName.getValue());
+            // set always even if not used, to be friendly to user
+            cnf.setOutGraphName(txtOutGraphName.getValue());
+            // check for text box - as it's required for context aware file formats
+            if (format.supportsContexts()) {
+                // graph uri must be provided
+                final String graphName = txtOutGraphName.getValue();
+                LOG.debug(">>> graphName:{}", graphName);
+                if (graphName == null || graphName.isEmpty()) {
+                    throw new DPUConfigException("Graph name must be set for context aware formats.");
+                }
             }
             final RdfToFilesConfig_V1.GraphToFileInfo info = cnf.new GraphToFileInfo();
             info.setInSymbolicName("");
-            info.setOutFileName(txtSingleFileSymbolicName.getValue());
+            info.setOutFileName(txtSingleFileOutputSymbolicName.getValue());
             cnf.setGraphToFileInfo(Arrays.asList(info));
         } else {
-            // multiple files
-
+            // multiple graphs, not supoorted yet
         }
         return cnf;
     }
@@ -162,12 +173,9 @@ public class RdfToFilesVaadinDialog extends BaseConfigDialog<RdfToFilesConfig_V1
         if (checkMergeGraphs.getValue()) {
             // single file
             desc.append("input->");
-            desc.append(txtSingleFileSymbolicName);
+            desc.append(txtSingleFileOutputSymbolicName);
             desc.append(".");
-            desc.append(selectRdfFormat.getValue());
-            if (checkGenGraphFile.getValue()) {
-                desc.append(" .graph is generated.");
-            }
+            desc.append(((RDFFormat) selectRdfFormat.getValue()).getDefaultFileExtension());
         } else {
             // multiple graphs
         }

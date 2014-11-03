@@ -1,5 +1,16 @@
 package eu.unifiedviews.plugins.transformer.unzipper;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Iterator;
+
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
@@ -7,21 +18,19 @@ import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.dpu.config.DPUConfigException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
-import java.io.File;
-import java.nio.file.Path;
-import java.util.Iterator;
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
-import org.apache.commons.io.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
+import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
+import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 /**
  * @author Škoda Petr
  */
 @DPU.AsTransformer
-public class UnZipper implements DPU {
+public class UnZipper extends ConfigurableBase<UnZipperConfig_V1>
+        implements ConfigDialogProvider<UnZipperConfig_V1> {
 
     private static final Logger LOG = LoggerFactory.getLogger(UnZipper.class);
 
@@ -34,16 +43,16 @@ public class UnZipper implements DPU {
     private DPUContext context;
 
     public UnZipper() {
-
+        super(UnZipperConfig_V1.class);
     }
 
     @Override
     public void execute(DPUContext context) throws DPUException {
         this.context = context;
 
-        final FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = inFilesData.getIteration();
+            filesIteration = FilesHelper.getFiles(inFilesData).iterator();
         } catch (DataUnitException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
@@ -65,7 +74,7 @@ public class UnZipper implements DPU {
                 FilesDataUnit.Entry entry = filesIteration.next();
                 //
                 // Prepare source/target file/directory
-                //                
+                //
                 final File sourceFile = new File(java.net.URI.create(entry.getFileURIString()));
 
                 String zipRelativePath = VirtualPathHelpers.getVirtualPath(inFilesData, entry.getSymbolicName());
@@ -104,11 +113,6 @@ public class UnZipper implements DPU {
             context.sendMessage(DPUContext.MessageType.ERROR,
                     "Problem with data unit.", "", ex);
         } finally {
-            try {
-                filesIteration.close();
-            } catch (DataUnitException ex) {
-                LOG.warn("Error in close.", ex);
-            }
         }
     }
 
@@ -118,19 +122,24 @@ public class UnZipper implements DPU {
         while (iter.hasNext()) {
             final File newFile = iter.next();
             final String relativePath = directoryPath.relativize(newFile.toPath()).toString();
-            final String newSymbolicName = relativePath;
+            final String newSymbolicName;
+            if (config.isNotPrefixed()) {
+                newSymbolicName = relativePath;
+            } else {
+                newSymbolicName = sourceSymbolicName + "/" + relativePath;
+            }
             // add file
             outFilesData.addExistingFile(newSymbolicName, newFile.toURI().toString());
             //
             // add metadata
             //
-            VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, relativePath);
+            VirtualPathHelpers.setVirtualPath(outFilesData, newSymbolicName, newSymbolicName);
         }
     }
 
     /**
      * Unzip given file into given directory.
-     * 
+     *
      * @param zipFile
      * @param targetDirectory
      * @return
@@ -148,6 +157,23 @@ public class UnZipper implements DPU {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public AbstractConfigDialog<UnZipperConfig_V1> getConfigurationDialog() {
+        return new UnZipperVaadinDialog();
+    }
+
+    @Override
+    public void configureDirectly(UnZipperConfig_V1 newConfig) throws DPUConfigException {
+        // workaround as configuration was initialy part of the Unzipper
+        // so original version of this function throws an exception
+        if (newConfig != null) {
+            config = newConfig;
+        } else {
+            // ignore and use default
+            config = new UnZipperConfig_V1();
+        }
     }
 
 }

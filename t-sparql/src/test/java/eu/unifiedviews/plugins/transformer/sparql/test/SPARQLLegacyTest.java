@@ -131,7 +131,7 @@ public class SPARQLLegacyTest {
             ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
 
-            assertEquals(IOUtils.toString(addAllOnceAgainInputStream), outputBos.toString("UTF-8"));
+            assertEquals(IOUtils.toString(addAllOnceAgainInputStream, "UTF-8"), outputBos.toString("UTF-8"));
         } finally {
             if (connection != null) {
                 try {
@@ -193,7 +193,7 @@ public class SPARQLLegacyTest {
             ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
 
-            assertEquals(IOUtils.toString(addAllOnceAgainInputStream), outputBos.toString("UTF-8"));
+            assertEquals(IOUtils.toString(addAllOnceAgainInputStream, "UTF-8"), outputBos.toString("UTF-8"));
         } finally {
             if (connection != null) {
                 try {
@@ -254,7 +254,7 @@ public class SPARQLLegacyTest {
             ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
 
-            assertEquals(IOUtils.toString(addAllOnceAgainInputStream), outputBos.toString("UTF-8"));
+            assertEquals(IOUtils.toString(addAllOnceAgainInputStream, "UTF-8"), outputBos.toString("UTF-8"));
         } finally {
             if (connection != null) {
                 try {
@@ -314,7 +314,7 @@ public class SPARQLLegacyTest {
             assertTrue(connection.size(graph) == connection2.size(RDFHelper.getGraphsURIArray(output)));
             ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
-            assertEquals(IOUtils.toString(addOnlyConstructInputStream), outputBos.toString("UTF-8"));
+            assertEquals(IOUtils.toString(addOnlyConstructInputStream, "UTF-8"), outputBos.toString("UTF-8"));
         } finally {
             if (connection != null) {
                 try {
@@ -503,7 +503,7 @@ public class SPARQLLegacyTest {
             ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
 
-            assertEquals(IOUtils.toString(addOnlyConstructInputStream), outputBos.toString("UTF-8"));
+            assertEquals(IOUtils.toString(addOnlyConstructInputStream, "UTF-8"), outputBos.toString("UTF-8"));
         } finally {
             if (connection != null) {
                 try {
@@ -564,7 +564,7 @@ public class SPARQLLegacyTest {
             ByteArrayOutputStream outputBos = new ByteArrayOutputStream();
             connection2.export(new TurtleWriter(outputBos), RDFHelper.getGraphsURIArray(output));
             System.out.println(outputBos.toString("UTF-8"));
-            assertEquals(IOUtils.toString(swappedInputStream), outputBos.toString("UTF-8"));
+            assertEquals(IOUtils.toString(swappedInputStream, "UTF-8"), outputBos.toString("UTF-8"));
         } finally {
             if (connection != null) {
                 try {

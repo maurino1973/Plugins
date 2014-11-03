@@ -79,20 +79,26 @@ public class VirtuosoLoaderVaadinDialog extends BaseConfigDialog<VirtuosoLoaderC
         setWidth("100%");
         setHeight("100%");
 
-        mainLayout.addComponent(new TextField(VIRTUOSO_URL_LABEL, virtuosoUrl));
-        mainLayout.addComponent(new TextField(USERNAME_LABEL, username));
-        mainLayout.addComponent(new TextField(PASSWORD_LABEL, password));
+        mainLayout.addComponent(createTextField(VIRTUOSO_URL_LABEL, virtuosoUrl));
+        mainLayout.addComponent(createTextField(USERNAME_LABEL, username));
+        mainLayout.addComponent(createTextField(PASSWORD_LABEL, password));
         mainLayout.addComponent(new CheckBox(CLEAR_DESTINATION_GRAPH_LABEL, clearDestinationGraph));
-        mainLayout.addComponent(new TextField(LOAD_DIRECTORY_PATH_LABEL, loadDirectoryPath));
-        mainLayout.addComponent(new TextField(INCLUDE_SUBDIRECTORIES_LABEL, includeSubdirectories));
-        mainLayout.addComponent(new TextField(LOAD_FILE_PATTERN_LABEL, loadFilePattern));
-        mainLayout.addComponent(new TextField(TARGET_CONTEXT_LABEL, targetContext));
-//        mainLayout.addComponent(new TextField(TARGET_TEMP_CONTEXT_LABEL, targetTempContext));
-        mainLayout.addComponent(new TextField(STATUS_UPDATE_INTERVAL_LABEL, statusUpdateInterval));
-        mainLayout.addComponent(new TextField(THREAD_COUNT_LABEL, threadCount));
+        mainLayout.addComponent(createTextField(LOAD_DIRECTORY_PATH_LABEL, loadDirectoryPath));
+        mainLayout.addComponent(createTextField(INCLUDE_SUBDIRECTORIES_LABEL, includeSubdirectories));
+        mainLayout.addComponent(createTextField(LOAD_FILE_PATTERN_LABEL, loadFilePattern));
+        mainLayout.addComponent(createTextField(TARGET_CONTEXT_LABEL, targetContext));
+//        mainLayout.addComponent(createTextField(TARGET_TEMP_CONTEXT_LABEL, targetTempContext));
+        mainLayout.addComponent(createTextField(STATUS_UPDATE_INTERVAL_LABEL, statusUpdateInterval));
+        mainLayout.addComponent(createTextField(THREAD_COUNT_LABEL, threadCount));
         mainLayout.addComponent(new CheckBox(SKIP_ON_ERROR_LABEL, skipOnError));
 
         setCompositionRoot(mainLayout);
+    }
+
+    private <T> TextField createTextField(String caption, ObjectProperty<T> property) {
+        final TextField result = new TextField(caption, property);
+        result.setWidth("100%");
+        return result;
     }
 
     @Override

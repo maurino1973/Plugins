@@ -3,6 +3,7 @@ package eu.unifiedviews.plugins.transformer.filestordft;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.Iterator;
 
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
@@ -22,6 +23,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
@@ -52,8 +54,15 @@ public class FilesToRDF extends ConfigurableBase<FilesToRDFConfig_V1> implements
 
         VirtualPathHelper inputVirtualPathHelper = VirtualPathHelpers.create(filesInput);
         RepositoryConnection connection = null;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            FilesDataUnit.Iteration filesIteration = filesInput.getIteration();
+            filesIteration = FilesHelper.getFiles(filesInput).iterator();
+        } catch (DataUnitException ex) {
+            dpuContext.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
+            return;
+        }
+
+        try {
 
             if (!filesIteration.hasNext()) {
                 return;

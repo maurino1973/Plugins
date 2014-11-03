@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,7 @@ import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.fileshelper.FilesHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
 import eu.unifiedviews.helpers.dpu.config.ConfigDialogProvider;
@@ -109,12 +111,11 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
         //
         // Get file iterator
         //
-        final FilesDataUnit.Iteration filesIteration;
+        final Iterator<FilesDataUnit.Entry> filesIteration;
         try {
-            filesIteration = inFilesTable.getIteration();
+            filesIteration = FilesHelper.getFiles(inFilesTable).iterator();
         } catch (DataUnitException ex) {
-            context.sendMessage(DPUContext.MessageType.ERROR,
-                    "DPU Failed", "Can't get file iterator.", ex);
+            context.sendMessage(DPUContext.MessageType.ERROR, "DPU Failed", "Can't get file iterator.", ex);
             return;
         }
         //
@@ -159,12 +160,6 @@ public class Tabular extends ConfigurableBase<TabularConfig_V1>
             context.sendMessage(DPUContext.MessageType.ERROR, "Problem with DataUnit", "", ex);
         } catch (RepositoryException ex) {
             context.sendMessage(DPUContext.MessageType.ERROR, "Problem with repository", "", ex);
-        }
-
-        try {
-            filesIteration.close();
-        } catch (DataUnitException ex) {
-            LOG.warn("Error in close.", ex);
         }
 
         try {

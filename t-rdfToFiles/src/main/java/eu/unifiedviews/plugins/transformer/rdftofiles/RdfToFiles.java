@@ -85,10 +85,7 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
                     "Failed to get graph names.", "", ex);
             return;
         }
-
-        //
         // convert from rdf to files
-        //
         try {
             // TODO export metadata graph ?!!
             if (config.isMergeGraphs()) {
@@ -118,8 +115,8 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
         final URI[] toExport = graphUris.values().toArray(new URI[0]);
         final String outputFileName = info.getOutFileName() + "." + rdfFormat.getDefaultFileExtension();
         final String outputSymbolicName = exportGraph(toExport, outputFileName);
-        // create graph name if needed
-        if (config.isGenGraphFile()) {
+        // create graph name if needed and contexts are not used
+        if (config.isGenGraphFile() && !rdfFormat.supportsContexts()) {
             try {
                 generateGraphFile(outputFileName, config.getOutGraphName());
             } catch (IOException ex) {
@@ -193,7 +190,16 @@ public class RdfToFiles extends ConfigurableBase<RdfToFilesConfig_V1> implements
         RepositoryConnection connection = null;
         try (FileOutputStream outStream = new FileOutputStream(outputFile); OutputStreamWriter outWriter = new OutputStreamWriter(outStream, Charset.forName(FILE_ENCODE))) {
             connection = inRdfData.getConnection();
-            final RDFWriter writer = Rio.createWriter(rdfFormat, outWriter);
+            RDFWriter writer = Rio.createWriter(rdfFormat, outWriter);
+            // replace with wrap if needed
+            if (rdfFormat.supportsContexts()) {
+                RdfWriterContextRenamer writerRenamer = new RdfWriterContextRenamer(writer);
+                // create and set context
+                final URI targetUri = connection.getValueFactory().createURI(config.getOutGraphName());
+                writerRenamer.setContext(targetUri);
+                // and assign new writer
+                writer = writerRenamer;
+            }
             // export
             connection.export(writer, uris);
         } catch (IOException ex) {
