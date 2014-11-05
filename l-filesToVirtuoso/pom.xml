@@ -13,7 +13,7 @@
 	<artifactId>uv-l-filesToVirtuoso</artifactId>
 	<name>L-FilesToVirtuoso</name>
 	<description>VirtuosoLoader issues Virtuoso internal functions to load directory of RDF data.</description>
-	<version>1.4.0</version>
+	<version>1.4.1-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
 	<repositories>
