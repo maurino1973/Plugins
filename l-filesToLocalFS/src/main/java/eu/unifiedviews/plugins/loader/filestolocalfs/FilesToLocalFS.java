@@ -8,6 +8,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +17,14 @@ import org.slf4j.LoggerFactory;
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
+import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
+import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelper;
+import eu.unifiedviews.helpers.dataunit.copyhelper.CopyHelpers;
+import eu.unifiedviews.helpers.dataunit.resourcehelper.ResourceHelper;
+import eu.unifiedviews.helpers.dataunit.resourcehelper.ResourceHelpers;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelper;
 import eu.unifiedviews.helpers.dataunit.virtualpathhelper.VirtualPathHelpers;
 import eu.unifiedviews.helpers.dpu.config.AbstractConfigDialog;
@@ -33,6 +40,9 @@ public class FilesToLocalFS extends
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
+
+    @DataUnit.AsOutput(name = "filesOutput")
+    public WritableFilesDataUnit filesOutput;
 
     public FilesToLocalFS() {
         super(FilesToLocalFSConfig_V1.class);
@@ -66,7 +76,8 @@ public class FilesToLocalFS extends
         long index = 0L;
         boolean shouldContinue = !dpuContext.canceled();
         VirtualPathHelper inputVirtualPathHelper = VirtualPathHelpers.create(filesInput);
-
+        CopyHelper copyHelper = CopyHelpers.create(filesInput, filesOutput);
+        ResourceHelper outputResourceHelper = ResourceHelpers.create(filesOutput);
         try {
             while (shouldContinue && filesIteration.hasNext()) {
                 index++;
@@ -93,6 +104,10 @@ public class FilesToLocalFS extends
                         } else {
                             java.nio.file.Files.copy(inputPath, outputPath, copyOptionsArray);
                         }
+                        copyHelper.copyMetadata(entry.getSymbolicName());
+                        Map<String, String> resourceMap = new HashMap<>();
+                        resourceMap.put("destinationFileUri", outputFile.toURI().toASCIIString());
+                        outputResourceHelper.setResource(entry.getSymbolicName(), resourceMap);
                         if (dpuContext.isDebugging()) {
                             LOG.debug("Processed {} file in {}s", appendNumber(index), (System.currentTimeMillis() - start.getTime()) / 1000);
                         }
@@ -123,6 +138,16 @@ public class FilesToLocalFS extends
             }
             try {
                 inputVirtualPathHelper.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close", ex);
+            }
+            try {
+                outputResourceHelper.close();
+            } catch (DataUnitException ex) {
+                LOG.warn("Error in close", ex);
+            }
+            try {
+                copyHelper.close();
             } catch (DataUnitException ex) {
                 LOG.warn("Error in close", ex);
             }
