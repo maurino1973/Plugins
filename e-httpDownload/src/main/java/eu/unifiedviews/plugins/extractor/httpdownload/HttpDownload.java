@@ -30,7 +30,7 @@ public class HttpDownload extends ConfigurableBase<HttpDownloadConfig_V1> implem
 
     private HttpDownloadConfig_V2 configInternal;
 
-    @DataUnit.AsOutput(name = "filesOutput")
+    @DataUnit.AsOutput(name = "output")
     public WritableFilesDataUnit filesOutput;
 
     public HttpDownload() {
