@@ -224,7 +224,7 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig_V1> im
             resultSetErrorRows.close();
             statementsErrorRows.close();
 
-            rdfOutput.addExistingDataGraph("RDF data", new URIImpl(config.getTargetContext()));
+            rdfOutput.addExistingDataGraph(config.getTargetContext(), new URIImpl(config.getTargetContext()));
 
             LOG.info("Done.");
         } catch (DataUnitException | SQLException ex) {

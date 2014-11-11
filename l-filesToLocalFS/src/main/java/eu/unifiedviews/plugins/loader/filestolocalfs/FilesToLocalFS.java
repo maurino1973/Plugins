@@ -6,6 +6,7 @@ import java.net.URI;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -98,6 +99,7 @@ public class FilesToLocalFS extends
                         } else {
                             java.nio.file.Files.copy(inputPath, outputPath, copyOptionsArray);
                         }
+                        java.nio.file.Files.setPosixFilePermissions(outputPath, PosixFilePermissions.fromString("rw-r--r--"));
                         filesOutput.addExistingFile(entry.getSymbolicName(), outputFile.toURI().toASCIIString());
                         if (dpuContext.isDebugging()) {
                             LOG.debug("Processed {} file in {}s", appendNumber(index), (System.currentTimeMillis() - start.getTime()) / 1000);
