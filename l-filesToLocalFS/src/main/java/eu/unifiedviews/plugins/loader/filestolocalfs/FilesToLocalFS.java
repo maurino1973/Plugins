@@ -6,6 +6,7 @@ import java.net.URI;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import eu.unifiedviews.dataunit.DataUnit;
 import eu.unifiedviews.dataunit.DataUnitException;
 import eu.unifiedviews.dataunit.files.FilesDataUnit;
+import eu.unifiedviews.dataunit.files.WritableFilesDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
@@ -33,6 +35,9 @@ public class FilesToLocalFS extends
 
     @DataUnit.AsInput(name = "filesInput")
     public FilesDataUnit filesInput;
+
+    @DataUnit.AsOutput(name = "filesOutput")
+    public WritableFilesDataUnit filesOutput;
 
     public FilesToLocalFS() {
         super(FilesToLocalFSConfig_V1.class);
@@ -66,7 +71,8 @@ public class FilesToLocalFS extends
         long index = 0L;
         boolean shouldContinue = !dpuContext.canceled();
         VirtualPathHelper inputVirtualPathHelper = VirtualPathHelpers.create(filesInput);
-
+//        CopyHelper copyHelper = CopyHelpers.create(filesInput, filesOutput);
+//        ResourceHelper outputResourceHelper = ResourceHelpers.create(filesOutput);
         try {
             while (shouldContinue && filesIteration.hasNext()) {
                 index++;
@@ -93,6 +99,8 @@ public class FilesToLocalFS extends
                         } else {
                             java.nio.file.Files.copy(inputPath, outputPath, copyOptionsArray);
                         }
+                        java.nio.file.Files.setPosixFilePermissions(outputPath, PosixFilePermissions.fromString("rw-r--r--"));
+                        filesOutput.addExistingFile(entry.getSymbolicName(), outputFile.toURI().toASCIIString());
                         if (dpuContext.isDebugging()) {
                             LOG.debug("Processed {} file in {}s", appendNumber(index), (System.currentTimeMillis() - start.getTime()) / 1000);
                         }
@@ -126,6 +134,16 @@ public class FilesToLocalFS extends
             } catch (DataUnitException ex) {
                 LOG.warn("Error in close", ex);
             }
+//            try {
+//                outputResourceHelper.close();
+//            } catch (DataUnitException ex) {
+//                LOG.warn("Error in close", ex);
+//            }
+//            try {
+//                copyHelper.close();
+//            } catch (DataUnitException ex) {
+//                LOG.warn("Error in close", ex);
+//            }
         }
     }
 

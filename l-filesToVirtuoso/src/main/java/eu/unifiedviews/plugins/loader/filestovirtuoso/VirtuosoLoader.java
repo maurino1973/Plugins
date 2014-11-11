@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.openrdf.model.impl.URIImpl;
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryLanguage;
 import org.openrdf.query.Update;
@@ -21,6 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import virtuoso.sesame2.driver.VirtuosoRepository;
+import eu.unifiedviews.dataunit.DataUnit;
+import eu.unifiedviews.dataunit.DataUnitException;
+import eu.unifiedviews.dataunit.rdf.WritableRDFDataUnit;
 import eu.unifiedviews.dpu.DPU;
 import eu.unifiedviews.dpu.DPUContext;
 import eu.unifiedviews.dpu.DPUException;
@@ -30,7 +34,11 @@ import eu.unifiedviews.helpers.dpu.config.ConfigurableBase;
 
 @DPU.AsLoader
 public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig_V1> implements ConfigDialogProvider<VirtuosoLoaderConfig_V1> {
+
     private static final Logger LOG = LoggerFactory.getLogger(VirtuosoLoader.class);
+
+    @DataUnit.AsOutput(name = "rdfOutput")
+    public WritableRDFDataUnit rdfOutput;
 
     private static final String LD_DIR = "ld_dir (?, ?, ?)";
 
@@ -90,11 +98,11 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig_V1> im
             }
 //            else {
 //                LOG.info("Adding loaded data to destination graph");
-//                Update update = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, String.format(ADD_QUERY, config.getTargetTempContext(), config.getTargetContext()));    
+//                Update update = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, String.format(ADD_QUERY, config.getTargetTempContext(), config.getTargetContext()));
 //                update.execute();
 //                LOG.info("Added data to destination graph.");
 //                LOG.info("Clearing temporary graph.");
-//                Update update2 = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, String.format(CLEAR_QUERY, config.getTargetTempContext()));    
+//                Update update2 = repositoryConnection.prepareUpdate(QueryLanguage.SPARQL, String.format(CLEAR_QUERY, config.getTargetTempContext()));
 //                update2.execute();
 //                LOG.info("Cleared temporary graph.");
 //            }
@@ -216,8 +224,10 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig_V1> im
             resultSetErrorRows.close();
             statementsErrorRows.close();
 
+            rdfOutput.addExistingDataGraph(config.getTargetContext(), new URIImpl(config.getTargetContext()));
+
             LOG.info("Done.");
-        } catch (SQLException ex) {
+        } catch (DataUnitException | SQLException ex) {
             throw new DPUException("Error executing query", ex);
         } finally {
             LOG.info("User cancelled.");
@@ -269,8 +279,9 @@ public class VirtuosoLoader extends ConfigurableBase<VirtuosoLoaderConfig_V1> im
             // Check for special case: 11 - 13 are all "th".
             // So if the second to last digit is 1, it is "th".
             char secondToLastDigit = value.charAt(value.length() - 2);
-            if (secondToLastDigit == '1')
+            if (secondToLastDigit == '1') {
                 return value + "th";
+            }
         }
         char lastDigit = value.charAt(value.length() - 1);
         switch (lastDigit) {
