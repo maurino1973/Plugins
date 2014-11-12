@@ -139,8 +139,6 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         URI exResURI = valueFactory.createURI(ns_void + "exampleResource");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
-        outConnection.begin();
-
         outConnection.add(datasetURI, RDF.TYPE, void_datasetClass, outGraphURI);
         outConnection.add(datasetURI, RDF.TYPE, dcat_datasetClass, outGraphURI);
         if (config.getComsodeDatasetId() != null && !config.getComsodeDatasetId().isEmpty()) {
@@ -216,7 +214,6 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         }
 
         outConnection.add(datasetURI, dcat_distribution, distroURI, outGraphURI);
-        outConnection.commit();
 
         if (context.canceled()) {
             context.sendMessage(DPUContext.MessageType.INFO, "DPU has been cancelled.");
@@ -224,7 +221,6 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         }
 
         // DCAT Distribution
-        outConnection.begin();
         outConnection.add(distroURI, RDF.TYPE, dcat_distroClass, outGraphURI);
 
         for (String u : config.getLicenses()) {
@@ -236,10 +232,9 @@ public class Metadata extends ConfigurableBase<MetadataConfig_V1>
         } else {
             outConnection.add(distroURI, DCTERMS.MODIFIED, valueFactory.createLiteral(df.format(config.getModified()), xsd_date), outGraphURI);
         }
-        outConnection.commit();
 
         // Now compute statistics on input data
-        
+
         if (inRdfData != null) {
             context.sendMessage(DPUContext.MessageType.INFO, "Starting statistics computation");
 
